@@ -1,0 +1,256 @@
+@keyframes nodeItemBorderKey {
+  0% {
+    border: 3px dashed #bcdcff;
+  }
+
+  100% {
+    border: 3px dashed #009cff;
+  }
+}
+
+@-webkit-keyframes nodeItemBorderKey /* Safari and Chrome */ {
+  0% {
+    border: 3px dashed #bcdcff;
+  }
+
+  100% {
+    border: 3px dashed #009cff;
+  }
+}
+
+.nodeItemActiveBorder {
+  animation: nodeItemBorderKey 1s linear 0s infinite alternate;
+  -webkit-animation: nodeItemBorderKey 1s linear 0s infinite alternate; /* Safari and Chrome */
+}
+
+.nodeItemBorder {
+  border: 2px solid rgb(8, 8, 8);
+}
+
+.nodeItemContainer {
+  padding: 2px;
+  z-index: 2;
+
+  .nodeItemBox {
+    position: relative;
+    // width: 180px;
+    padding: 5px;
+    z-index: 0;
+    background: rgba(225, 248, 255, 1);
+    // border: 2px solid #000;
+    border-radius: 2px;
+    box-sizing: border-box;
+
+    &:hover {
+      border: 2px solid rgb(0, 192, 255);
+    }
+
+    .attribute {
+      min-height: 50px;
+      border-top: 1px solid rgba(0, 0, 0, 0.5);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+      background: rgba(255, 255, 255, 0.4);
+    }
+  }
+
+  .outEntityNodeItemBox {
+    position: relative;
+    // width: 180px;
+    padding: 5px;
+    z-index: 0;
+    background: rgba(216, 224, 228, 0.8);
+    border: 2px solid #000;
+    border-radius: 2px;
+    box-sizing: border-box;
+
+    &:hover {
+      border: 2px solid rgb(0, 192, 255);
+    }
+
+    .attribute {
+      min-height: 50px;
+      border-top: 1px solid rgba(0, 0, 0, 0.5);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+      background: rgba(255, 255, 255, 0.4);
+    }
+  }
+
+  .enumNodeItemBox {
+    position: relative;
+    // width: 180px;
+    padding: 5px;
+    z-index: 0;
+    background: rgba(255, 255, 232, 0.8);
+    border: 2px solid #000;
+    border-radius: 2px;
+    box-sizing: border-box;
+
+    &:hover {
+      border: 2px solid rgb(0, 192, 255);
+    }
+  }
+
+  .outEnumNodeItemBox {
+    position: relative;
+    // width: 180px;
+    padding: 5px;
+    z-index: 0;
+    background: rgba(228, 228, 207, 0.8);
+    border: 2px solid #000;
+    border-radius: 2px;
+    box-sizing: border-box;
+
+    &:hover {
+      border: 2px solid rgb(0, 192, 255);
+    }
+  }
+
+  .interfaceNodeItemBox {
+    position: relative;
+    // width: 180px;
+    padding: 5px;
+    z-index: 0;
+    background: rgba(242, 232, 255, 0.8);
+    border: 2px solid #000;
+    border-radius: 2px;
+    box-sizing: border-box;
+
+    &:hover {
+      border: 2px solid rgb(0, 192, 255);
+    }
+  }
+
+  .sysInterfaceNodeItemBox {
+    position: relative;
+    // width: 180px;
+    padding: 5px;
+    z-index: 0;
+    background: rgba(221, 207, 228, 0.8);
+    border: 2px solid #000;
+    border-radius: 2px;
+    box-sizing: border-box;
+
+    &:hover {
+      border: 2px solid rgb(0, 192, 255);
+    }
+  }
+
+  .dtoNodeItemBox {
+    padding: 5px;
+    background: rgba(253, 246, 150, 0.8);
+    border: 2px solid #000;
+    border-radius: 2px;
+    box-sizing: border-box;
+
+    &:hover {
+      border: 2px solid rgb(238, 255, 0);
+    }
+  }
+
+  &.current-node-item {
+    background: linear-gradient(0deg, transparent 50%, rgb(0, 192, 255) 50%)
+        repeat-y,
+      linear-gradient(0deg, transparent 50%, rgb(0, 192, 255) 50%) repeat-y,
+      linear-gradient(90deg, transparent 50%, rgb(0, 192, 255) 50%) repeat-x,
+      linear-gradient(90deg, transparent 50%, rgb(0, 192, 255) 50%) repeat-x;
+    background-size: 2px 12px, 2px 12px, 12px 2px, 12px 2px;
+    background-position: 0 0, 100% 0, 0 0, 0 100%;
+    animation: shine 1s infinite linear;
+
+    .nodeItemBox {
+      border-color: transparent;
+    }
+  }
+}
+
+.nodeItemTableRelation {
+  font-size: 12px;
+  transform: scale(0.9);
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.box {
+  font-size: 12px;
+}
+
+.row {
+  background: none;
+
+  :hover {
+    background: none;
+  }
+}
+
+.table {
+  background-color: rgba(230, 230, 230, 0.5);
+
+  .ant-table-cell {
+    background: none;
+  }
+
+  .ant-table-cell-row-hover {
+    background: none !important;
+  }
+
+  .ant-table-cell {
+    background: none;
+  }
+
+  div {
+    background: none;
+  }
+
+  tr {
+    background: none;
+  }
+
+  th {
+    background: none !important;
+  }
+
+  td {
+    background: none !important;
+  }
+
+  col {
+    background: none;
+  }
+}
+// 连线目标点
+.portWidgetTarget {
+  position: absolute;
+  width: 0;
+  height: 0;
+  left: 50%;
+  top: 50%;
+
+  &.isLineConnect {
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    z-index: 1;
+  }
+}
+
+// 连线起始点
+.portWidgetSources {
+  position: absolute;
+  width: 0;
+  height: 0;
+  left: 50%;
+  top: 50%;
+
+  &.isLineConnect {
+    width: 30%;
+    height: 30%;
+    left: 70%;
+    top: 0;
+    opacity: 0.5;
+    z-index: 2;
+    background-color: rgb(87, 255, 143);
+    border-radius: 10px;
+  }
+}

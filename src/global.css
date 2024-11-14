@@ -1,0 +1,22 @@
+.ant-layout {
+  display: flex;
+  flex: auto;
+  flex-direction: column;
+  background: #f0f2f5;
+  height: 100vh;
+}
+
+.ant-pro-layout .ant-pro-layout-content {
+  padding-inline: 2px;
+  padding-block: 2px;
+  margin: 0px;
+  display: flex;
+}
+
+.ant-tabs-nav {
+  margin: 0 0 5px 0;
+}
+
+.ant-tree-node-content-wrapper {
+  display: flex;
+}

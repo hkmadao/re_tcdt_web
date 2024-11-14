@@ -1,0 +1,115 @@
+import { TAudit } from '@/models';
+
+/**公共属性 */
+export type TCommonAttribute = {
+  /**属性id */
+  idCommonAttribute?: string;
+  /**属性名称 */
+  attributeName?: string;
+  /**显示名称 */
+  displayName?: string;
+  /**字段名称 */
+  columnName?: string;
+  /**默认值 */
+  defaultValue?: string;
+  /**是否必填 */
+  fgMandatory?: boolean;
+  /**数据长度 */
+  len?: number;
+  /**精度 */
+  pcs?: number;
+  /**序号 */
+  sn?: number;
+  /**引用属性名称 */
+  refAttributeName?: string;
+  /**引用属性显示名称 */
+  refDisplayName?: string;
+  /**属性类别 */
+  category?: string;
+  /**上级实体信息 */
+  refEntity?: TDdEntity;
+  idRefEntity?: string;
+  /**项目 */
+  project?: TProject;
+  idProject?: string;
+  /**数据类型 */
+  dataType?: TDataType;
+  idDataType?: string;
+} & TAudit;
+/**实体信息 */
+export type TDdEntity = {
+  /**实体id */
+  idEntity?: string;
+  /**表名 */
+  tableName?: string;
+  /**主属性类型名称 */
+  pkAttributeTypeName?: string;
+  /**主属性code */
+  pkAttributeCode?: string;
+  /**主属性名称 */
+  pkAttributeName?: string;
+  /**类名 */
+  className?: string;
+  /**显示名称 */
+  displayName?: string;
+} & TAudit;
+/**项目 */
+export type TProject = {
+  /**项目编号 */
+  code?: string;
+  /**文件名样式 */
+  fileNameType?: string;
+  /**项目模板编号 */
+  templateCode?: string;
+  /**项目id */
+  idProject?: string;
+  /**系统路径 */
+  path?: string;
+  /**显示名称 */
+  displayName?: string;
+  /**备注 */
+  note?: string;
+} & TAudit;
+/**数据类型 */
+export type TDataType = {
+  /**精度 */
+  pcs?: number;
+  /**备注 */
+  note?: string;
+  /**扩展属性6 */
+  ext6?: string;
+  /**TypeScript类型 */
+  typeScriptType?: string;
+  /**HTML5输入框类型 */
+  webInputType?: string;
+  /**数据类型编码 */
+  code?: string;
+  /**扩展属性3 */
+  ext3?: string;
+  /**扩展属性1 */
+  ext1?: string;
+  /**必填标志 */
+  fgMandatory?: boolean;
+  /**扩展属性2 */
+  ext2?: string;
+  /**对象类型名称 */
+  objectType?: string;
+  /**扩展属性4 */
+  ext4?: string;
+  /**显示名称 */
+  displayName?: string;
+  /**数据类型id */
+  idDataType?: string;
+  /**字段类型 */
+  columnType?: string;
+  /**对象类型包名 */
+  objectTypePackage?: string;
+  /**扩展属性5 */
+  ext5?: string;
+  /**默认值 */
+  defaultValue?: string;
+  /**序列号 */
+  sn?: number;
+  /**长度 */
+  len?: number;
+} & TAudit;

@@ -1,0 +1,38 @@
+.diagram {
+  display: flex;
+}
+
+.canvasWidget {
+  width: 2970px;
+  height: 2100px;
+  // width: 100%;
+  // height: 80vh;
+
+  svg:not(:root) {
+    overflow: visible;
+    // z-index: 1;
+    background-size: 200px 200px;
+    background-image: linear-gradient(
+        180deg,
+        rgba(200, 200, 200, 0.8) 0%,
+        rgba(200, 200, 200, 0.8) 1%,
+        transparent 2%,
+        transparent 49%,
+        rgba(200, 200, 200, 0.8) 50%,
+        rgba(200, 200, 200, 0.8) 51%,
+        transparent 52%,
+        transparent 99%
+      ),
+      linear-gradient(
+        90deg,
+        rgba(200, 200, 200, 0.8) 0%,
+        rgba(200, 200, 200, 0.8) 1%,
+        transparent 2%,
+        transparent 49%,
+        rgba(200, 200, 200, 0.8) 50%,
+        rgba(200, 200, 200, 0.8) 51%,
+        transparent 52%,
+        transparent 99%
+      );
+  }
+}

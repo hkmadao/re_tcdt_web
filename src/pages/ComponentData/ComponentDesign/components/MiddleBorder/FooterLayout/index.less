@@ -1,0 +1,68 @@
+.resizableHandleElement {
+  background-color: #b9b9b9;
+  height: 2px;
+  cursor: n-resize;
+  display: flex;
+  flex: auto;
+
+  &:hover {
+    background-color: #61b3ff;
+    height: 3px;
+  }
+}
+
+.my-ant-card-body {
+  :global {
+    .ant-pro-card-body {
+      display: block;
+      box-sizing: border-box;
+      height: 100%;
+      padding: 0px;
+    }
+  }
+}
+
+@keyframes arrow {
+  0% {
+    top: -5px;
+    color: #8bc7ff;
+  }
+
+  50% {
+    top: 0px;
+    color: #0084ff;
+  }
+
+  100% {
+    top: 2px;
+    color: #0084ff;
+  }
+}
+
+/* Safari and Chrome */
+@-webkit-keyframes arrow {
+  0% {
+    top: -5px;
+    color: #61b3ff;
+  }
+
+  50% {
+    top: 0px;
+    color: #0084ff;
+  }
+
+  100% {
+    top: 2px;
+    color: #0084ff;
+  }
+}
+
+.arrow {
+  font-size: 20px;
+  position: relative;
+  color: #61b3ff;
+  cursor: pointer;
+  animation: arrow 1s linear 0s infinite normal;
+  /* Safari and Chrome */
+  -webkit-animation: arrow 1s linear 0s infinite normal;
+}

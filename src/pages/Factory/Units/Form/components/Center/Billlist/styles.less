@@ -1,0 +1,28 @@
+.component {
+  position: relative;
+
+  .component-delete {
+    display: none;
+
+    .component-delete-icon {
+      font-size: 14px;
+      color: blue;
+    }
+  }
+
+  &:hover {
+    .component-delete {
+      display: block;
+      position: absolute;
+      right: -6px;
+      top: -6px;
+      border-radius: 12px;
+      height: 24px;
+      width: 24px;
+      text-align: center;
+      cursor: pointer;
+      background-color: white;
+      z-index: 999;
+    }
+  }
+}

@@ -1,0 +1,16 @@
+.main {
+  display: flex;
+  flex: auto;
+  background-color: #f3f3f3;
+  height: 100%;
+
+  :global(> .ant-spin-nested-loading) {
+    display: flex;
+    flex: auto;
+
+    :global(> .ant-spin-container) {
+      display: flex;
+      flex: auto;
+    }
+  }
+}

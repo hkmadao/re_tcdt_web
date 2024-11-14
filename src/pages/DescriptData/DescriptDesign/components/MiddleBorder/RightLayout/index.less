@@ -1,0 +1,57 @@
+.resizableHandleElement {
+  background-color: #b9b9b9;
+  cursor: e-resize;
+  display: flex;
+  flex: auto;
+  width: 2px;
+
+  &:hover {
+    background-color: #61b3ff;
+    width: 3px;
+  }
+}
+
+@keyframes arrow {
+  0% {
+    right: 5px;
+    color: #8bc7ff;
+  }
+
+  50% {
+    right: 0px;
+    color: #0084ff;
+  }
+
+  100% {
+    right: -2px;
+    color: #0084ff;
+  }
+}
+
+/* Safari and Chrome */
+@-webkit-keyframes arrow {
+  0% {
+    right: 5px;
+    color: #61b3ff;
+  }
+
+  50% {
+    right: 0px;
+    color: #0084ff;
+  }
+
+  100% {
+    right: -2px;
+    color: #0084ff;
+  }
+}
+
+.arrow {
+  font-size: 20px;
+  width: 25px;
+  position: relative;
+  color: #61b3ff;
+  animation: arrow 1s linear 0s infinite normal;
+  /* Safari and Chrome */
+  -webkit-animation: arrow 1s linear 0s infinite normal;
+}

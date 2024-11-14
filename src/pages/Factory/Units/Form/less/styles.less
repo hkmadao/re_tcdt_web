@@ -1,0 +1,136 @@
+.attrrow {
+  border-bottom: 1px solid #eeeeee;
+  border-left: 1px solid #eeeeee;
+  border-right: 1px solid #eeeeee;
+  padding: 5px 0px;
+}
+
+.my-ant-card-body {
+  :global {
+    .ant-pro-card-body {
+      padding: 0px;
+    }
+
+    .ant-card-body {
+      padding: 0px;
+    }
+
+    .ant-table-fgMandatory {
+      .ant-table-placeholder {
+        display: none;
+      }
+    }
+  }
+}
+
+.my-ant-form {
+  :global {
+    .ant-form-item {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      color: rgba(0, 0, 0, 0.85);
+      font-size: 14px;
+      font-variant: tabular-nums;
+      line-height: 1.5715;
+      list-style: none;
+      font-feature-settings: 'tnum', 'tnum';
+      margin-bottom: 10px;
+      vertical-align: top;
+    }
+  }
+}
+
+.modalBody {
+  :global {
+    .ant-modal-body {
+      padding: 0px;
+      font-size: 14px;
+      line-height: 1.5715;
+      word-wrap: break-word;
+    }
+
+    .ant-collapse-ghost
+      > .ant-collapse-item
+      > .ant-collapse-content
+      > .ant-collapse-content-box {
+      padding-top: 0px;
+      padding-bottom: 0px;
+    }
+
+    .ant-collapse > .ant-collapse-item > .ant-collapse-header {
+      position: relative;
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: flex-start;
+      padding: 5px 5px;
+      color: rgba(0, 0, 0, 0.85);
+      line-height: 1.5715;
+      cursor: pointer;
+      transition: all 0.3s, visibility 0s;
+    }
+  }
+}
+
+.dragboxtarget {
+  overflow: auto;
+  // min-height: 100px;
+  width: 100%;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  color: white;
+  padding: 5px;
+  text-align: center;
+  font-size: 1rem;
+  line-height: normal;
+  float: left;
+  background-color: rgb(255, 255, 255);
+}
+
+.dragboxtargetActive {
+  overflow: auto;
+  // min-height: 100px;
+  width: 100%;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  color: white;
+  padding: 5px;
+  text-align: center;
+  font-size: 1rem;
+  line-height: normal;
+  float: left;
+  background-color: rgb(29, 207, 29);
+}
+
+.dragboxtargetCanDrop {
+  overflow: auto;
+  // min-height: 100px;
+  width: 100%;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  color: white;
+  padding: 5px;
+  text-align: center;
+  font-size: 1rem;
+  line-height: normal;
+  float: left;
+  background-color: rgb(188, 204, 43);
+}
+
+.my-panel {
+  :global {
+    .ant-tabs-content-holder {
+      display: flex;
+      overflow: auto;
+    }
+
+    .ant-tabs-content-top {
+      display: flex;
+    }
+
+    .ant-tabs-tabpane-active {
+      display: flex;
+      flex: auto;
+    }
+  }
+}
