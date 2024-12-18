@@ -139,6 +139,38 @@ const DropBody: FC = () => {
           billSearchRef.enumConfig = enumInfo;
         }
 
+        if (nodeData.webInputType === 'Checkbox') {
+          const enumInfo: TEnumRef = {
+            idEnumRef: nanoid(),
+            enumColumns: [],
+          };
+          const allEnumAttrInfo: TEnumColumn = {
+            idEnumColumn: nanoid(),
+            displayName: '全部',
+            enumValue: 'all',
+            code: 'all',
+          };
+          enumInfo.enumColumns?.push(allEnumAttrInfo);
+          const yesEnumAttrInfo: TEnumColumn = {
+            idEnumColumn: nanoid(),
+            displayName: '是',
+            enumValue: 'true',
+            code: 'true',
+          };
+          enumInfo.enumColumns?.push(yesEnumAttrInfo);
+          const noEnumAttrInfo: TEnumColumn = {
+            idEnumColumn: nanoid(),
+            displayName: '否',
+            enumValue: 'false',
+            code: 'false',
+          };
+          enumInfo.enumColumns?.push(noEnumAttrInfo);
+          billSearchRef.valueType = 'Bool';
+          billSearchRef.defaultValue = 'all';
+          billSearchRef.htmlInputType = 'Select';
+          billSearchRef.enumConfig = enumInfo;
+        }
+
         dispatch(actions.addCondition(billSearchRef));
       },
       collect: (monitor) => ({

@@ -4,9 +4,9 @@ import { Input } from 'antd';
 import { actions } from '../../../store';
 import { useCurrentButton } from '../../../hooks';
 
-const NormalText: FC<{ attr: 'disableScript' | 'hiddenScript' }> = ({
-  attr,
-}) => {
+const NormalText: FC<{
+  attr: 'nameScript' | 'disableScript' | 'hiddenScript';
+}> = ({ attr }) => {
   const searchRef = useCurrentButton();
   const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState<string>();

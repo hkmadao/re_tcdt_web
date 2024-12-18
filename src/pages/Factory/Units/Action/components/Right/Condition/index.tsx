@@ -33,6 +33,9 @@ const Condition: FC = () => {
         <Descriptions.Item label="按钮尺寸">
           <SizeSelect />
         </Descriptions.Item>
+        <Descriptions.Item label="名称逻辑脚本">
+          <NormalText attr={'nameScript'} />
+        </Descriptions.Item>
         <Descriptions.Item label="禁用逻辑脚本">
           <NormalText attr={'disableScript'} />
         </Descriptions.Item>

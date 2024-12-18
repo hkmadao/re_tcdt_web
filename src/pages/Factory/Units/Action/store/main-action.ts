@@ -28,7 +28,14 @@ export const updateBase: CaseReducer<
 export const addCondition: CaseReducer<
   TModuleStore,
   PayloadAction<
-    Pick<TButton, 'clickEventName' | 'label' | 'disableScript' | 'hiddenScript'>
+    Pick<
+      TButton,
+      | 'nameScript'
+      | 'clickEventName'
+      | 'label'
+      | 'disableScript'
+      | 'hiddenScript'
+    >
   >
 > = (state, action) => {
   const id = nanoid();

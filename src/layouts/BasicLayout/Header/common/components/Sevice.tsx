@@ -10,7 +10,7 @@ const Sevice: FC = () => {
     <>
       <Select
         value={window.localStorage.getItem('service') ?? 'Rust'}
-        style={{ width: 100 }}
+        style={{ width: 100, display: 'none' }}
         onChange={handleServiceChange}
         options={[
           {

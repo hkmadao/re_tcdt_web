@@ -24,6 +24,7 @@ const DropBody: FC = () => {
           dispatch(
             actions.addCondition({
               label: nodeData.label,
+              nameScript: "'" + nodeData.label + "'",
               clickEventName: nodeData.clickEventName,
               disableScript: nodeData.disableScript,
               hiddenScript: nodeData.hiddenScript,

@@ -4,6 +4,7 @@ import {
   TBillRef,
   TUiFactoryContent,
   TBillFormContent,
+  TQueryContent,
 } from '@/models';
 
 const findLayout: (
@@ -122,3 +123,12 @@ export const getRefById = (id: string, billformConf: TBillFormContent) => {
     return billRef;
   }
 };
+
+export function getQueryAttributeRef(
+  attributeName: string,
+  queryConf: TQueryContent | undefined,
+) {
+  return queryConf?.searchRefs.find(
+    (searcheRef) => searcheRef.attributeName === attributeName,
+  )?.refConfig;
+}

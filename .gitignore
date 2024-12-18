@@ -22,10 +22,10 @@
 # svn
 .svn
 .idea
+.vscode
 
-/src/pages/ComponentAPI
 # 动态生成文件
 /src/store/dynamic-store.ts
 /config/dynamic-routes.ts
 /src/menu/dynamic-menus.ts
-.vscode
+

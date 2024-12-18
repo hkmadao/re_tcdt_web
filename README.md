@@ -37,13 +37,19 @@ export_on_save:
 
 ## Getting Started
 
-Install dependencies,
+Install dependencies
 
 ```bash
 $ yarn
 ```
 
-Start the dev server,
+Generate dynmic files
+
+```bash
+$ yarn run generateRouteAndStore
+```
+
+Start the dev server
 
 ```bash
 $ yarn start

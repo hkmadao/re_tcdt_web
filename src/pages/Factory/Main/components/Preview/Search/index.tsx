@@ -210,8 +210,8 @@ const SearchPriview: FC<{ idConf: string }> = ({ idConf }) => {
           setItemNodes(newItemNodes);
 
           const initValues = searcheRefs.reduce((prev, cur, index) => {
-            if (index === 1) {
-              return { [prev.attributeName!]: cur.defaultValue } as any;
+            if (index === 0) {
+              return { [cur.attributeName!]: cur.defaultValue } as any;
             }
             return { ...prev, [cur.attributeName!]: cur.defaultValue } as any;
           });

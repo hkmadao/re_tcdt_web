@@ -6,6 +6,7 @@ import { PickerProps } from 'antd/lib/date-picker/generatePicker';
 type TCustomDatePickProps = {
   showTime?: boolean;
   format?: string;
+  displayFormat?: string;
   value?: string;
   onChange?: any;
 };
@@ -13,6 +14,7 @@ type TCustomDatePickProps = {
 const CustomDatePick: FC<TCustomDatePickProps> = ({
   showTime,
   format,
+  displayFormat,
   value,
   onChange,
 }) => {
@@ -39,7 +41,7 @@ const CustomDatePick: FC<TCustomDatePickProps> = ({
         onChange={handleChange}
         value={dateValue}
         ref={inputDisplayRef}
-        format={format ?? 'YYYY-MM-DD'}
+        format={displayFormat ?? 'YYYY-MM-DD'}
         showTime
       />
     </>

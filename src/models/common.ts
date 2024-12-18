@@ -95,7 +95,7 @@ export type TTree = {
 
 function switchFilterValue(sourceFilterNodes: TFilterNode[]) {
   let newFilterNodes: TFilterNode[] = [];
-  const fgRust = window.localStorage.getItem('service') === 'Rust';
+  const fgRust = (window.localStorage.getItem('service') ?? 'Rust') === 'Rust';
   if (fgRust) {
     newFilterNodes = sourceFilterNodes.map((sourceFilterNode) => {
       const targetFilterNode: TFilterNode = {

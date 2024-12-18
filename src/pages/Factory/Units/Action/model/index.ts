@@ -5,6 +5,7 @@ export type TButton = {
   type: string;
   label: string;
   clickEventName: string;
+  nameScript: string;
   disableScript: string;
   hiddenScript: string;
   showOrder: number;

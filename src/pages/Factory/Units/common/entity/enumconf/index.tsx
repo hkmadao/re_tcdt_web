@@ -195,7 +195,7 @@ const EnumConf: FC<{
           <EditableProTable<TEnumColumn>
             className={classNames(styles['my-ant-card-body'])}
             actionRef={actionRef}
-            rowKey={'idBillValueEnum'}
+            rowKey={'idEnumColumn'}
             headerTitle={false}
             bordered={true}
             size={'small'}
