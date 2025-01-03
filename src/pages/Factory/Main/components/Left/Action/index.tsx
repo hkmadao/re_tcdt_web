@@ -7,7 +7,7 @@ import { TUiFactory, TUiFactoryContent } from '@/pages/Factory/Main/model';
 import API from '@/pages/Factory/Main/api';
 import { actions, selectModuleData } from '@/pages/Factory/Main/store';
 import SelectComponent from './selectcomponent';
-import BillFormBase from './base';
+import PageDesignBase from './base';
 import { findLayoutBycompType } from '../../../store/util';
 import BillFormDownLoad from './billformdownload';
 
@@ -107,7 +107,7 @@ const Action: React.FC = () => {
         </div>
         <div>
           <Tooltip title={'基本信息'}>
-            <BillFormBase />
+            <PageDesignBase />
           </Tooltip>
         </div>
       </div>

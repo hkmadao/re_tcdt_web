@@ -93,7 +93,7 @@ export type TUiFactory = {
   content?: string;
 } & TUiFactoryCommon;
 
-export type TModleType = {
+export type TModelType = {
   /**主类型 */
   mainType: TModuleType;
   /**引用类型 */
@@ -107,7 +107,7 @@ export type TUiFactoryContent = {
   idTree?: string;
   idViewButtonAction?: string;
   idEditButtonAction?: string;
-  modleType?: TModleType;
+  modelType?: TModelType;
   pages: TPage[];
   layouts: TLayout[];
   assos: TPageAssoLayout[];

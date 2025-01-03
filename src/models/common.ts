@@ -130,6 +130,19 @@ function switchFilterValue(sourceFilterNodes: TFilterNode[]) {
   return newFilterNodes;
 }
 
+export const andOrLogicNode = (
+  andFilterNodes: TFilterNode[],
+  orFilterNodes: TFilterNode[],
+) => {
+  if (andFilterNodes.length === 0) {
+    const result: TLogicNode = orLogicNode(orFilterNodes)();
+    return result;
+  }
+  const result: TLogicNode = andLogicNode(andFilterNodes)();
+  result.logicNode = orLogicNode(orFilterNodes)();
+  return result;
+};
+
 export const andLogicNode = (filterNodes: TFilterNode[]) => {
   let newFilterNodes: TFilterNode[] = switchFilterValue(filterNodes);
   const result: TLogicNode = {
@@ -163,6 +176,91 @@ const oneParamConds = [
   'greaterThan',
   'lessThan',
 ];
+
+type TSearchFilter = {
+  andFilters: TFilterNode[];
+  orFilters: TFilterNode[];
+};
+
+export function buildFiltersBySearchRef(
+  searchData: any,
+  searcheRefs: TBillSearchRef[] | undefined,
+): TSearchFilter | undefined {
+  const searchFilter: TSearchFilter = {
+    andFilters: [],
+    orFilters: [],
+  };
+  const andFns: TFilterNode[] = [];
+  const orFns: TFilterNode[] = [];
+  if (searchData) {
+    const orConditions =
+      searcheRefs?.filter(
+        (searcheRef) =>
+          searcheRef.searchAttributes && searcheRef.searchAttributes.length > 1,
+      ) || [];
+    if (orConditions.length > 1) {
+      console.error('unsupprot more than one or filter');
+      return;
+    }
+    searcheRefs?.forEach((searcheRef) => {
+      if (
+        !(
+          searcheRef.operatorCode === 'isNull' ||
+          searcheRef.operatorCode === 'notNull'
+        ) &&
+        (searchData[searcheRef.attributeName!] === undefined ||
+          searchData[searcheRef.attributeName!] === null)
+      ) {
+        return;
+      }
+      if (searcheRef.operatorCode) {
+        let value = searchData[searcheRef.attributeName!];
+        if (searcheRef.valueType === 'Bool') {
+          if (
+            !(
+              value === true ||
+              value === false ||
+              value === 'true' ||
+              value === 'false'
+            )
+          ) {
+            return;
+          }
+          value = value && value === 'true';
+        } else if (!value && value !== 0) {
+          return;
+        }
+        const searchAttributes = searcheRef.searchAttributes;
+        if (!searchAttributes || searchAttributes.length === 0) {
+          return;
+        }
+        if (searchAttributes.length === 1) {
+          const fn: TFilterNode = {
+            name: searchAttributes[0],
+            operatorCode: searcheRef.operatorCode,
+            filterParams: buildFilterValueBySearchRef(searcheRef, value),
+          };
+          andFns.push(fn);
+        } else {
+          const orLogicNode: TLogicNode = {
+            logicOperatorCode: 'or',
+          };
+          searchAttributes.forEach((searchAttribute) => {
+            const fn: TFilterNode = {
+              name: searchAttribute,
+              operatorCode: searcheRef.operatorCode,
+              filterParams: buildFilterValueBySearchRef(searcheRef, value),
+            };
+            orFns.push(fn);
+          });
+        }
+      }
+    });
+  }
+  searchFilter.andFilters = andFns;
+  searchFilter.orFilters = orFns;
+  return searchFilter;
+}
 
 export const buildFilterValueBySearchRef = (
   searchRef: TBillSearchRef,

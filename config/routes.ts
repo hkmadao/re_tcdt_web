@@ -66,6 +66,12 @@ export default [
         exact: true,
       },
       {
+        path: 'devmanager/CodeEditor',
+        name: '模板代码查看',
+        component: '@/pages/CodeEditor',
+        exact: true,
+      },
+      {
         path: 'devmanager/MainFactory',
         name: '页面工厂',
         component: '@/pages/Factory/Main',

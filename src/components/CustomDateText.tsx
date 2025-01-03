@@ -18,7 +18,7 @@ const CustomDateTimeText: FC<TCustomDateTimeTextProps> = ({
 
   useEffect(() => {
     if (value) {
-      const date = moment(value, format ?? 'YYYY-MM-DD');
+      const date = moment(value, format ?? 'YYYY-MM-DDTHH:mm:ssZ');
       const dateValueText = date.format(displayFormat ?? 'YYYY-MM-DD HH:mm:ss');
       setDateValueText(dateValueText);
     }

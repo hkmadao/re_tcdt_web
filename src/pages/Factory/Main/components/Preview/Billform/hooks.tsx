@@ -26,12 +26,12 @@ type TFormMap = {
 };
 
 export const getConf = async (idBillform: string) => {
-  const q: TBillForm = await ModuleAPI.getById(idBillform);
-  if (!q.content) {
+  const billForm: TBillForm = await ModuleAPI.getById(idBillform);
+  if (!billForm.content) {
     return;
   }
-  const qc: TBillFormContent = JSON.parse(q.content);
-  const conf = qc.configForm;
+  const billFormContent: TBillFormContent = JSON.parse(billForm.content);
+  const conf = billFormContent.configForm;
   const formMap = getFormMap(conf);
   const subTableConfMap = getSubTableMap(conf);
   return { conf, formMap, subTableConfMap };

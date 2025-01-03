@@ -47,7 +47,7 @@ export const slice = createSlice({
           );
           state.data = {
             ...uiFactoryCommon,
-            modleType: billFormContent.modleType,
+            modelType: billFormContent.modelType,
             pages: billFormContent.pages,
             layouts: billFormContent.layouts,
             assos: billFormContent.assos,

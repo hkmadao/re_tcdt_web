@@ -47,7 +47,7 @@ const GenerateSingleFile: FC = () => {
         .filter((sql) => {
           const existSqls = selectedTableNames.filter((t) => {
             const reg = new RegExp(
-              `^(CREATE|ALTER|DROP){1,1}\\s{1,}TABLE\\s*(IF\\s*EXISTS\\s*){0,1}\`{0,1}${t}\`{0,1}\\s*`,
+              `^(CREATE|ALTER|DROP){1,1}\\s+TABLE\\s*(IF\\s*EXISTS\\s*)?[\`|"]?${t}[\`|"]?\\s*`,
               'igm',
             );
             const march = sql.match(reg);
@@ -83,11 +83,18 @@ const GenerateSingleFile: FC = () => {
       .then((res) => {
         setSourceCode(res);
         // setTargetCode(res);
-        const reg = new RegExp('CREATE TABLE `?(\\w{1,})`?', 'g');
+        const reg = new RegExp(
+          'CREATE\\s+TABLE\\s+\\w*\\.*[`|"]?(\\w+)[`|"]?',
+          'g',
+        );
         const m = (res as string).match(reg);
         const tableNames =
           m?.map((mi) => {
-            return mi.replace('CREATE TABLE ', '').replaceAll('`', '');
+            console.log(mi);
+            return mi
+              .replace('CREATE TABLE ', '')
+              .replaceAll('`', '')
+              .replaceAll('"', '');
           }) || [];
         setTableNames(tableNames);
         setSelectedTableNames(tableNames);

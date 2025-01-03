@@ -7,12 +7,22 @@ import { actions, usePageInfo, useSelectedRows } from '../../store';
 
 const RightGrid: React.FC<TRefProps> = (props) => {
   const dispatch = useDispatch();
-  const { selectedRowKeys } = useSelectedRows();
+  const { selectedRowKeys, selectedRows } = useSelectedRows();
   const pageInfo = usePageInfo();
 
   useEffect(() => {
     if (props.refStyle === 'table') {
+      const initSelectedRowKeys = props.value
+        ? [props.value[props.backWriteProp!]]
+        : [];
+      const initSelectedRows = props.value ? [props.value] : [];
       dispatch(fetchTableData({ refProps: props }));
+      dispatch(
+        actions.setSelectedRows({
+          rowKeys: initSelectedRowKeys,
+          rows: initSelectedRows,
+        }),
+      );
     }
   }, []);
 

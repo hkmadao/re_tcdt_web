@@ -117,7 +117,7 @@ export const removeCollection = createAsyncThunk(
   `/removeCollection`,
   async (params: TSimpleEntityCollection, thunkAPI) => {
     const result: TEntityCollectionSaveResult =
-      await DescriptTreeAPI.entityCollectionSaveByAction(params);
+      await DescriptTreeAPI.entityCollectionRemove(params);
     if (result.status !== 0) {
       message.error(result.message);
     }

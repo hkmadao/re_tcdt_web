@@ -8,125 +8,14 @@ import {
 import { TAttribute, TModuleType } from '@/pages/Factory/common/model';
 import { nanoid } from '@reduxjs/toolkit';
 import styles from './index.less';
-import { useModles } from '@/pages/Factory/Main/hooks';
-
-const typeColumns: ProColumns<TModuleType>[] = [
-  {
-    title: '序号',
-    dataIndex: 'sn',
-    width: '50px',
-    editable: false,
-    render: (text, record, index, action) => {
-      return <span>{index + 1}</span>;
-    },
-  },
-  {
-    title: 'P',
-    dataIndex: 'fgMain',
-    width: '50px',
-    editable: false,
-    // valueType: 'checkbox',
-    // formItemProps: { valuePropName: 'checked' },
-    renderFormItem: (_schema, config) => {
-      return config.record?.fgMain ? '是' : '否';
-    },
-    render: (text, record, _, action) => {
-      return record.fgMain ? '是' : '否';
-    },
-  },
-  {
-    title: '类名',
-    dataIndex: 'className',
-    formItemProps: {
-      rules: [
-        {
-          required: true,
-          message: '此项为必填项',
-        },
-      ],
-    },
-  },
-  {
-    title: '类注释名',
-    dataIndex: 'displayName',
-    formItemProps: {
-      rules: [
-        {
-          required: true,
-          message: '此项为必填项',
-        },
-      ],
-    },
-  },
-];
-
-const attrColumns: ProColumns<TAttribute>[] = [
-  {
-    title: '序号',
-    dataIndex: 'sn',
-    width: '50px',
-    editable: false,
-    render: (text, record, index, action) => {
-      return <span>{index + 1}</span>;
-    },
-  },
-  {
-    title: 'P',
-    dataIndex: 'fgPk',
-    width: '50px',
-    editable: false,
-    // valueType: 'checkbox',
-    // formItemProps: { valuePropName: 'checked' },
-    renderFormItem: (_schema, config) => {
-      return config.record?.fgPk ? '是' : '否';
-    },
-    render: (text, record, _, action) => {
-      return record.fgPk ? '是' : '否';
-    },
-  },
-  {
-    title: '属性名',
-    dataIndex: 'attributeName',
-    formItemProps: {
-      rules: [
-        {
-          required: true,
-          message: '此项为必填项',
-        },
-      ],
-    },
-  },
-  {
-    title: '属性注释名',
-    dataIndex: 'displayName',
-    formItemProps: {
-      rules: [
-        {
-          required: true,
-          message: '此项为必填项',
-        },
-      ],
-    },
-  },
-  {
-    title: '属性类型',
-    dataIndex: 'attributeType',
-    formItemProps: {
-      rules: [
-        {
-          required: true,
-          message: '此项为必填项',
-        },
-      ],
-    },
-  },
-];
+import { useModels } from '@/pages/Factory/Main/hooks';
+import ImportModelType from './ImportModelType';
 
 const ModuleType: FC<{ onResultChange: (ms: TModuleType[]) => void }> = ({
   onResultChange,
 }) => {
   const { Panel } = Collapse;
-  const models = useModles();
+  const models = useModels();
   const actionRef = useRef<ActionType>();
   const attrActionRef = useRef<ActionType>();
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
@@ -336,6 +225,7 @@ const ModuleType: FC<{ onResultChange: (ms: TModuleType[]) => void }> = ({
                 <Button onClick={handleAddRow} size={'small'}>
                   添加
                 </Button>
+                <ImportModelType setModuleTypes={setModuleTypes} />
                 <Button
                   onClick={handleSetToMain}
                   size={'small'}
@@ -415,3 +305,115 @@ const ModuleType: FC<{ onResultChange: (ms: TModuleType[]) => void }> = ({
 };
 
 export default ModuleType;
+
+const typeColumns: ProColumns<TModuleType>[] = [
+  {
+    title: '序号',
+    dataIndex: 'sn',
+    width: '50px',
+    editable: false,
+    render: (text, record, index, action) => {
+      return <span>{index + 1}</span>;
+    },
+  },
+  {
+    title: 'P',
+    dataIndex: 'fgMain',
+    width: '50px',
+    editable: false,
+    // valueType: 'checkbox',
+    // formItemProps: { valuePropName: 'checked' },
+    renderFormItem: (_schema, config) => {
+      return config.record?.fgMain ? '是' : '否';
+    },
+    render: (text, record, _, action) => {
+      return record.fgMain ? '是' : '否';
+    },
+  },
+  {
+    title: '类名',
+    dataIndex: 'className',
+    formItemProps: {
+      rules: [
+        {
+          required: true,
+          message: '此项为必填项',
+        },
+      ],
+    },
+  },
+  {
+    title: '类注释名',
+    dataIndex: 'displayName',
+    formItemProps: {
+      rules: [
+        {
+          required: true,
+          message: '此项为必填项',
+        },
+      ],
+    },
+  },
+];
+
+const attrColumns: ProColumns<TAttribute>[] = [
+  {
+    title: '序号',
+    dataIndex: 'sn',
+    width: '50px',
+    editable: false,
+    render: (text, record, index, action) => {
+      return <span>{index + 1}</span>;
+    },
+  },
+  {
+    title: 'P',
+    dataIndex: 'fgPk',
+    width: '50px',
+    editable: false,
+    // valueType: 'checkbox',
+    // formItemProps: { valuePropName: 'checked' },
+    renderFormItem: (_schema, config) => {
+      return config.record?.fgPk ? '是' : '否';
+    },
+    render: (text, record, _, action) => {
+      return record.fgPk ? '是' : '否';
+    },
+  },
+  {
+    title: '属性名',
+    dataIndex: 'attributeName',
+    formItemProps: {
+      rules: [
+        {
+          required: true,
+          message: '此项为必填项',
+        },
+      ],
+    },
+  },
+  {
+    title: '属性注释名',
+    dataIndex: 'displayName',
+    formItemProps: {
+      rules: [
+        {
+          required: true,
+          message: '此项为必填项',
+        },
+      ],
+    },
+  },
+  {
+    title: '属性类型',
+    dataIndex: 'attributeType',
+    formItemProps: {
+      rules: [
+        {
+          required: true,
+          message: '此项为必填项',
+        },
+      ],
+    },
+  },
+];

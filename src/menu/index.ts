@@ -45,6 +45,10 @@ const menus: MenuDataItem[] = [
         name: '公共属性',
       },
       {
+        path: '/devmanager/CodeEditor',
+        name: '模板代码查看',
+      },
+      {
         path: '/factory',
         name: '前端工厂',
         children: [

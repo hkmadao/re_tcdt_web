@@ -34,6 +34,35 @@ export const fillTreeKey = (treeDatas?: TTree[]) => {
   return result;
 };
 
+export const fillTreeKeyByFieldName = (
+  parentKeyName: string,
+  keyFieldName: string,
+  labelName: string,
+  treeDatas?: any[],
+) => {
+  const result: TTree[] = [];
+  if (!treeDatas) {
+    return result;
+  }
+  for (let i = 0; i < treeDatas.length; i++) {
+    const t = treeDatas[i];
+    const children = fillTreeKeyByFieldName(
+      parentKeyName,
+      keyFieldName,
+      labelName,
+      t.children,
+    );
+    result.push({
+      ...t,
+      idParent: t[parentKeyName],
+      key: t[keyFieldName],
+      title: t[labelName],
+      children,
+    });
+  }
+  return result;
+};
+
 export const getUpKeysByKey = (key: Key, treeDatas: TTree[]) => {
   const result: Key[] = [];
   for (let i = 0; i < treeDatas.length; i++) {
@@ -218,16 +247,16 @@ export const arrToTree = (
 
 /**根据keys获取树节点数据 */
 export const getSelectedNodes = (
-  selectedKesys: Key[],
+  selectedKeys: Key[],
   tree: TTree[],
 ): TTree[] => {
   const selectedNodes: TTree[] = [];
   for (let i = 0; i < tree.length; i++) {
     const node = tree[i];
-    if (selectedKesys.includes(node.id)) {
+    if (selectedKeys.includes(node.key)) {
       selectedNodes.push({ ...node });
     }
-    const childResult = getSelectedNodes(selectedKesys, node.children ?? []);
+    const childResult = getSelectedNodes(selectedKeys, node.children ?? []);
     selectedNodes.push(...childResult);
   }
   return selectedNodes;

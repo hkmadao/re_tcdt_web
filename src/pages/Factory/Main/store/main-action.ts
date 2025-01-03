@@ -8,7 +8,7 @@ import {
   TPageAssoLayout,
   TUiFactoryContent,
   TComponentType,
-  TModleType,
+  TModelType,
 } from '../model';
 import {
   buildAsso,
@@ -31,9 +31,9 @@ export const updateBaseMain: CaseReducer<
 /**修改模型数据 */
 export const updateModelTyps: CaseReducer<
   TModuleStore,
-  PayloadAction<TModleType>
+  PayloadAction<TModelType>
 > = (state, action) => {
-  state.data.modleType = action.payload;
+  state.data.modelType = action.payload;
 };
 
 export const setCurrentPageId: CaseReducer<

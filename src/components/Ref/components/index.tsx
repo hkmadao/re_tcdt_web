@@ -11,6 +11,8 @@ import { useEffect, useRef, useState } from 'react';
 const Component: React.FC<TRefProps> = (props) => {
   const dispatch = useDispatch();
   const {
+    size,
+    disabled,
     billTreeRef,
     title,
     tableRef,
@@ -25,6 +27,23 @@ const Component: React.FC<TRefProps> = (props) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [interValue, setInterValue] = useState<any>();
   const inputDisplayRef = useRef<InputRef>(null);
+  const [inputSize, setInputSize] = useState<'small' | 'middle' | 'large'>();
+  const [inputDisabled, setDisabled] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!size) {
+      setInputSize('middle');
+    }
+    setInputSize(size);
+  }, [size]);
+
+  useEffect(() => {
+    if (!disabled) {
+      setDisabled(false);
+      return;
+    }
+    setDisabled(disabled);
+  }, [disabled]);
 
   useEffect(() => {
     if (value) {
@@ -63,11 +82,13 @@ const Component: React.FC<TRefProps> = (props) => {
   }, [value]);
 
   const handleSearch = () => {
+    if (inputDisabled) return;
     dispatch(actions.initPageInfo());
     setIsModalVisible(true);
   };
 
   const handleClear = () => {
+    if (inputDisabled) return;
     /**清空显示的值 */
     setInterValue(undefined);
 
@@ -102,6 +123,8 @@ const Component: React.FC<TRefProps> = (props) => {
     <>
       <Space direction="horizontal" size={2}>
         <Input
+          size={inputSize}
+          disabled={inputDisabled}
           ref={inputDisplayRef}
           value={interValue}
           readOnly
@@ -113,11 +136,12 @@ const Component: React.FC<TRefProps> = (props) => {
                 <CloseCircleFilled
                   style={{ color: 'rgb(191 191 191)' }}
                   onClick={handleClear}
+                  disabled={inputDisabled}
                 />
               ) : (
                 ''
               )}
-              <SearchOutlined onClick={handleSearch} />
+              <SearchOutlined onClick={handleSearch} disabled={inputDisabled} />
             </Space>
           }
         />

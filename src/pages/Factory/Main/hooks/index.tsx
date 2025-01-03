@@ -23,13 +23,13 @@ export const useModuleData = () => {
   });
 };
 
-export const useModles = () => {
+export const useModels = () => {
   return useSelector((state: { [x: string]: TModuleStore }) => {
-    const modles: TModuleType[] = [];
-    if (state[moduleReducerName].data.modleType) {
-      modles.push(state[moduleReducerName].data.modleType.mainType);
-      modles.push(...state[moduleReducerName].data.modleType.refTypes);
+    const models: TModuleType[] = [];
+    if (state[moduleReducerName].data.modelType) {
+      models.push(state[moduleReducerName].data.modelType.mainType);
+      models.push(...state[moduleReducerName].data.modelType.refTypes);
     }
-    return modles;
+    return models;
   });
 };

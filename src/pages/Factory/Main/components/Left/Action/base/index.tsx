@@ -1,4 +1,13 @@
-import { Button, Form, Input, Modal, Select, Tooltip, message } from 'antd';
+import {
+  Badge,
+  Button,
+  Form,
+  Input,
+  Modal,
+  Select,
+  Tooltip,
+  message,
+} from 'antd';
 import { FC, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { PicCenterOutlined } from '@ant-design/icons';
@@ -7,10 +16,10 @@ import { actions, selectModuleData } from '@/pages/Factory/Main/store';
 import ModuleType from './ModuleType';
 import { TModuleType } from '@/pages/Factory/common/model';
 
-const BillFormBase: FC = () => {
+const PageDesignBase: FC = () => {
   const [form] = Form.useForm<TUiFactoryContent>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const billForm = useSelector(selectModuleData);
+  const pageDesign = useSelector(selectModuleData);
   const [moduleTypes, setModuleTypes] = useState<TModuleType[]>([]);
   const dispatch = useDispatch();
 
@@ -19,9 +28,9 @@ const BillFormBase: FC = () => {
   /**点击选择组件 */
   const handleToConfig = () => {
     form.resetFields();
-    if (billForm) {
+    if (pageDesign) {
       form.setFieldsValue({
-        ...billForm,
+        ...pageDesign,
       });
     }
     setModalVisible(true);
@@ -53,15 +62,17 @@ const BillFormBase: FC = () => {
   return (
     <>
       <span>
-        <Tooltip overlay={'基本信息'}>
-          <Button
-            type={'text'}
-            onClick={handleToConfig}
-            disabled={!billForm.idFactory}
-            size={'middle'}
-            icon={<PicCenterOutlined />}
-          ></Button>
-        </Tooltip>
+        <Badge count={<span style={{ color: 'red' }}>!</span>}>
+          <Tooltip overlay={'基本信息'}>
+            <Button
+              type={'text'}
+              onClick={handleToConfig}
+              disabled={!pageDesign.idFactory}
+              size={'middle'}
+              icon={<PicCenterOutlined />}
+            ></Button>
+          </Tooltip>
+        </Badge>
       </span>
       <Modal
         title="基本信息"
@@ -78,6 +89,7 @@ const BillFormBase: FC = () => {
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
             autoComplete="off"
+            size={'small'}
           >
             <Form.Item label="id" name="idFactory" hidden>
               <Input />
@@ -104,4 +116,4 @@ const BillFormBase: FC = () => {
   );
 };
 
-export default BillFormBase;
+export default PageDesignBase;

@@ -2,6 +2,8 @@ import { TBillRef, TFilterNode, TPageInfo } from '@/models';
 import { Key } from 'react';
 
 export type TRefProps = {
+  size?: 'small' | 'middle' | 'large';
+  disabled?: boolean;
   gridFixedFilterNodes?: TFilterNode[];
   treeFixedFilterNodes?: TFilterNode[];
   value?: any;

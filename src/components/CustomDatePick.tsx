@@ -12,7 +12,6 @@ type TCustomDatePickProps = {
 };
 
 const CustomDatePick: FC<TCustomDatePickProps> = ({
-  showTime,
   format,
   displayFormat,
   value,
@@ -25,13 +24,13 @@ const CustomDatePick: FC<TCustomDatePickProps> = ({
 
   useEffect(() => {
     if (value) {
-      const date = moment(value, format ?? 'YYYY-MM-DD');
+      const date = moment(value, format ?? 'YYYY-MM-DDTHH:mm:ssZ');
       setDateValue(date);
     }
   }, [value]);
 
   const handleChange = (value: any, dateString: string) => {
-    onChange(dateString);
+    onChange(value);
   };
 
   return (
@@ -41,7 +40,7 @@ const CustomDatePick: FC<TCustomDatePickProps> = ({
         onChange={handleChange}
         value={dateValue}
         ref={inputDisplayRef}
-        format={displayFormat ?? 'YYYY-MM-DD'}
+        format={displayFormat ?? 'YYYY-MM-DD HH:mm:ss'}
         showTime
       />
     </>

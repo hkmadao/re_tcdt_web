@@ -1,47 +1,30 @@
 import { CaseReducer, PayloadAction } from '@reduxjs/toolkit';
-import { TLeftTreeStore } from '../models';
+import { TDomainStore } from './models';
 import { TTree } from '@/models';
 import { Key } from 'react';
-import { subject, treeConf } from '../../../conf';
 import { deepCopy, getMatchKeys, getTreeByKeys, getTreeKeys } from '@/util';
-
-export const setComponentInfo: CaseReducer<
-  TLeftTreeStore,
-  PayloadAction<{ idUiConf: string; fgDisabled: boolean }>
-> = (state, action) => {
-  const { idUiConf, fgDisabled } = action.payload;
-  state.idUiConf = idUiConf;
-  state.fgDisabled = fgDisabled;
-};
+import { TProject } from '../models';
 
 export const setSelectedNode: CaseReducer<
-  TLeftTreeStore,
+  TDomainStore,
   PayloadAction<{ keys: Key[]; node: TTree }>
 > = (state, action) => {
   const { keys, node } = action.payload;
   state.selectedNode = node;
   state.selectedKeys = keys;
-  subject.publish({
-    topic: 'treeNodeSelected',
-    producerId: state.idUiConf!,
-    data: deepCopy(node),
-  });
+  state.currentFile = deepCopy(node);
 };
 
 export const cancelSelectedNode: CaseReducer<
-  TLeftTreeStore,
+  TDomainStore,
   PayloadAction<void>
 > = (state, action) => {
   state.selectedKeys = [];
   state.selectedNode = undefined;
-  subject.publish({
-    topic: 'treeSelectCancel',
-    producerId: state.idUiConf!,
-    data: undefined,
-  });
+  state.currentFile = undefined;
 };
 
-export const toggleExpand: CaseReducer<TLeftTreeStore, PayloadAction<Key>> = (
+export const toggleExpand: CaseReducer<TDomainStore, PayloadAction<Key>> = (
   state,
   action,
 ) => {
@@ -53,14 +36,14 @@ export const toggleExpand: CaseReducer<TLeftTreeStore, PayloadAction<Key>> = (
 };
 
 export const setExpandedKeys: CaseReducer<
-  TLeftTreeStore,
+  TDomainStore,
   PayloadAction<Key[]>
 > = (state, action) => {
   state.expandedKeys = action.payload;
 };
 
 export const searchTreeNode: CaseReducer<
-  TLeftTreeStore,
+  TDomainStore,
   PayloadAction<string | undefined>
 > = (state, action) => {
   const searchValue = action.payload;
@@ -70,7 +53,7 @@ export const searchTreeNode: CaseReducer<
     return;
   }
   const foundKeys = getMatchKeys(
-    treeConf?.searchAttrs || [],
+    ['filePathName'],
     searchValue,
     state.sourchTreeData || [],
   );
@@ -78,4 +61,18 @@ export const searchTreeNode: CaseReducer<
   state.expandedKeys = getTreeKeys(foundTree);
   state.foundKeys = foundKeys;
   state.treeData = foundTree;
+};
+
+export const toggleFgEdit: CaseReducer<TDomainStore, PayloadAction<boolean>> = (
+  state,
+  action,
+) => {
+  state.fgEdit = action.payload;
+};
+
+export const setCurrentProject: CaseReducer<
+  TDomainStore,
+  PayloadAction<TProject | undefined>
+> = (state, action) => {
+  state.currentProject = action.payload;
 };
