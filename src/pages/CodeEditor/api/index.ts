@@ -4,21 +4,27 @@ const TemplateFileAPI = {
   getFileTreeByProjectId: (params: {
     idProject: string;
   }): Promise<TTemplateFile> => {
-    return API.GET(`/templateFile/fetchTreeByProjectId`, params);
+    return API.GET(`/templateFile/getTreeByProjectId`, params);
   },
-  getFileByPath: (params: { filePath: string }): Promise<TTemplateFile> => {
+  getFileByPath: (params: {
+    idProject: string;
+    filePath: string;
+  }): Promise<TTemplateFile> => {
     return API.GET(`/templateFile/getFileByPath`, params);
   },
   add: (params: TTemplateFile): Promise<TTemplateFile> => {
     return API.POST(`/templateFile/add`, params);
   },
-  updateStatis: (
+  updateStat: (
     params: Omit<TTemplateFile, 'content' | 'children'>,
   ): Promise<TTemplateFile> => {
-    return API.POST(`/templateFile/updateStatis`, params);
+    return API.POST(`/templateFile/updateStat`, params);
   },
   updateContent: (
-    params: Pick<TTemplateFile, 'parentPathName' | 'fileName' | 'content'>,
+    params: Pick<
+      TTemplateFile,
+      'idProject' | 'parentPathName' | 'fileName' | 'content'
+    >,
   ): Promise<TTemplateFile> => {
     return API.POST(`/templateFile/updateContent`, params);
   },

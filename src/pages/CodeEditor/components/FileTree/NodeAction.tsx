@@ -16,7 +16,7 @@ import {
 } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFgEdit, useSelectedNode } from '../../hooks';
-import { addFile, removeFile, saveFileStatis } from '../../store';
+import { addFile, removeFile, saveFileStat } from '../../store';
 import { TTemplateFile } from '../../models';
 
 const NodeAction: FC = () => {
@@ -66,7 +66,7 @@ const NodeAction: FC = () => {
   const handleOk = async () => {
     const formValues = await form.validateFields();
     if (formValues.filePathName) {
-      distpatch(saveFileStatis(formValues));
+      distpatch(saveFileStat(formValues));
     } else {
       distpatch(addFile(formValues));
     }
@@ -92,7 +92,7 @@ const NodeAction: FC = () => {
             size={'small'}
             onClick={handleToEdit}
             type={'default'}
-            disabled={fgEdit || !selectedNode}
+            disabled={fgEdit || !selectedNode || !selectedNode.idParent}
           >
             <EditOutlined />
           </Button>
@@ -103,12 +103,14 @@ const NodeAction: FC = () => {
             okText="确定"
             cancelText="取消"
             disabled={
-              fgEdit || !selectedNode || selectedNode.children?.length !== 0
+              fgEdit ||
+              !selectedNode ||
+              selectedNode.children?.length !== 0 ||
+              !selectedNode.idParent
             }
           >
             <Button
               size={'small'}
-              // onClick={handleToDelete}
               type={'default'}
               disabled={
                 fgEdit || !selectedNode || selectedNode.children?.length !== 0

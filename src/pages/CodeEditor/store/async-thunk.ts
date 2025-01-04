@@ -4,6 +4,8 @@ import { componentName } from '../conf';
 import { TDomainStore } from './models';
 import { TProject, TTemplateFile } from '../models';
 import { message } from 'antd';
+import { TTree } from '@/models';
+import { Key } from 'react';
 
 export const fetchTreeByProject = createAsyncThunk(
   `/fetchTreeByProject`,
@@ -77,11 +79,19 @@ export const fetchTree = createAsyncThunk(
 
 export const fetchFile = createAsyncThunk(
   `/fetchFile`,
-  async (param: { filePath: string }, thunkAPI) => {
-    const templateFile: TTemplateFile = await TemplateFileAPI.getFileByPath(
-      param,
-    );
-    return templateFile;
+  async (param: { keys: Key[]; node: TTree }, thunkAPI) => {
+    const { keys, node } = param;
+    const state: TDomainStore = (thunkAPI.getState() as any)[componentName];
+    const idProject = state.currentProject?.idProject;
+    if (idProject === undefined) {
+      message.error('未选择项目');
+      throw new Error('未选择项目');
+    }
+    const templateFile: TTemplateFile = await TemplateFileAPI.getFileByPath({
+      idProject,
+      filePath: node.filePathName,
+    });
+    return { keys, templateFile };
   },
 );
 
@@ -89,21 +99,41 @@ export const addFile = createAsyncThunk(
   `/addFile`,
   async (templateFile: TTemplateFile, thunkAPI) => {
     const state: TDomainStore = (thunkAPI.getState() as any)[componentName];
-    const saveData: TTemplateFile = await TemplateFileAPI.add(templateFile);
+    const idProject = state.currentProject?.idProject;
+    if (idProject === undefined) {
+      message.error('未选择项目');
+      throw new Error('未选择项目');
+    }
+    const saveData: TTemplateFile = await TemplateFileAPI.add({
+      idProject,
+      ...templateFile,
+    });
     return saveData;
   },
 );
 
-export const saveFileStatis = createAsyncThunk(
-  `/saveFileStatis`,
+export const saveFileStat = createAsyncThunk(
+  `/saveFileStat`,
   async (
     templateFile: Omit<TTemplateFile, 'content' | 'children'>,
     thunkAPI,
   ) => {
     const state: TDomainStore = (thunkAPI.getState() as any)[componentName];
-    const saveData: TTemplateFile = await TemplateFileAPI.updateStatis(
-      templateFile,
-    );
+    const idProject = state.currentProject?.idProject;
+    if (idProject === undefined) {
+      message.error('未选择项目');
+      throw new Error('未选择项目');
+    }
+    const oldFilePathName = templateFile.filePathName;
+    const filePathName =
+      oldFilePathName.substring(0, oldFilePathName.lastIndexOf('/') + 1) +
+      templateFile.fileName;
+    const saveData: TTemplateFile = await TemplateFileAPI.updateStat({
+      idProject,
+      ...templateFile,
+      oldFilePathName,
+      filePathName,
+    });
     return saveData;
   },
 );
@@ -118,9 +148,15 @@ export const saveFileContent = createAsyncThunk(
     thunkAPI,
   ) => {
     const state: TDomainStore = (thunkAPI.getState() as any)[componentName];
-    const saveData: TTemplateFile = await TemplateFileAPI.updateContent(
-      templateFile,
-    );
+    const idProject = state.currentProject?.idProject;
+    if (idProject === undefined) {
+      message.error('未选择项目');
+      throw new Error('未选择项目');
+    }
+    const saveData: TTemplateFile = await TemplateFileAPI.updateContent({
+      idProject,
+      ...templateFile,
+    });
     return saveData;
   },
 );
@@ -129,20 +165,29 @@ export const removeFile = createAsyncThunk(
   `/removeFile`,
   async (param: void, thunkAPI) => {
     const state: TDomainStore = (thunkAPI.getState() as any)[componentName];
+    const idProject = state.currentProject?.idProject;
+    if (idProject === undefined) {
+      message.error('未选择项目');
+      throw new Error('未选择项目');
+    }
     const selectNode = state.selectedNode;
     if (!selectNode) {
       message.error('未选中节点');
       throw new Error('未选中节点');
     }
     const saveData: TTemplateFile = await TemplateFileAPI.remove(
-      treeNodeConvertTemplateFile(selectNode),
+      treeNodeConvertTemplateFile(idProject, selectNode),
     );
     return saveData;
   },
 );
 
-const treeNodeConvertTemplateFile = (treeNode: any): TTemplateFile => {
+const treeNodeConvertTemplateFile = (
+  idProject: string,
+  treeNode: any,
+): TTemplateFile => {
   return {
+    idProject,
     parentPathName: treeNode.parentPathName,
     filePathName: treeNode.filePathName,
     fileName: treeNode.fileName,

@@ -16,7 +16,7 @@ import {
   useFgEdit,
   useCurrentProject,
 } from '../../hooks';
-import { actions, fetchTree } from '../../store';
+import { actions, fetchFile, fetchTree } from '../../store';
 import SelectProject from './SelectProject';
 import NodeAction from './NodeAction';
 
@@ -82,7 +82,11 @@ const LeftTreeLayout: FC<TOprationLayout> = () => {
     //只有第一次点击执行事件，防止连续多次执行
     if (nativeEvent.detail === 1) {
       if (keys && keys.length > 0) {
-        dispatch(actions.setSelectedNode({ keys, node }));
+        if (node.fgFile) {
+          dispatch(fetchFile({ keys, node }));
+        } else {
+          dispatch(actions.setSelectedNode({ keys, node }));
+        }
       }
     }
   };
@@ -91,6 +95,7 @@ const LeftTreeLayout: FC<TOprationLayout> = () => {
     keys: Key[],
     { node }: { node: TTree; expanded: boolean },
   ) => {
+    if (fgEdit) return;
     dispatch(actions.toggleExpand(node.key));
   };
 
@@ -128,7 +133,8 @@ const LeftTreeLayout: FC<TOprationLayout> = () => {
         style={{
           display: 'flex',
           flex: '0 1 auto',
-          width: '30%',
+          minWidth: '20%',
+          maxWidth: '30%',
           overflow: 'auto',
           margin: '0px 5px 0px 5px',
         }}
@@ -151,7 +157,7 @@ const LeftTreeLayout: FC<TOprationLayout> = () => {
             <Space size={'small'}>
               <Input
                 size={'small'}
-                readOnly={fgEdit}
+                readOnly={fgEdit || !currentProject}
                 ref={searchRef}
                 value={searchValue}
                 onChange={handleChange}
@@ -173,7 +179,7 @@ const LeftTreeLayout: FC<TOprationLayout> = () => {
                 size={'small'}
                 onClick={handleSearch}
                 type={'primary'}
-                disabled={fgEdit}
+                disabled={fgEdit || !currentProject}
               >
                 <SearchOutlined />
               </Button>
@@ -181,7 +187,7 @@ const LeftTreeLayout: FC<TOprationLayout> = () => {
                 size={'small'}
                 onClick={onReflesh}
                 type={'primary'}
-                disabled={fgEdit}
+                disabled={fgEdit || !currentProject}
               >
                 <ReloadOutlined />
               </Button>

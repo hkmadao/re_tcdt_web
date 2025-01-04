@@ -1,9 +1,11 @@
 /**模板文件 */
 export type TTemplateFile = {
+  idProject?: string;
   /**上级目录路径，用'/'分割 */
   parentPathName?: string;
   /**文件路径，用'/'分割 */
   filePathName: string;
+  oldFilePathName?: string;
   fileName: string;
   fgFile: boolean;
   content?: string;

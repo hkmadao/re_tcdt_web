@@ -10,6 +10,7 @@ const MainModule: FC = () => {
   return (
     <>
       <Spin
+        delay={100}
         spinning={loadStatus === 'loading'}
         wrapperClassName={classNames(styles.spin)}
       >

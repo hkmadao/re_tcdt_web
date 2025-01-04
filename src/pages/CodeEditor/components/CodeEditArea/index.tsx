@@ -74,6 +74,7 @@ const CodeEditArea: FC = () => {
           display: 'flex',
           flex: '1 1 auto',
           flexDirection: 'column',
+          width: '70%',
           gap: '10px',
         }}
       >
