@@ -30,49 +30,6 @@ export const fetchTree = createAsyncThunk(
       await TemplateFileAPI.getFileTreeByProjectId({
         idProject: state.currentProject.idProject!,
       });
-    // let templateFile: TTemplateFile = {
-    //   parentPathName: undefined,
-    //   filePathName: 'tcdt_rust',
-    //   fileName: 'tcdt_rust',
-    //   fgFile: false,
-    //   content: '',
-    //   children: [
-    //     {
-    //       parentPathName: 'tcdt_rust',
-    //       filePathName: 'tcdt_rust/app_full',
-    //       fileName: 'app_full',
-    //       fgFile: false,
-    //       content: '',
-    //       children: [
-    //         {
-    //           parentPathName: 'tcdt_rust/app_full',
-    //           filePathName: 'tcdt_rust/app_full/mysql_template.sql',
-    //           fileName: 'mysql_template.sql',
-    //           fgFile: true,
-    //           content: '-- mysql template\n'.repeat(50),
-    //           children: []
-    //         }
-    //       ]
-    //     },
-    //     {
-    //       parentPathName: 'tcdt_rust',
-    //       filePathName: 'tcdt_rust/app_part',
-    //       fileName: 'app_part',
-    //       fgFile: false,
-    //       content: '',
-    //       children: [
-    //         {
-    //           parentPathName: 'tcdt_rust/app_part',
-    //           filePathName: 'tcdt_rust/app_part/--_mysql_template.sql',
-    //           fileName: '--_mysql_template.sql',
-    //           fgFile: true,
-    //           content: '-- mysql template',
-    //           children: []
-    //         }
-    //       ]
-    //     }
-    //   ]
-    // };
     return templateFile;
   },
 );
@@ -104,9 +61,12 @@ export const addFile = createAsyncThunk(
       message.error('未选择项目');
       throw new Error('未选择项目');
     }
+    const filePathName =
+      templateFile.parentPathName + '/' + templateFile.fileName;
     const saveData: TTemplateFile = await TemplateFileAPI.add({
-      idProject,
       ...templateFile,
+      idProject,
+      filePathName,
     });
     return saveData;
   },
@@ -124,17 +84,24 @@ export const saveFileStat = createAsyncThunk(
       message.error('未选择项目');
       throw new Error('未选择项目');
     }
+    const selectedNode = state.selectedNode;
     const oldFilePathName = templateFile.filePathName;
     const filePathName =
       oldFilePathName.substring(0, oldFilePathName.lastIndexOf('/') + 1) +
       templateFile.fileName;
     const saveData: TTemplateFile = await TemplateFileAPI.updateStat({
-      idProject,
       ...templateFile,
+      idProject,
       oldFilePathName,
       filePathName,
     });
-    return saveData;
+    let afterSave: TTemplateFile = {
+      ...saveData,
+    };
+    if (selectedNode) {
+      afterSave.content = selectedNode.content;
+    }
+    return afterSave;
   },
 );
 

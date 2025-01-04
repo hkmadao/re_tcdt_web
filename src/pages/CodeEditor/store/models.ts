@@ -10,7 +10,6 @@ export type TDomainStore = {
   currentProject?: TProject;
   /**文件树 */
   fileTree?: TTemplateFile;
-  currentFile?: TTemplateFile;
   /**树的原始数据 */
   sourchTreeData?: TTree[];
   /**当前树的数据 */

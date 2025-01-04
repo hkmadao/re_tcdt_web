@@ -11,10 +11,6 @@ const selectFgEdit = (state: { [x: string]: TDomainStore }) => {
   return state[componentName].fgEdit;
 };
 
-const selectCurrentFile = (state: { [x: string]: TDomainStore }) => {
-  return state[componentName].currentFile;
-};
-
 const selectTreeData = (state: { [x: string]: TDomainStore }) => {
   return state[componentName].treeData;
 };
@@ -38,10 +34,6 @@ const selectSelectedNode = (state: { [x: string]: TDomainStore }) => {
 
 export const useLoadingStatus = () => {
   return useSelector(selectStatus);
-};
-
-export const useCurrentFile = () => {
-  return useSelector(selectCurrentFile);
 };
 
 export const useSelectedNode = () => {

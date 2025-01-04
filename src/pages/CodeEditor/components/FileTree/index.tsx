@@ -133,8 +133,8 @@ const LeftTreeLayout: FC<TOprationLayout> = () => {
         style={{
           display: 'flex',
           flex: '0 1 auto',
-          minWidth: '20%',
-          maxWidth: '30%',
+          width: '30%',
+          maxWidth: '400px',
           overflow: 'auto',
           margin: '0px 5px 0px 5px',
         }}

@@ -70,6 +70,7 @@ const NodeAction: FC = () => {
     } else {
       distpatch(addFile(formValues));
     }
+    setModalVisible(false);
   };
 
   return (

@@ -12,7 +12,6 @@ export const setSelectedNode: CaseReducer<
   const { keys, node } = action.payload;
   state.selectedNode = node;
   state.selectedKeys = keys;
-  state.currentFile = deepCopy(node);
 };
 
 export const cancelSelectedNode: CaseReducer<
@@ -21,7 +20,6 @@ export const cancelSelectedNode: CaseReducer<
 > = (state, action) => {
   state.selectedKeys = [];
   state.selectedNode = undefined;
-  state.currentFile = undefined;
 };
 
 export const toggleExpand: CaseReducer<TDomainStore, PayloadAction<Key>> = (

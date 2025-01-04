@@ -17,9 +17,9 @@ import {
 } from './async-thunk';
 import {
   addNodeByParentKey,
-  deepCopy,
   fillTreeKeyByFieldName,
   getChildTree,
+  getTreeKeys,
   removeNodeByKey,
   updateNode,
 } from '@/util';
@@ -54,12 +54,12 @@ export const slice = createSlice({
         state.currentProject = project;
         state.sourchTreeData = treeData;
         state.treeData = treeData;
-        if (
-          treeData &&
-          treeData.length > 0 &&
-          state.expandedKeys.length === 0
-        ) {
+        state.selectedKeys = [];
+        state.selectedNode = undefined;
+        if (treeData && treeData.length > 0) {
           state.expandedKeys = [treeData[0].key];
+        } else {
+          state.expandedKeys = [];
         }
       })
       .addCase(fetchTree.pending, (state, action) => {
@@ -99,6 +99,7 @@ export const slice = createSlice({
           ...templateFile,
           key: templateFile.filePathName,
           idParent: templateFile.parentPathName,
+          title: templateFile.fileName,
           children: [],
         };
         if (!templateFile.fgFile) {
@@ -107,9 +108,8 @@ export const slice = createSlice({
         }
         state.selectedNode = treeNode;
         state.selectedKeys = keys;
-        state.currentFile = deepCopy(treeNode);
-        updateNode(treeNode, state.sourchTreeData);
-        updateNode(treeNode, state.treeData);
+        state.sourchTreeData = updateNode(treeNode, state.sourchTreeData);
+        state.treeData = updateNode(treeNode, state.treeData);
       })
       .addCase(addFile.pending, (state, action) => {
         state.status = 'loading';
@@ -122,16 +122,21 @@ export const slice = createSlice({
         const templateFile = action.payload;
         let treeNode: TTree = {
           ...templateFile,
+          content: '',
           key: templateFile.filePathName,
           idParent: templateFile.parentPathName,
+          title: templateFile.fileName,
           children: [],
         };
         if (!templateFile.fgFile) {
           const children = getChildTree(treeNode.key, state.sourchTreeData);
           treeNode.children = children;
         }
-        addNodeByParentKey(treeNode, state.sourchTreeData);
-        addNodeByParentKey(treeNode, state.treeData);
+        state.sourchTreeData = addNodeByParentKey(
+          treeNode,
+          state.sourchTreeData,
+        );
+        state.treeData = addNodeByParentKey(treeNode, state.treeData);
       })
       .addCase(saveFileStat.pending, (state, action) => {
         state.status = 'loading';
@@ -146,20 +151,48 @@ export const slice = createSlice({
           ...templateFile,
           key: templateFile.filePathName,
           idParent: templateFile.parentPathName,
+          title: templateFile.fileName,
+          filePathName: templateFile.filePathName,
           children: [],
         };
         if (!templateFile.fgFile) {
           const children =
-            getChildTree(treeNode.key, state.sourchTreeData) || [];
+            getChildTree(templateFile.oldFilePathName!, state.sourchTreeData) ||
+            [];
+          const childrenKeys = getTreeKeys(children);
+          state.expandedKeys = state.expandedKeys.filter(
+            (k) => !childrenKeys.includes(k),
+          );
           const newChildren = children.map((child) => {
-            return recursionUpdateStatis(treeNode, child);
+            return recursionUpdateStat(treeNode, child);
           });
           treeNode.children = newChildren;
-        } else {
-          state.currentFile = templateFile;
         }
-        updateNode(treeNode, state.sourchTreeData);
-        updateNode(treeNode, state.treeData);
+
+        //remove old node
+        state.sourchTreeData = removeNodeByKey(
+          templateFile.oldFilePathName!,
+          state.sourchTreeData,
+        );
+        state.treeData = removeNodeByKey(
+          templateFile.oldFilePathName!,
+          state.treeData,
+        );
+        //add new node
+        state.sourchTreeData = addNodeByParentKey(
+          treeNode,
+          state.sourchTreeData,
+        );
+        state.treeData = addNodeByParentKey(treeNode, state.treeData);
+
+        state.selectedNode = treeNode;
+        state.selectedKeys = [treeNode.key];
+        if (state.expandedKeys.includes(templateFile.oldFilePathName!)) {
+          state.expandedKeys = state.expandedKeys.filter(
+            (k) => k !== templateFile.oldFilePathName!,
+          );
+          state.expandedKeys.push(treeNode.key);
+        }
 
         state.fgEdit = false;
       })
@@ -176,13 +209,14 @@ export const slice = createSlice({
           ...templateFile,
           key: templateFile.filePathName,
           idParent: templateFile.parentPathName,
+          title: templateFile.fileName,
           children: [],
         };
 
-        updateNode(treeNode, state.sourchTreeData);
-        updateNode(treeNode, state.treeData);
+        state.sourchTreeData = updateNode(treeNode, state.sourchTreeData);
+        state.treeData = updateNode(treeNode, state.treeData);
 
-        state.currentFile = templateFile;
+        state.selectedNode = treeNode;
         state.fgEdit = false;
       })
       .addCase(removeFile.pending, (state, action) => {
@@ -198,12 +232,19 @@ export const slice = createSlice({
           ...templateFile,
           key: templateFile.filePathName,
           idParent: templateFile.parentPathName,
+          title: templateFile.fileName,
           children: [],
         };
-        removeNodeByKey(treeNode.key, state.sourchTreeData);
-        removeNodeByKey(treeNode.key, state.treeData);
+        state.sourchTreeData = removeNodeByKey(
+          treeNode.key,
+          state.sourchTreeData,
+        );
+        state.treeData = removeNodeByKey(treeNode.key, state.treeData);
         state.selectedKeys = [];
-        state.currentFile = undefined;
+        state.selectedNode = undefined;
+        state.expandedKeys = state.expandedKeys.filter(
+          (k) => k !== treeNode.key,
+        );
       });
   },
 });
@@ -219,12 +260,18 @@ export default configureStore({
   },
 });
 
-const recursionUpdateStatis = (parentTemplateFile: TTree, child: TTree) => {
-  return {
+const recursionUpdateStat = (parentTemplateFile: TTree, child: TTree) => {
+  let newChild: TTree = {
     ...child,
     idParent: parentTemplateFile.filePathName,
     key: parentTemplateFile.filePathName + '/' + child.fileName,
     parentPathName: parentTemplateFile.filePathName,
     filePathName: parentTemplateFile.filePathName + '/' + child.fileName,
   };
+  if (child.children) {
+    newChild.children = child.children.map((c) => {
+      return recursionUpdateStat(newChild, c);
+    });
+  }
+  return newChild;
 };

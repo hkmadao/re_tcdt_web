@@ -5,36 +5,50 @@ import { javascript } from '@codemirror/lang-javascript';
 import { androidstudio } from '@uiw/codemirror-theme-androidstudio';
 import { Button, message } from 'antd';
 import { actions, saveFileContent } from '../../store';
-import { useCurrentFile, useFgEdit } from '../../hooks';
+import { useSelectedNode, useFgEdit } from '../../hooks';
 import { TTemplateFile } from '../../models';
 
 const CodeEditArea: FC = () => {
   const dispatch = useDispatch();
-  const currentFile = useCurrentFile();
+  const selectedNode = useSelectedNode();
   const fgEdit = useFgEdit();
   const [sourceTemplateFile, setSourceTemplateFile] =
     React.useState<TTemplateFile>();
   const [templateFile, setTemplateFile] = React.useState<TTemplateFile>();
 
   useEffect(() => {
-    if (currentFile && currentFile.fgFile) {
-      const newTemplateFile: TTemplateFile = { ...currentFile };
+    if (selectedNode && selectedNode.fgFile) {
+      const newTemplateFile: TTemplateFile = {
+        ...selectedNode,
+        filePathName: selectedNode.filePathName,
+        fileName: selectedNode.fileName,
+        fgFile: selectedNode.fgFile,
+        children: [],
+      };
       setTemplateFile(newTemplateFile);
+    } else {
+      setTemplateFile(undefined);
     }
-  }, [currentFile]);
+  }, [selectedNode]);
 
   useEffect(() => {
-    if (!fgEdit && currentFile && currentFile.fgFile) {
-      const newTemplateFile: TTemplateFile = { ...currentFile };
+    if (!fgEdit && selectedNode && selectedNode.fgFile) {
+      const newTemplateFile: TTemplateFile = {
+        ...selectedNode,
+        filePathName: selectedNode.filePathName,
+        fileName: selectedNode.fileName,
+        fgFile: selectedNode.fgFile,
+        children: [],
+      };
       setTemplateFile(newTemplateFile);
     }
   }, [fgEdit]);
 
-  const onChange = React.useCallback((val: string, viewUpdate: any) => {
+  const onChange = (val: string, viewUpdate: any) => {
     if (!templateFile) return;
     const newTemplateFile: TTemplateFile = { ...templateFile, content: val };
     setTemplateFile(newTemplateFile);
-  }, []);
+  };
 
   const toggleFgEdit = () => {
     if (!templateFile) {
@@ -97,7 +111,7 @@ const CodeEditArea: FC = () => {
             <Button
               size={'small'}
               onClick={toggleFgEdit}
-              disabled={!currentFile?.fgFile}
+              disabled={!selectedNode?.fgFile}
             >
               {fgEdit ? '取消' : '编辑'}
             </Button>
