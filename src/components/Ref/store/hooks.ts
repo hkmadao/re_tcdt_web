@@ -2,7 +2,7 @@ import { moduleReducerName } from '../conf';
 import { TModuleStore } from '../model';
 import { useSelector, useDispatch } from 'react-redux';
 
-export const useStatus = () => {
+export const useLoadingStatus = () => {
   const select = (state: { [x: string]: TModuleStore }) => {
     return state[moduleReducerName].status;
   };

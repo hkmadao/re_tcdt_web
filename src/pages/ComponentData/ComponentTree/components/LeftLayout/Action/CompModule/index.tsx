@@ -328,7 +328,7 @@ const CompModuleAction: FC = () => {
     if (window.tcdtAPI && singleComponentNodes.length > 0) {
       const params = singleComponentNodes.map((node) => {
         return {
-          url: Env.serverURL + `/component/generateSingle?id=${node?.id}`,
+          url: Env.directServerUrl + `/component/generateSingle?id=${node?.id}`,
           name: node.displayName ?? '',
         };
       });
@@ -348,7 +348,8 @@ const CompModuleAction: FC = () => {
     if (window.tcdtAPI && enumComponentNodes.length > 0) {
       const params = enumComponentNodes.map((node) => {
         return {
-          url: Env.serverURL + `/component/generateEnumPart?id=${node?.id}`,
+          url:
+            Env.directServerUrl + `/component/generateEnumPart?id=${node?.id}`,
           name: node.displayName ?? '',
         };
       });
@@ -368,7 +369,9 @@ const CompModuleAction: FC = () => {
     if (window.tcdtAPI && combinationComponentNodes.length > 0) {
       const params = combinationComponentNodes.map((node) => {
         return {
-          url: Env.serverURL + `/component/generateCombination?id=${node?.id}`,
+          url:
+            Env.directServerUrl +
+            `/component/generateCombination?id=${node?.id}`,
           name: node.displayName ?? '',
         };
       });

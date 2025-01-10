@@ -20,7 +20,7 @@ const GeneratePart: FC = () => {
     }
     if (window.tcdtAPI) {
       window.tcdtAPI.generateEntityPart(
-        Env.serverURL +
+        Env.directServerUrl +
           `/entityCollection/generatePart?id=${entityCollection.idEntityCollection}`,
       );
       return;

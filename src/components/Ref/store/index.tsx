@@ -19,16 +19,24 @@ export const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchTableData.pending, (state, action) => {})
-      .addCase(fetchTableData.rejected, (state, action) => {})
+      .addCase(fetchTableData.pending, (state, action) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchTableData.rejected, (state, action) => {
+        state.status = 'failed';
+      })
       .addCase(fetchTableData.fulfilled, (state, action) => {
         const { pageInfo, searchValues } = action.payload;
         state.status = 'succeeded';
         state.pageInfo = pageInfo;
         state.searchValues = searchValues;
       })
-      .addCase(fetchTreeData.pending, (state, action) => {})
-      .addCase(fetchTreeData.rejected, (state, action) => {})
+      .addCase(fetchTreeData.pending, (state, action) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchTreeData.rejected, (state, action) => {
+        state.status = 'failed';
+      })
       .addCase(fetchTreeData.fulfilled, (state, action) => {
         const treeData = action.payload;
         state.status = 'succeeded';

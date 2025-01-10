@@ -1,19 +1,20 @@
 import Axios, { AxiosRequestConfig } from 'axios';
 import { message } from 'antd';
-import { history } from 'umi';
 import Env from '@/conf/env';
 import { getLonginUser, setLonginUser, setRediectPath, User } from '@/session';
 
-Axios.defaults.withCredentials = false;
+let serverURL = Env.serverURL;
 
-Axios.defaults.timeout = 60000;
+let baseAxios = Axios.create({
+  baseURL: serverURL,
+  timeout: 20000,
+});
 
-Axios.interceptors.request.use(
+baseAxios.interceptors.request.use(
   (config: AxiosRequestConfig<any>) => {
     let user: User = getLonginUser();
-    // console.log(user);
-    if (config.headers) {
-      config.headers['Authorization'] = user ? user.token! : '';
+    if (config.headers && user && user.token) {
+      config.headers['Authorization'] = user.token;
     }
     return config;
   },
@@ -23,7 +24,7 @@ Axios.interceptors.request.use(
   },
 );
 
-Axios.interceptors.response.use(
+baseAxios.interceptors.response.use(
   function (response) {
     if (response.data) {
       if (response.data.status === 0) {
@@ -89,84 +90,79 @@ Axios.interceptors.response.use(
   },
 );
 
-let serverURL = Env.serverURL;
-Axios.defaults.baseURL = serverURL;
-
 export const POST = async <T>(uri: string, params: T) => {
-  const res = await Axios.post(`${serverURL}${uri}`, params);
+  const res = await baseAxios.post(`${uri}`, params);
   return res.data;
 };
 export const GET = async <T>(uri: string, params?: T) => {
-  const res = await Axios.get(`${uri}`, {
+  const res = await baseAxios.get(`${uri}`, {
     params: params,
   });
   return res.data;
 };
 
 export const PUT = async <T>(uri: any, params: T) => {
-  const res = await Axios.put(`${serverURL}${uri}`, params);
+  const res = await baseAxios.put(`${uri}`, params);
   return res.data;
 };
 
 export const DELETE = async <T>(uri: any, params: { vos: T[] }) => {
-  const res = await Axios.delete(`${serverURL}${uri}`, {
+  const res = await baseAxios.delete(`${uri}`, {
     params: params,
   });
   return res.data;
 };
 
 export const PATCH = async <T>(uri: any, params: T) => {
-  const res = await Axios.patch(`${serverURL}${uri}`, params);
+  const res = await baseAxios.patch(`${uri}`, params);
   return res.data;
 };
 
 export const GET_DOWNLOAD = async (uri: any, downloadFileName?: string) => {
-  await Axios.get(`${serverURL}${uri}`, { responseType: 'arraybuffer' }).then(
-    (res) => {
-      if (!downloadFileName) {
-        if (!res.headers) {
-          return Promise.reject('No Response Headers error');
-        }
-        let contentDisposition = res.headers['content-disposition'];
-        // console.log(res.headers);
-        if (!contentDisposition) {
-          return Promise.reject(
-            'Response Headers Error: No Content-Disposition Header',
-          );
-        }
-        //content-disposition value is attachment;filename=xxx.xx
-        let fileNameEncode;
-        if (
-          contentDisposition.indexOf('=') > 0 &&
-          contentDisposition.indexOf('=') < contentDisposition.length
-        ) {
-          fileNameEncode = contentDisposition.substring(
-            contentDisposition.lastIndexOf('=') + 1,
-          );
-        }
-        if (!fileNameEncode || fileNameEncode.length < 1) {
-          return Promise.reject(
-            'Response Headers Error: Content-Disposition Header filename Is Empty',
-          );
-        }
-        downloadFileName = decodeURI(fileNameEncode);
+  await baseAxios.get(`${uri}`, { responseType: 'arraybuffer' }).then((res) => {
+    if (!downloadFileName) {
+      if (!res.headers) {
+        return Promise.reject('No Response Headers error');
       }
-      // 这里 data 是返回来的二进制数据
-      var blob = new Blob([res.data], {
-        type: 'application/x-msdownload;charset=UTF-8',
-      });
-      // 创建一个blob的对象链接
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      // 把获得的blob的对象链接赋值给新创建的这个 a 链接
-      link.setAttribute('download', downloadFileName); // 设置下载文件名
-      document.body.appendChild(link);
-      // 使用js点击这个链接
-      link.click();
-      document.body.removeChild(link);
-    },
-  );
+      let contentDisposition = res.headers['content-disposition'];
+      // console.log(res.headers);
+      if (!contentDisposition) {
+        return Promise.reject(
+          'Response Headers Error: No Content-Disposition Header',
+        );
+      }
+      //content-disposition value is attachment;filename=xxx.xx
+      let fileNameEncode;
+      if (
+        contentDisposition.indexOf('=') > 0 &&
+        contentDisposition.indexOf('=') < contentDisposition.length
+      ) {
+        fileNameEncode = contentDisposition.substring(
+          contentDisposition.lastIndexOf('=') + 1,
+        );
+      }
+      if (!fileNameEncode || fileNameEncode.length < 1) {
+        return Promise.reject(
+          'Response Headers Error: Content-Disposition Header filename Is Empty',
+        );
+      }
+      downloadFileName = decodeURI(fileNameEncode);
+    }
+    // 这里 data 是返回来的二进制数据
+    var blob = new Blob([res.data], {
+      type: 'application/x-msdownload;charset=UTF-8',
+    });
+    // 创建一个blob的对象链接
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    // 把获得的blob的对象链接赋值给新创建的这个 a 链接
+    link.setAttribute('download', downloadFileName); // 设置下载文件名
+    document.body.appendChild(link);
+    // 使用js点击这个链接
+    link.click();
+    document.body.removeChild(link);
+  });
 };
 
 const BaseAPI = {

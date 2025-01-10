@@ -69,7 +69,7 @@ const ModifyPassword: FC = () => {
             name="username"
             rules={[{ required: true, message: 'Please input your username!' }]}
           >
-            <Input readOnly={true} />
+            <Input />
           </Form.Item>
 
           <Form.Item
@@ -79,7 +79,7 @@ const ModifyPassword: FC = () => {
               { required: true, message: 'Please input your oldPassword!' },
             ]}
           >
-            <Input.Password autoComplete={'new-password'} />
+            <Input.Password autoComplete={'on'} />
           </Form.Item>
 
           <Form.Item

@@ -61,6 +61,11 @@ const refConfig: TBillRef = {
         name: 'displayName',
         displayName: '显示名称',
       },
+      {
+        idBillRefColumn: 'SFb6YBzXE6klsMkHKQRDz',
+        name: 'templateCode',
+        displayName: '项目模板编号',
+      },
     ],
     searchRefs: [
       {

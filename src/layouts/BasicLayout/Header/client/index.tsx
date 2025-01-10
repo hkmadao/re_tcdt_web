@@ -20,6 +20,7 @@ enum EPathKey {
   Action = '/devmanager/factory/units/Action',
   AttributeType = '/devmanager/AttributeType',
   CommonAttribute = '/devmanager/Commonattribute',
+  CodeEditor = '/devmanager/CodeEditor',
   // InternalMethod = '/devmanager/InternalMethodAgg',
   Process = '/client/programconf',
 }
@@ -35,6 +36,7 @@ const pathObject: any = {
   [EPathKey.Action]: '按钮建模',
   [EPathKey.AttributeType]: '数据类型配置',
   [EPathKey.CommonAttribute]: '公共属性',
+  [EPathKey.CodeEditor]: '模板代码查看',
   // [EPathKey.InternalMethod]: '内置方法配置',
   [EPathKey.Process]: '程序配置',
 };
@@ -74,6 +76,16 @@ const CilentHeader: FC = () => {
         onClick: (e) => {
           if (localtion.pathname !== EPathKey.CommonAttribute) {
             history.push(EPathKey.CommonAttribute);
+          }
+        },
+      },
+      {
+        key: 'CodeEditor',
+        label: '模板代码查看',
+        disabled: EPathKey.CodeEditor === localtion.pathname,
+        onClick: (e) => {
+          if (localtion.pathname !== EPathKey.CodeEditor) {
+            history.push(EPathKey.CodeEditor);
           }
         },
       },

@@ -20,7 +20,7 @@ const GenerateFull: FC = () => {
     }
     if (window.tcdtAPI) {
       window.tcdtAPI.generateEntityFull(
-        Env.serverURL +
+        Env.directServerUrl +
           `/entityCollection/generateFull?id=${entityCollection.idEntityCollection}`,
       );
       return;

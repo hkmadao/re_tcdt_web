@@ -35,4 +35,12 @@ export default defineConfig({
     default: 'zh-CN',
     baseSeparator: '-',
   },
+  //配置跨域proxy代理
+  proxy: {
+    '/api': {
+      target: 'http://127.0.0.1:8800', // 这是服务端域名
+      changeOrigin: true, //允许域名进行转换
+      pathRewrite: { '^/api': '' }, //将请求url里的去掉
+    },
+  },
 });

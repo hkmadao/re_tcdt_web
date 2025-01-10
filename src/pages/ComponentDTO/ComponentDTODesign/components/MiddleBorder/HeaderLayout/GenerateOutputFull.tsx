@@ -24,7 +24,7 @@ const GenerateOutputFull: FC = () => {
     }
     if (window.tcdtAPI) {
       window.tcdtAPI.generateOutputFull(
-        Env.serverURL +
+        Env.directServerUrl +
           `/dtoEntityCollection/generateOutputFull?id=${entityCollection.idDtoEntityCollection}`,
       );
       return;

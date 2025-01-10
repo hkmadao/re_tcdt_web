@@ -38,27 +38,21 @@ const GenerateCode: FC = () => {
       message.error('请填写包名！');
       return;
     }
-    console.log(
-      Env.serverURL + `/component/generateSingle?id=${component?.idComponent}`,
-    );
+
     if (window.tcdtAPI) {
-      console.log(
-        Env.serverURL +
-          `/component/generateSingle?id=${component?.idComponent}`,
-      );
       if (component.componentType === EnumComponentType.Single) {
         window.tcdtAPI.generateComponentSingle(
-          Env.serverURL +
+          Env.directServerUrl +
             `/component/generateSingle?id=${component?.idComponent}`,
         );
       } else if (component.componentType === EnumComponentType.Enum) {
         window.tcdtAPI.generateComponentEnumPart(
-          Env.serverURL +
+          Env.directServerUrl +
             `/component/generateEnumPart?id=${component?.idComponent}`,
         );
       } else {
         window.tcdtAPI.generateComponentCombination(
-          Env.serverURL +
+          Env.directServerUrl +
             `/component/generateCombination?id=${component?.idComponent}`,
         );
       }

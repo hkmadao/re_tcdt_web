@@ -96,6 +96,10 @@ const menus: MenuDataItem[] = [
         path: '/sys/Useragg',
         name: '系统用户聚合',
       },
+      {
+        path: '/sys/SysToken',
+        name: 'Token管理',
+      },
     ],
   },
   {

@@ -24,7 +24,7 @@ const GenerateFull: FC = () => {
     }
     if (window.tcdtAPI) {
       window.tcdtAPI.generateInputFull(
-        Env.serverURL +
+        Env.directServerUrl +
           `/dtoEntityCollection/generateInputFull?id=${entityCollection.idDtoEntityCollection}`,
       );
       return;

@@ -16,7 +16,7 @@ const BillFormDownLoad: FC = () => {
     }
     if (window.tcdtAPI) {
       window.tcdtAPI.generateBillForm(
-        Env.serverURL + `/factory/generate?id=${moduleData.idFactory}`,
+        Env.directServerUrl + `/factory/generate?id=${moduleData.idFactory}`,
       );
       return;
     }

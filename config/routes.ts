@@ -18,6 +18,12 @@ export default [
         exact: true,
       },
       {
+        path: 'sys/SysToken',
+        name: 'Token管理',
+        component: '@/pages/SysToken',
+        exact: true,
+      },
+      {
         path: 'sys/Menu',
         name: '系统菜单',
         component: '@/pages/Menu',

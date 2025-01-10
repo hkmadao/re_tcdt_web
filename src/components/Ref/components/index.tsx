@@ -1,14 +1,22 @@
-import store, { actions, useSelectedNodes, useSelectedRows } from '../store';
+import store, {
+  actions,
+  useLoadingStatus,
+  useSelectedNodes,
+  useSelectedRows,
+} from '../store';
 import { TRefProps } from '../model';
-import { Divider, Input, InputRef, Modal, Space } from 'antd';
+import { Divider, Input, InputRef, Modal, Space, Spin } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { SearchOutlined, CloseCircleFilled } from '@ant-design/icons';
 import LeftTree from './Tree';
 import Search from './Search';
 import RightGrid from './Grid';
 import { useEffect, useRef, useState } from 'react';
+import classNames from 'classnames';
+import styles from './index.less';
 
 const Component: React.FC<TRefProps> = (props) => {
+  const loadStatus = useLoadingStatus();
   const dispatch = useDispatch();
   const {
     size,
@@ -156,53 +164,59 @@ const Component: React.FC<TRefProps> = (props) => {
         onCancel={handleCancel}
         destroyOnClose={true}
       >
-        <div
-          style={{
-            display: 'flex',
-            flex: 'auto',
-            flexDirection: 'row',
-            alignItems: 'stretch',
-            overflow: 'auto',
-          }}
+        <Spin
+          delay={100}
+          spinning={loadStatus === 'loading'}
+          wrapperClassName={classNames(styles.spin)}
         >
           <div
             style={{
-              minWidth: refStyle === 'treeTable' ? '300px' : undefined,
-              display: refStyle !== 'table' ? 'block' : 'none',
-              flex: '1 0 auto',
+              display: 'flex',
+              flex: 'auto',
+              flexDirection: 'row',
+              alignItems: 'stretch',
+              overflow: 'auto',
             }}
-            hidden={!billTreeRef}
           >
-            <LeftTree {...props} />
-          </div>
-          <Divider
-            style={{
-              height: 'auto',
-              display: refStyle !== 'treeTable' ? 'none' : 'block',
-            }}
-            type="vertical"
-          />
-          <div style={{ overflow: 'auto' }}>
             <div
               style={{
-                display:
-                  tableRef?.searchRefs && tableRef?.searchRefs.length > 0
-                    ? 'flex'
-                    : 'none',
-              }}
-            >
-              <Search {...props} />
-            </div>
-            <div
-              style={{
-                display: refStyle !== 'tree' ? 'flex' : 'none',
+                minWidth: refStyle === 'treeTable' ? '300px' : undefined,
+                display: refStyle !== 'table' ? 'block' : 'none',
                 flex: '1 0 auto',
               }}
+              hidden={!billTreeRef}
             >
-              <RightGrid {...props} />
+              <LeftTree {...props} />
+            </div>
+            <Divider
+              style={{
+                height: 'auto',
+                display: refStyle !== 'treeTable' ? 'none' : 'block',
+              }}
+              type="vertical"
+            />
+            <div style={{ overflow: 'auto' }}>
+              <div
+                style={{
+                  display:
+                    tableRef?.searchRefs && tableRef?.searchRefs.length > 0
+                      ? 'flex'
+                      : 'none',
+                }}
+              >
+                <Search {...props} />
+              </div>
+              <div
+                style={{
+                  display: refStyle !== 'tree' ? 'flex' : 'none',
+                  flex: '1 0 auto',
+                }}
+              >
+                <RightGrid {...props} />
+              </div>
             </div>
           </div>
-        </div>
+        </Spin>
       </Modal>
     </>
   );

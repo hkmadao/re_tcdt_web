@@ -40,7 +40,7 @@ const GenerateEnumFull: FC = () => {
     }
     if (window.tcdtAPI) {
       window.tcdtAPI.generateComponentEnumFull(
-        Env.serverURL +
+        Env.directServerUrl +
           `/component/generateEnumFull?id=${component?.idComponent}`,
       );
       return;

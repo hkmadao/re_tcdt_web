@@ -60,7 +60,7 @@ const Login: FC = () => {
           labelCol={{ span: 11 }}
           wrapperCol={{ span: 11 }}
           initialValues={{ remember: true }}
-          autoComplete="off"
+          autoComplete="on"
         >
           <Form.Item
             label={localeMsg.usernameText}

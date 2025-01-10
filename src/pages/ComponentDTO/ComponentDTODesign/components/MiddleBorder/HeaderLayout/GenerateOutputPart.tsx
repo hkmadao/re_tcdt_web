@@ -25,7 +25,7 @@ const GenerateOutputPart: FC = () => {
     console.log(window.tcdtAPI);
     if (window.tcdtAPI) {
       window.tcdtAPI.generateOutputPart(
-        Env.serverURL +
+        Env.directServerUrl +
           `/dtoEntityCollection/generateOutputPart?id=${entityCollection.idDtoEntityCollection}`,
       );
       return;
