@@ -67,7 +67,7 @@ const Login: FC = () => {
             name="username"
             rules={[{ required: true, message: 'Please input your username!' }]}
           >
-            <Input />
+            <Input autoComplete={'username'} />
           </Form.Item>
 
           <Form.Item
@@ -75,7 +75,7 @@ const Login: FC = () => {
             name="password"
             rules={[{ required: true, message: 'Please input your password!' }]}
           >
-            <Input.Password autoComplete={'new-password'} />
+            <Input.Password autoComplete={'password'} />
           </Form.Item>
 
           <Form.Item

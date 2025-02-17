@@ -169,6 +169,36 @@ const RightTable: (
     }
   };
 
+  const handleRowUp = () => {
+    if (editableKeys && editableKeys.length === 1) {
+      const id = editableKeys[0];
+      const targetIndex = refDataList.findIndex(
+        (attr) => attr.idBillRefColumn === id,
+      );
+      if (targetIndex > 0) {
+        const newRefDataList = [...refDataList];
+        const moveDatas = newRefDataList.splice(targetIndex, 1);
+        newRefDataList.splice(targetIndex - 1, 0, ...moveDatas);
+        setRefDataList(newRefDataList);
+      }
+    }
+  };
+
+  const handleRowDown = () => {
+    if (editableKeys && editableKeys.length === 1) {
+      const id = editableKeys[0];
+      const targetIndex = refDataList.findIndex(
+        (attr) => attr.idBillRefColumn === id,
+      );
+      if (targetIndex < refDataList.length - 1) {
+        const newRefDataList = [...refDataList];
+        const moveDatas = newRefDataList.splice(targetIndex, 1);
+        newRefDataList.splice(targetIndex + 1, 0, ...moveDatas);
+        setRefDataList(newRefDataList);
+      }
+    }
+  };
+
   useEffect(() => {
     if (idComponentEntity) {
       CommonAPI.getDescriptionDataByCompEntiId({ id: idComponentEntity }).then(
@@ -210,16 +240,22 @@ const RightTable: (
   };
 
   const handeldSelectedAttribute = (selectedAttrs: TDescriptionInfo[]) => {
-    const newDataList = selectedAttrs.map((extAttr) => {
-      const newBillRefColumn: TBillRefColumn = {
-        idBillRefColumn: nanoid(),
-        name: extAttr.fullAttributeName,
-        displayName: extAttr.displayName,
-        dataType: undefined,
-      };
-      return newBillRefColumn;
-    });
-    setRefDataList(newDataList);
+    const newDataList = selectedAttrs
+      .filter((extAttr) => {
+        return refDataList.find(
+          (refData) => refData.name !== extAttr.fullAttributeName,
+        );
+      })
+      .map((extAttr) => {
+        const newBillRefColumn: TBillRefColumn = {
+          idBillRefColumn: nanoid(),
+          name: extAttr.fullAttributeName,
+          displayName: extAttr.displayName,
+          dataType: undefined,
+        };
+        return newBillRefColumn;
+      });
+    setRefDataList([...refDataList, ...newDataList]);
   };
 
   const handleSearch = (searchText: string) => {
@@ -321,6 +357,12 @@ const RightTable: (
               disabled={!editableKeys || editableKeys.length == 0}
             >
               删除
+            </Button>
+            <Button size={'small'} onClick={handleRowUp}>
+              上移
+            </Button>
+            <Button size={'small'} onClick={handleRowDown}>
+              下移
             </Button>
           </Space>
           <EditableProTable<TBillRefColumn>

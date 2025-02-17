@@ -3,7 +3,7 @@ import { FC, Key, useEffect, useRef, useState } from 'react';
 import { SearchOutlined } from '@ant-design/icons';
 import { TDescriptionInfo } from '../../../../../model';
 import { ColumnsType } from 'antd/lib/table';
-import { getSelectedNodes } from '@/util';
+import { TTree } from '@/models';
 
 const columns: ColumnsType<TDescriptionInfo> = [
   {
@@ -17,6 +17,23 @@ const columns: ColumnsType<TDescriptionInfo> = [
     key: 'displayName',
   },
 ];
+
+/**根据keys获取树节点数据 */
+export const getSelectedNodes = (
+  selectedKeys: Key[],
+  tree: TTree[],
+): TTree[] => {
+  const selectedNodes: TTree[] = [];
+  for (let i = 0; i < tree.length; i++) {
+    const node = tree[i];
+    if (selectedKeys.includes(node.id!)) {
+      selectedNodes.push({ ...node });
+    }
+    const childResult = getSelectedNodes(selectedKeys, node.children ?? []);
+    selectedNodes.push(...childResult);
+  }
+  return selectedNodes;
+};
 
 const SelectAttribute: FC<{
   idComponentEntity?: string;
