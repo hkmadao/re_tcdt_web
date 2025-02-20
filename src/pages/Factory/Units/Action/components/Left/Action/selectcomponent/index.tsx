@@ -21,17 +21,18 @@ import {
 } from 'antd';
 import { FC, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import BillfromTable from './BillfromTable';
+import TableAction from './TableAction';
 import SubProjectTree from '@/pages/Factory/common/SubProjectTree';
 import { TCompUpTreeInfo } from '@/pages/Factory/common/model';
 import { TAction } from '../../../../model';
 import ModuleAPI from '../../../../api';
 import { fetchById } from '../../../../store/async-thunk';
+import ComponentTree from '@/pages/Factory/common/ComponentTree';
 
 const SelectComponent: FC = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [billformTableData, setBillformTableData] = useState<TAction[]>([]);
+  const [tableData, setTableData] = useState<TAction[]>([]);
   const [compUpTreeInfo, setCompUpTreeInfo] = useState<TCompUpTreeInfo>();
   const [searchValue, setSearchValue] = useState<string>();
   const [total, setTotal] = useState<number>(0);
@@ -41,7 +42,7 @@ const SelectComponent: FC = () => {
 
   useEffect(() => {}, []);
 
-  const handleSubProjectSelect = (nodeData?: TCompUpTreeInfo) => {
+  const handleComponentSelect = (nodeData?: TCompUpTreeInfo) => {
     if (nodeData) {
       setCompUpTreeInfo({
         ...nodeData,
@@ -128,10 +129,10 @@ const SelectComponent: FC = () => {
         setPageSize(pageData.pageInfoInput.pageSize || 10);
         setTotal(pageData.pageInfoInput.totalCount || 0);
         if (pageData.dataList) {
-          setBillformTableData(pageData.dataList);
+          setTableData(pageData.dataList);
           return;
         }
-        setBillformTableData([]);
+        setTableData([]);
       });
     }
   };
@@ -139,18 +140,18 @@ const SelectComponent: FC = () => {
   /**点击选择组件 */
   const handleToSelectComponent = () => {
     setCompUpTreeInfo(undefined);
-    setBillformTableData([]);
+    setTableData([]);
     setSelectedRowKeys([]);
     setModalVisible(true);
   };
 
   /**点击配置查询模板 */
-  const handleConfBillform = () => {
+  const handleConf = () => {
     if (!selectedRowKeys || selectedRowKeys.length === 0) {
       message.warn('请先选择查询模板模板！');
       return;
     }
-    const billform = billformTableData.find(
+    const billform = tableData.find(
       (billform) => billform.idButtonAction === selectedRowKeys[0],
     );
     if (!billform) {
@@ -238,7 +239,7 @@ const SelectComponent: FC = () => {
         maskClosable={false}
         open={modalVisible}
         onCancel={handleCloseModal}
-        onOk={handleConfBillform}
+        onOk={handleConf}
         width={'800px'}
         destroyOnClose={true}
       >
@@ -246,17 +247,17 @@ const SelectComponent: FC = () => {
           <Row>
             <Col span={8} style={{}}>
               <div style={{ height: '500px', overflow: 'auto' }}>
-                <SubProjectTree
+                <ComponentTree
                   fgLoadData={modalVisible}
-                  handleSelect={handleSubProjectSelect}
+                  handleSelect={handleComponentSelect}
                 />
               </div>
             </Col>
             <Col span={16}>
-              <BillfromTable
+              <TableAction
                 compUpTreeInfo={compUpTreeInfo}
                 selectedRowKeys={selectedRowKeys}
-                handleConfBillform={handleConfBillform}
+                handleConfBillform={handleConf}
                 searchCallBack={fetchUiFactory}
               />
               <div style={{ height: '450px', overflow: 'auto' }}>
@@ -266,7 +267,7 @@ const SelectComponent: FC = () => {
                     bordered={true}
                     size={'small'}
                     columns={columns}
-                    dataSource={billformTableData}
+                    dataSource={tableData}
                     onRow={onRow}
                     rowSelection={{
                       type: 'radio',

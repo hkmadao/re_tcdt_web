@@ -26,10 +26,10 @@ import {
   selectCurrentLayout,
   selectModuleData,
 } from '../../../../store';
-import { TSubProjectUpTreeInfo } from '@/pages/Factory/common/model';
-import SubProjectTree from '@/pages/Factory/common/SubProjectTree';
 import ModuleAPI from '@/pages/Factory/Units/Action/api';
 import { TAction } from '@/pages/Factory/Units/Action/model';
+import { TCompUpTreeInfo } from '@/pages/Factory/common/model';
+import ComponentTree from '@/pages/Factory/common/ComponentTree';
 
 const ActionComp: FC = () => {
   const currentLayout = useSelector(selectCurrentLayout);
@@ -37,7 +37,11 @@ const ActionComp: FC = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [tableData, setTableData] = useState<TAction[]>([]);
+  const [selectedIdProject, setSelectIdProject] = useState<string>();
   const [selectedIdSubProject, setSelectIdSubProject] = useState<string>();
+  const [selectIdComponentModule, setSelectIdComponentModule] =
+    useState<string>();
+  const [selectIdComponent, setSelectIdComponent] = useState<string>();
   const [searchValue, setSearchValue] = useState<string>();
   const [total, setTotal] = useState<number>(0);
   const [pageIndex, setPageIndex] = useState<number>(0);
@@ -48,33 +52,36 @@ const ActionComp: FC = () => {
 
   useEffect(() => {}, []);
 
-  const handleSubProjectSelect = (nodeData?: TSubProjectUpTreeInfo) => {
+  const handleComponentSelect = (nodeData?: TCompUpTreeInfo) => {
     if (nodeData) {
-      fetchData(nodeData.idSubProject, undefined);
+      fetchData(
+        nodeData.idProject,
+        nodeData.idSubProject,
+        nodeData.idComponentModule,
+        nodeData.idComponent,
+        undefined,
+      );
     }
   };
 
   /**获取表单模板 */
   const fetchData = (
+    idProject: string | undefined,
     idSubProject: string | undefined,
+    idComponentModule: string | undefined,
+    idComponent: string | undefined,
     search: string | undefined,
     page?: number,
     pageSize?: number,
   ) => {
     setSearchValue(search);
+    setSelectIdComponent(idComponent);
+    setSelectIdComponentModule(idComponentModule);
     setSelectIdSubProject(idSubProject);
+    setSelectIdProject(idProject);
     let param: TPageInfoInput = {};
-    if (idSubProject) {
-      param = {
-        pageIndex: page ? page : 1,
-        pageSize: pageSize ? pageSize : 10,
-        logicNode: andLogicNode([
-          equalFilterNode('idSubProject', stringFilterParam(idSubProject)),
-        ])(),
-      };
-    }
-    //搜索框的有值，不传树节点条件
-    if (!idSubProject) {
+
+    if (search && search.trim() !== '') {
       param = {
         pageIndex: page ? page : 1,
         pageSize: pageSize ? pageSize : 10,
@@ -82,16 +89,50 @@ const ActionComp: FC = () => {
           orLogicNode([
             likeFullFilterNode('name', stringFilterParam(search ?? '')),
             likeFullFilterNode('displayName', stringFilterParam(search ?? '')),
-            equalFilterNode(
-              'idSubProject',
-              stringFilterParam(moduleData.idSubProject!),
-            ),
           ])(),
         ),
       };
       //搜索框有值，需要置空左树节点数据
       setSelectedRowKeys([]);
+      setSelectIdComponent(undefined);
+      setSelectIdComponentModule(undefined);
       setSelectIdSubProject(undefined);
+      setSelectIdProject(undefined);
+    } else if (idComponent) {
+      param = {
+        pageIndex: page ? page : 1,
+        pageSize: pageSize ? pageSize : 10,
+        logicNode: andLogicNode([
+          equalFilterNode('idComponent', stringFilterParam(idComponent)),
+        ])(),
+      };
+    } else if (idComponentModule) {
+      param = {
+        pageIndex: page ? page : 1,
+        pageSize: pageSize ? pageSize : 10,
+        logicNode: andLogicNode([
+          equalFilterNode(
+            'idComponentModule',
+            stringFilterParam(idComponentModule),
+          ),
+        ])(),
+      };
+    } else if (idSubProject) {
+      param = {
+        pageIndex: page ? page : 1,
+        pageSize: pageSize ? pageSize : 10,
+        logicNode: andLogicNode([
+          equalFilterNode('idSubProject', stringFilterParam(idSubProject)),
+        ])(),
+      };
+    } else if (idProject) {
+      param = {
+        pageIndex: page ? page : 1,
+        pageSize: pageSize ? pageSize : 10,
+        logicNode: andLogicNode([
+          equalFilterNode('idProject', stringFilterParam(idProject)),
+        ])(),
+      };
     }
     if (param.logicNode) {
       ModuleAPI.getAction(param).then((pageData) => {
@@ -108,7 +149,13 @@ const ActionComp: FC = () => {
   };
 
   const handleSearch = () => {
-    fetchData(undefined, searchRef.current?.input?.value);
+    fetchData(
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      searchRef.current?.input?.value,
+    );
   };
 
   /**点击选择组件 */
@@ -171,7 +218,15 @@ const ActionComp: FC = () => {
   };
 
   const onPageChange = (page: number, pageSize: number) => {
-    fetchData(selectedIdSubProject, searchValue, page, pageSize);
+    fetchData(
+      selectedIdProject,
+      selectedIdSubProject,
+      selectIdComponentModule,
+      selectIdComponent,
+      searchValue,
+      page,
+      pageSize,
+    );
   };
 
   const showTotal = (total: number) => {
@@ -256,12 +311,12 @@ const ActionComp: FC = () => {
           <Row>
             <Col span={8} style={{}}>
               <div style={{ height: '500px', overflow: 'auto' }}>
-                <SubProjectTree
-                  idSubProject={moduleData.idSubProject}
-                  idTreeSelected={moduleData.idSubProject}
-                  idSelected={currentLayout?.component?.idRef}
+                <ComponentTree
                   fgLoadData={modalVisible}
-                  handleSelect={handleSubProjectSelect}
+                  idSubProject={moduleData.idSubProject}
+                  idTreeSelected={moduleData.idComponent}
+                  idSelected={currentLayout?.component?.idRef}
+                  handleSelect={handleComponentSelect}
                 />
               </div>
             </Col>

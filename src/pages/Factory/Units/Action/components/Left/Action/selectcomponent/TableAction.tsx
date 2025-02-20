@@ -1,20 +1,15 @@
 import { Button, Form, Input, InputRef, Modal, Space } from 'antd';
-import { FC, useRef, useState } from 'react';
+import { FC, useMemo, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { TAction } from '../../../../model';
 import ModuleAPI from '../../../../api';
 import { SearchOutlined } from '@ant-design/icons';
-import SubProjectRef from '@/pages/Factory/common/ref/subprojectree';
 import { TCompUpTreeInfo } from '@/pages/Factory/common/model';
+import CopyFrom from './copyfrom';
+import ComponentRef from '@/pages/Factory/common/ref/componenttree';
+import { firstToUpper } from '@/util';
 
-type TSubProject = {
-  idProject?: string;
-  projectName?: string;
-  idSubProject?: string;
-  subProjectName?: string;
-};
-
-const BillfromTable: FC<{
+const TableAction: FC<{
   compUpTreeInfo?: TCompUpTreeInfo;
   selectedRowKeys: React.Key[];
   handleConfBillform: () => void;
@@ -32,7 +27,6 @@ const BillfromTable: FC<{
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const dispatch = useDispatch();
   const [detailBillForm, setDetailBillForm] = useState<TAction>();
-  const [subProject, setSubProject] = useState<TSubProject>();
 
   const searchRef = useRef<InputRef>(null);
 
@@ -44,8 +38,14 @@ const BillfromTable: FC<{
   const handleToAddBillform = () => {
     if (compUpTreeInfo) {
       form.resetFields();
-      form.setFieldValue('idSubProject', compUpTreeInfo.idSubProject);
-      form.setFieldValue('subProjectName', compUpTreeInfo.subProjectName);
+      form.setFieldValue(
+        'name',
+        compUpTreeInfo.componentName
+          ? firstToUpper(compUpTreeInfo.componentName)
+          : undefined,
+      );
+      form.setFieldValue('idComponent', compUpTreeInfo.idComponent);
+      form.setFieldValue('displayName', compUpTreeInfo.compDisplayName);
     }
     setModalVisible(true);
   };
@@ -54,7 +54,6 @@ const BillfromTable: FC<{
     form.resetFields();
     const addBillFrom: Partial<TAction> = {};
     form.setFieldsValue(addBillFrom);
-    setSubProject(undefined);
     setModalVisible(false);
   };
 
@@ -65,12 +64,6 @@ const BillfromTable: FC<{
       const id = selectedRowKeys[0];
       const billForm: Partial<TAction> = await ModuleAPI.getById(id as string);
       setDetailBillForm(billForm);
-      setSubProject({
-        idProject: billForm.idProject,
-        projectName: billForm.projectName,
-        idSubProject: billForm.idSubProject,
-        subProjectName: billForm.subProjectName,
-      });
       form.setFieldsValue(billForm);
     }
     setModalVisible(true);
@@ -79,28 +72,29 @@ const BillfromTable: FC<{
   /**确认保存查询模板 */
   const handleSaveBillformOk = async () => {
     const billForm = await form.validateFields();
+    const toSaveData: TAction = {
+      ...billForm,
+    };
     if (billForm.idButtonAction) {
       //编辑
       const saveBillForm = await ModuleAPI.updateAction({
         ...detailBillForm,
-        ...billForm,
-        idProject: subProject?.idProject,
-        projectName: billForm.projectName,
-        idSubProject: subProject?.idSubProject,
-        subProjectName: subProject?.subProjectName,
+        ...compUpTreeInfo,
+        ...toSaveData,
       });
     } else {
       const saveBillForm = await ModuleAPI.addAction({
-        ...billForm,
-        idProject: subProject?.idProject,
-        projectName: billForm.projectName,
-        idSubProject: subProject?.idSubProject,
-        subProjectName: subProject?.subProjectName,
+        ...compUpTreeInfo,
+        ...toSaveData,
       });
     }
 
     searchCallBack(compUpTreeInfo, searchRef.current?.input?.value);
     setModalVisible(false);
+  };
+
+  const copyCallback = () => {
+    searchCallBack(compUpTreeInfo, searchRef.current?.input?.value);
   };
 
   /**确认删除查询模板 */
@@ -113,6 +107,18 @@ const BillfromTable: FC<{
       await ModuleAPI.deleteAction(billForm);
     }
     searchCallBack(compUpTreeInfo, searchRef.current?.input?.value);
+  };
+
+  /**点击组件 */
+  const handleTreeClick = (nodeData: TCompUpTreeInfo) => {
+    return () => {
+      const newBillForm: TAction = {};
+      newBillForm.idComponent = nodeData.idComponent;
+      newBillForm.componentName = nodeData.componentName;
+      newBillForm.name = nodeData.componentName;
+      newBillForm.displayName = nodeData.compDisplayName;
+      form.setFieldsValue(newBillForm);
+    };
   };
 
   return (
@@ -134,6 +140,7 @@ const BillfromTable: FC<{
         >
           新建
         </Button>
+        <CopyFrom compUpTreeInfo={compUpTreeInfo} saveCallback={copyCallback} />
         <Button
           type={'primary'}
           size={'small'}
@@ -166,7 +173,7 @@ const BillfromTable: FC<{
         </Button>
       </Space>
       <Modal
-        title="添加查询模板"
+        title="添加..."
         open={modalVisible}
         onOk={handleSaveBillformOk}
         onCancel={handleAddBillformCancel}
@@ -178,8 +185,8 @@ const BillfromTable: FC<{
           wrapperCol={{ span: 16 }}
           autoComplete="off"
         >
-          <Form.Item label="子项目" name="subProjectName">
-            <SubProjectRef {...subProject} okCallback={setSubProject} />
+          <Form.Item label="组件id" name="idComponent">
+            <ComponentRef {...compUpTreeInfo} okCallback={handleTreeClick} />
           </Form.Item>
           <Form.Item label="idButtonAction" name="idButtonAction" hidden>
             <Input />
@@ -204,4 +211,4 @@ const BillfromTable: FC<{
   );
 };
 
-export default BillfromTable;
+export default TableAction;

@@ -44,7 +44,10 @@ export const getInitExpandKeys = (tree: TTree[]): Key[] => {
 };
 
 const ComponentRef: FC<
-  TCompUpTreeInfo & { okCallback: (subProject: TCompUpTreeInfo) => void }
+  TCompUpTreeInfo & {
+    disabled?: boolean;
+    okCallback: (subProject: TCompUpTreeInfo) => void;
+  }
 > = (props) => {
   const [spinning, setSpinning] = useState(false);
   const [expandedKeys, setExpandedKeys] = useState<Key[]>([]);
@@ -195,6 +198,7 @@ const ComponentRef: FC<
           value={selectComponent?.displayName}
           readOnly
           placeholder={'请选择'}
+          disabled={props.disabled}
           suffix={
             <Space direction="horizontal" size={2}>
               {selectComponent && selectComponent.id ? (
@@ -205,6 +209,7 @@ const ComponentRef: FC<
               <Button
                 size="small"
                 type="primary"
+                disabled={props.disabled}
                 onClick={handleToSelectComponent}
               >
                 <SearchOutlined />

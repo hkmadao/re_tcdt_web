@@ -54,6 +54,10 @@ const BillformComp: FC = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [fgImportModel, setFgImportModel] = useState<boolean>(false);
   const [billformTableData, setBillformTableData] = useState<TBillForm[]>([]);
+  const [selectedIdProject, setSelectIdProject] = useState<string>();
+  const [selectedIdSubProject, setSelectIdSubProject] = useState<string>();
+  const [selectIdComponentModule, setSelectIdComponentModule] =
+    useState<string>();
   const [selectIdComponent, setSelectIdComponent] = useState<string>();
   const [searchValue, setSearchValue] = useState<string>();
   const [total, setTotal] = useState<number>(0);
@@ -67,12 +71,21 @@ const BillformComp: FC = () => {
 
   const handleComponentSelect = (nodeData?: TCompUpTreeInfo) => {
     if (nodeData) {
-      fetchBillForm(nodeData.idComponent, undefined);
+      fetchBillForm(
+        nodeData.idProject,
+        nodeData.idSubProject,
+        nodeData.idComponentModule,
+        nodeData.idComponent,
+        undefined,
+      );
     }
   };
 
   /**获取表单模板 */
   const fetchBillForm = (
+    idProject: string | undefined,
+    idSubProject: string | undefined,
+    idComponentModule: string | undefined,
     idComponent: string | undefined,
     search: string | undefined,
     page?: number,
@@ -80,22 +93,12 @@ const BillformComp: FC = () => {
   ) => {
     setSearchValue(search);
     setSelectIdComponent(idComponent);
+    setSelectIdSubProject(idSubProject);
+    setSelectIdComponentModule(idComponentModule);
+    setSelectIdProject(idProject);
     let param: TPageInfoInput = {};
-    if (idComponent) {
-      param = {
-        pageIndex: page ? page : 1,
-        pageSize: pageSize ? pageSize : 10,
-        logicNode: andLogicNode([
-          equalFilterNode('idComponent', stringFilterParam(idComponent)),
-          equalFilterNode(
-            'idSubProject',
-            stringFilterParam(moduleData.idSubProject!),
-          ),
-        ])(),
-      };
-    }
-    //搜索框的有值，不传树节点条件
-    if (!idComponent) {
+
+    if (search && search.trim() !== '') {
       param = {
         pageIndex: page ? page : 1,
         pageSize: pageSize ? pageSize : 10,
@@ -103,16 +106,50 @@ const BillformComp: FC = () => {
           orLogicNode([
             likeFullFilterNode('name', stringFilterParam(search ?? '')),
             likeFullFilterNode('displayName', stringFilterParam(search ?? '')),
-            equalFilterNode(
-              'idSubProject',
-              stringFilterParam(moduleData.idSubProject!),
-            ),
           ])(),
         ),
       };
       //搜索框有值，需要置空左树节点数据
       setSelectedRowKeys([]);
       setSelectIdComponent(undefined);
+      setSelectIdComponentModule(undefined);
+      setSelectIdSubProject(undefined);
+      setSelectIdProject(undefined);
+    } else if (idComponent) {
+      param = {
+        pageIndex: page ? page : 1,
+        pageSize: pageSize ? pageSize : 10,
+        logicNode: andLogicNode([
+          equalFilterNode('idComponent', stringFilterParam(idComponent)),
+        ])(),
+      };
+    } else if (idComponentModule) {
+      param = {
+        pageIndex: page ? page : 1,
+        pageSize: pageSize ? pageSize : 10,
+        logicNode: andLogicNode([
+          equalFilterNode(
+            'idComponentModule',
+            stringFilterParam(idComponentModule),
+          ),
+        ])(),
+      };
+    } else if (idSubProject) {
+      param = {
+        pageIndex: page ? page : 1,
+        pageSize: pageSize ? pageSize : 10,
+        logicNode: andLogicNode([
+          equalFilterNode('idSubProject', stringFilterParam(idSubProject)),
+        ])(),
+      };
+    } else if (idProject) {
+      param = {
+        pageIndex: page ? page : 1,
+        pageSize: pageSize ? pageSize : 10,
+        logicNode: andLogicNode([
+          equalFilterNode('idProject', stringFilterParam(idProject)),
+        ])(),
+      };
     }
     if (param.logicNode) {
       API.getBillForm(param).then((pageData: TPageInfo<TBillForm>) => {
@@ -129,7 +166,13 @@ const BillformComp: FC = () => {
   };
 
   const handleSearch = () => {
-    fetchBillForm(undefined, searchRef.current?.input?.value);
+    fetchBillForm(
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      searchRef.current?.input?.value,
+    );
   };
 
   /**点击选择组件 */
@@ -205,7 +248,15 @@ const BillformComp: FC = () => {
   };
 
   const onPageChange = (page: number, pageSize: number) => {
-    fetchBillForm(selectIdComponent, searchValue, page, pageSize);
+    fetchBillForm(
+      selectedIdProject,
+      selectedIdSubProject,
+      selectIdComponentModule,
+      selectIdComponent,
+      searchValue,
+      page,
+      pageSize,
+    );
   };
 
   const showTotal = (total: number) => {

@@ -9,6 +9,7 @@ import {
 import {
   Button,
   Col,
+  Form,
   Input,
   InputRef,
   message,
@@ -18,25 +19,25 @@ import {
   Table,
   TableColumnType,
 } from 'antd';
-import { FC, useEffect, useRef, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { CloseOutlined, SearchOutlined } from '@ant-design/icons';
-import {
-  actions,
-  selectCurrentLayout,
-  selectModuleData,
-} from '../../../../store';
+import { FC, useEffect, useMemo, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { SearchOutlined } from '@ant-design/icons';
 import { TCompUpTreeInfo } from '@/pages/Factory/common/model';
-import ModuleAPI from '@/pages/Factory/Units/Tree/api';
-import { TTreeConf } from '@/pages/Factory/Units/Tree/model';
+import ModuleAPI from '@/pages/Factory/Units/Action/api';
+import { TAction, TActionContent } from '@/pages/Factory/Units/Action/model';
 import ComponentTree from '@/pages/Factory/common/ComponentTree';
+import ComponentRef from '@/pages/Factory/common/ref/componenttree';
+import { nanoid } from '@reduxjs/toolkit';
 
-const TreeComp: FC = () => {
-  const currentLayout = useSelector(selectCurrentLayout);
-  const moduleData = useSelector(selectModuleData);
+const CopyForm: FC<{
+  compUpTreeInfo?: TCompUpTreeInfo;
+  saveCallback: () => void;
+}> = ({ compUpTreeInfo, saveCallback }) => {
+  const [form] = Form.useForm<TAction>();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [tableData, setTableData] = useState<TTreeConf[]>([]);
+  const [addModalVisible, setAddModalVisible] = useState<boolean>(false);
+  const [tableData, setTableData] = useState<TAction[]>([]);
   const [selectedIdProject, setSelectIdProject] = useState<string>();
   const [selectedIdSubProject, setSelectIdSubProject] = useState<string>();
   const [selectIdComponentModule, setSelectIdComponentModule] =
@@ -46,7 +47,6 @@ const TreeComp: FC = () => {
   const [total, setTotal] = useState<number>(0);
   const [pageIndex, setPageIndex] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(0);
-  const inputDisplayRef = useRef<InputRef>(null);
   const searchRef = useRef<InputRef>(null);
   const dispatch = useDispatch();
 
@@ -76,11 +76,10 @@ const TreeComp: FC = () => {
   ) => {
     setSearchValue(search);
     setSelectIdComponent(idComponent);
-    setSelectIdComponentModule(idComponentModule);
     setSelectIdSubProject(idSubProject);
+    setSelectIdComponentModule(idComponentModule);
     setSelectIdProject(idProject);
     let param: TPageInfoInput = {};
-
     if (search && search.trim() !== '') {
       param = {
         pageIndex: page ? page : 1,
@@ -135,7 +134,7 @@ const TreeComp: FC = () => {
       };
     }
     if (param.logicNode) {
-      ModuleAPI.get(param).then((pageData) => {
+      ModuleAPI.getAction(param).then((pageData) => {
         setPageIndex(pageData.pageInfoInput.pageIndex || 1);
         setPageSize(pageData.pageInfoInput.pageSize || 10);
         setTotal(pageData.pageInfoInput.totalCount || 0);
@@ -156,58 +155,6 @@ const TreeComp: FC = () => {
       undefined,
       searchRef.current?.input?.value,
     );
-  };
-
-  /**点击选择组件 */
-  const handleToSelectComponent = () => {
-    setSelectIdSubProject(undefined);
-    setTableData([]);
-    setSelectedRowKeys([]);
-    setModalVisible(true);
-  };
-
-  /**点击配置表单 */
-  const handleConfBillform = () => {
-    if (!selectedRowKeys || selectedRowKeys.length === 0) {
-      message.warn('请先选择树模板！');
-      return;
-    }
-    const billform = tableData.find(
-      (billform) => billform.idTree === selectedRowKeys[0],
-    );
-    if (!billform) {
-      message.warn('找不到对应树模板！');
-      return;
-    }
-    if (currentLayout) {
-      dispatch(
-        actions.updateLayout({
-          ...currentLayout,
-          component: {
-            componentType: currentLayout.component?.componentType!,
-            idRef: billform.idTree!,
-            name: billform.displayName!,
-          },
-        }),
-      );
-    }
-    setModalVisible(false);
-  };
-
-  const handleClear = () => {
-    setSelectIdSubProject(undefined);
-    if (currentLayout) {
-      dispatch(
-        actions.updateLayout({
-          ...currentLayout,
-          component: {
-            componentType: currentLayout.component?.componentType!,
-            idRef: undefined,
-            name: undefined,
-          },
-        }),
-      );
-    }
   };
 
   /**点击关闭选择组件弹窗 */
@@ -231,12 +178,12 @@ const TreeComp: FC = () => {
     return <>总数：{total}</>;
   };
 
-  const columns: TableColumnType<TTreeConf>[] = [
+  const columns: TableColumnType<TAction>[] = [
     {
       dataIndex: 'name',
       title: '名称',
       width: '200px',
-      render: (value: any, record: TTreeConf, index: number) => {
+      render: (value: any, record: TAction, index: number) => {
         return <span>{record.name}</span>;
       },
     },
@@ -244,16 +191,16 @@ const TreeComp: FC = () => {
       dataIndex: 'displayName',
       title: '显示名称',
       width: '200px',
-      render: (value: any, record: TTreeConf, index: number) => {
+      render: (value: any, record: TAction, index: number) => {
         return <span>{record.displayName}</span>;
       },
     },
   ];
 
-  const onRow = (record: TTreeConf) => {
+  const onRow = (record: TAction) => {
     return {
       onClick: (event: any) => {
-        setSelectedRowKeys([record.idTree!]);
+        setSelectedRowKeys([record.idButtonAction!]);
       }, // 点击行
       onDoubleClick: (event: any) => {},
       onContextMenu: (event: any) => {},
@@ -263,45 +210,98 @@ const TreeComp: FC = () => {
   };
 
   const handleSelect = (
-    record: TTreeConf,
+    record: TAction,
     select: boolean,
-    selectedRows: TTreeConf[],
+    selectedRows: TAction[],
   ) => {
-    setSelectedRowKeys([record.idTree!]);
+    setSelectedRowKeys([record.idButtonAction!]);
+  };
+
+  const myCompUpTreeInfo = useMemo(() => compUpTreeInfo, [compUpTreeInfo]);
+
+  const fgDisabled = useMemo(() => {
+    return !compUpTreeInfo?.idComponent;
+  }, [compUpTreeInfo]);
+
+  const handleToCopy = () => {
+    setSelectIdSubProject(undefined);
+    setTableData([]);
+    setSelectedRowKeys([]);
+    setModalVisible(true);
+  };
+
+  const handleCopy = async () => {
+    if (!selectedRowKeys || selectedRowKeys.length !== 1) {
+      message.error('请选择一条记录');
+      return;
+    }
+    const copyId = selectedRowKeys[0];
+    const copyRecord = tableData.find(
+      (record) => record.idButtonAction === copyId,
+    );
+    if (!copyRecord) {
+      message.error('请选择一条记录');
+      return;
+    }
+    const recordDetail: TAction = await ModuleAPI.getById(
+      copyRecord.idButtonAction,
+    );
+    const newAction: TAction = {
+      ...recordDetail,
+      ...compUpTreeInfo,
+      idButtonAction: nanoid(),
+      name: recordDetail.name + '_copy',
+      displayName: recordDetail.displayName + '_copy',
+    };
+
+    form.setFieldsValue(newAction);
+    setAddModalVisible(true);
+  };
+
+  const handleAddCancel = () => {
+    setAddModalVisible(false);
+  };
+
+  const handleSave = async () => {
+    const billForm = await form.validateFields();
+    const toSaveData: TAction = {
+      ...billForm,
+    };
+    if (toSaveData.content) {
+      let contentObj: TActionContent = {
+        ...JSON.parse(toSaveData.content),
+        ...myCompUpTreeInfo,
+        name: toSaveData.name,
+        displayName: toSaveData.displayName,
+      };
+      toSaveData.content = JSON.stringify(contentObj);
+    }
+    const saveBillForm = await ModuleAPI.addAction({
+      ...myCompUpTreeInfo,
+      ...toSaveData,
+    });
+
+    saveCallback();
+    setAddModalVisible(false);
+    setModalVisible(false);
   };
 
   return (
     <>
-      <span>
-        <Input
-          ref={inputDisplayRef}
-          value={currentLayout?.component?.name}
-          readOnly
-          placeholder={'请选择'}
-          suffix={
-            <Space direction="horizontal" size={2}>
-              {currentLayout?.component?.name ? (
-                <CloseOutlined onClick={handleClear} />
-              ) : (
-                ''
-              )}
-              <Button
-                size="small"
-                type="primary"
-                onClick={handleToSelectComponent}
-              >
-                <SearchOutlined />
-              </Button>
-            </Space>
-          }
-        />
-      </span>
+      <Button
+        type={'primary'}
+        size={'small'}
+        onClick={handleToCopy}
+        disabled={fgDisabled}
+      >
+        从...复制
+      </Button>
       <Modal
-        title="选择树组件"
+        title="复制..."
         maskClosable={false}
         open={modalVisible}
         onCancel={handleCloseModal}
-        onOk={handleConfBillform}
+        footer={''}
         width={'800px'}
         destroyOnClose={true}
       >
@@ -311,9 +311,9 @@ const TreeComp: FC = () => {
               <div style={{ height: '500px', overflow: 'auto' }}>
                 <ComponentTree
                   fgLoadData={modalVisible}
-                  idSubProject={moduleData.idSubProject}
-                  idTreeSelected={moduleData.idComponent}
-                  idSelected={currentLayout?.component?.idRef}
+                  idSubProject={undefined}
+                  idTreeSelected={undefined}
+                  idSelected={undefined}
                   handleSelect={handleComponentSelect}
                 />
               </div>
@@ -329,16 +329,25 @@ const TreeComp: FC = () => {
                     />
                     <Button
                       size={'small'}
-                      onBlur={handleSearch}
                       onClick={handleSearch}
                       disabled={!!selectedIdSubProject}
                       type={'primary'}
                     >
                       <SearchOutlined />
                     </Button>
+                    <Button
+                      size={'small'}
+                      onClick={handleCopy}
+                      disabled={
+                        !selectedRowKeys || selectedRowKeys.length === 0
+                      }
+                      type={'primary'}
+                    >
+                      复制
+                    </Button>
                   </Space>
                   <Table
-                    rowKey={'idTree'}
+                    rowKey={'idButtonAction'}
                     bordered={true}
                     size={'small'}
                     columns={columns}
@@ -364,8 +373,53 @@ const TreeComp: FC = () => {
           </Row>
         </div>
       </Modal>
+      <Modal
+        title="添加..."
+        open={addModalVisible}
+        onOk={handleSave}
+        onCancel={handleAddCancel}
+        destroyOnClose={true}
+      >
+        <Form
+          form={form}
+          name="billform"
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 16 }}
+          autoComplete="off"
+        >
+          <Form.Item label="组件id" name="idComponent">
+            <ComponentRef
+              {...myCompUpTreeInfo}
+              okCallback={() => {
+                return;
+              }}
+              disabled
+            />
+          </Form.Item>
+          <Form.Item label="idButtonAction" name="idButtonAction" hidden>
+            <Input />
+          </Form.Item>
+          <Form.Item label="content" name="content" hidden>
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="名称"
+            name="name"
+            rules={[{ required: true, message: 'Please input name!' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="显示名称"
+            name="displayName"
+            rules={[{ required: true, message: 'Please input displayName!' }]}
+          >
+            <Input />
+          </Form.Item>
+        </Form>
+      </Modal>
     </>
   );
 };
 
-export default TreeComp;
+export default CopyForm;
