@@ -10,6 +10,7 @@ import { firstToLower, firstToUpper } from '@/util/name-convent';
 import { useFormBillformTabs } from '../../../store/hooks';
 import { TDescriptionInfo } from '@/pages/Factory/Units/common/model';
 import { useFgLoadData } from '../../../hooks';
+import { nanoid } from '@reduxjs/toolkit';
 
 export type TPanelTabsProps = {
   name: EPartName;
@@ -110,6 +111,13 @@ const PanelTabs: FC<TPanelTabsProps> = ({ name }) => {
           tabClassName: md.entityInfo?.className,
           firstLowerTabClassName: firstToLower(md.entityInfo?.className!),
           mainProperty: md.entityInfo?.pkAttributeInfo?.attributeName!,
+          orderInfoList: [
+            {
+              idOrderInfo: nanoid(),
+              orderProperty: md.entityInfo?.pkAttributeInfo?.attributeName!,
+              orderType: 'ASC',
+            },
+          ],
           orderProperty: md.entityInfo?.pkAttributeInfo?.attributeName!,
           orderType: 'ASC',
           refType:
@@ -155,9 +163,9 @@ const PanelTabs: FC<TPanelTabsProps> = ({ name }) => {
   };
 
   const handleOk = async () => {
-    setIsModalVisible(false);
     const values = await form.validateFields();
     dispatch(actions.addBillFormTab({ name, billFormTab: values }));
+    setIsModalVisible(false);
   };
 
   const handleCancel = () => {
@@ -285,6 +293,15 @@ const PanelTabs: FC<TPanelTabsProps> = ({ name }) => {
             rules={[{ required: true, message: 'Please input tabName!' }]}
           >
             <Input />
+          </Form.Item>
+          <Form.Item label={'复数类型'} name={'refType'}>
+            <Select
+              placeholder={'请选择'}
+              dropdownStyle={{ minWidth: '100px' }}
+            >
+              <Select.Option value={'Single'}>Single</Select.Option>
+              <Select.Option value={'Array'}>Array</Select.Option>
+            </Select>
           </Form.Item>
         </Form>
       </Modal>

@@ -18,8 +18,8 @@ export const setCurrent: CaseReducer<
   if (state.current) {
     if (state.current.attrType === EAttrTypes.Panel) {
       if (action.payload.attrType === EAttrTypes.Panel) {
-        const oldTab: TBillFormTab = state.current.data;
-        const newTab: TBillFormTab = action.payload.data;
+        const oldTab = state.current.data as TBillFormTab;
+        const newTab = action.payload.data as TBillFormTab;
         //选中相同，不做处理
         if (newTab.idBillFormTab === oldTab.idBillFormTab) {
           return;
@@ -28,8 +28,8 @@ export const setCurrent: CaseReducer<
     }
     if (state.current.attrType === EAttrTypes.Field) {
       if (action.payload.attrType === EAttrTypes.Field) {
-        const oldField: TBillFormField = state.current.data;
-        const newField: TBillFormField = action.payload.data;
+        const oldField = state.current.data as TBillFormField;
+        const newField = action.payload.data as TBillFormField;
         //选中相同，不做处理
         if (oldField.idBillFormField === newField.idBillFormField) {
           return;
@@ -39,26 +39,6 @@ export const setCurrent: CaseReducer<
   }
   state.current = action.payload;
 };
-
-// /**删除表单配置 */
-// export const deleteBillformb: CaseReducer<TModuleStore, PayloadAction<void>> = (
-//   state,
-//   action,
-// ) => {
-//   if (state.current?.attrType === EAttrTypes.Field) {
-//     const activeB = state.current.data as TBillFormField;
-//     state.data!.configForm![state.current.name]!.find(
-//       (billFormTab) => billFormTab.tabCode === state.current?.tabCode,
-//     )!.billFormFields = state.data
-//       .configForm![state.current.name]?.find(
-//         (billFormTab) => billFormTab.tabCode === state.current?.tabCode,
-//       )
-//       ?.billFormFields?.filter((billFormB) => {
-//         return billFormB.idBillFormField !== activeB.idBillFormField;
-//       });
-//     state.current = undefined;
-//   }
-// };
 
 /**添加Tab信息 */
 export const addBillFormTab: CaseReducer<
@@ -82,6 +62,7 @@ export const addBillFormTab: CaseReducer<
   state?.data.configForm![name]?.forEach(
     (billFormTab, index) => (billFormTab.tabIndex = index),
   );
+  state.current = undefined;
 };
 
 /**更新Tab信息 */
@@ -128,6 +109,7 @@ export const removeBillFormTab: CaseReducer<
       state.data.configForm!.tail = newBillFormTabs as TBillFormTab[];
       break;
   }
+  state.current = undefined;
 };
 
 /**新增控件 */
@@ -152,19 +134,8 @@ export const addBillFormFields: CaseReducer<
       (billFormTab) => billFormTab.tabCode === tabCode,
     )!.billFormFields = newBillformbs;
   }
+  state.current = undefined;
 };
-
-// /**批量更新控件 */
-// export const updateBillFormFields: CaseReducer<
-//   TModuleStore,
-//   PayloadAction<{ name: EPartName; tabindex: number; dtos: TBillFormField[] }>
-// > = (state, action) => {
-//   const { name, tabindex, dtos } = action.payload;
-//   let billformbs = state.data.configForm![name]?.find(
-//     (billFormTab) => billFormTab.tabIndex === tabindex,
-//   )?.billFormFields;
-//   billformbs?.splice(0, billformbs.length).push(...dtos);
-// };
 
 /**修改控件序号 */
 export const switchOrderBillFormFields: CaseReducer<
@@ -230,6 +201,7 @@ export const deleteBillFormField: CaseReducer<
   state.data.configForm![name]!.find(
     (billFormTab) => billFormTab.tabCode === tabCode,
   )!.billFormFields = newBillformFields;
+  state.current = undefined;
 };
 
 /**表单URI信息更新 */

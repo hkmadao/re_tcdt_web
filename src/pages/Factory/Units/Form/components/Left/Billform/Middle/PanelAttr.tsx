@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { Form, Row, Col, Input, Select, Checkbox } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
@@ -16,6 +16,9 @@ import {
 } from '@/pages/Factory/Units/Form/model';
 import styles from '@/pages/Factory/Units/Form/less/styles.less';
 import { TDescriptionInfo } from '@/pages/Factory/Units/common/model';
+import OrderConf from '@/pages/Factory/Units/common/entity/orderconf';
+import { TOrderInfo } from '../../../../model/billform-common';
+import { nanoid } from '@reduxjs/toolkit';
 
 type TMsgMap = {
   [x: string]: TTip;
@@ -53,10 +56,19 @@ const PanelAttr = () => {
   const treeDatas = useSelector(selectMetaData);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const [dto, setDto] = useState<TBillFormTab>();
+  const [billFormTab, setBillFormTab] = useState<TBillFormTab>();
   const [activeItem, setActiveItem] = useState('');
   const [propertyOptions, setPropertyOptions] = useState<ReactNode[]>();
   const [metadataOptions, setMetadataOptions] = useState<ReactNode[]>();
+  const [propertyArr, setPropertyArr] = useState<{ value: string }[]>([]);
+
+  const orderInfoList = useMemo(() => {
+    if (!currentData) {
+      return [];
+    }
+    const billFormTDTO = currentData.data as TBillFormTab;
+    return billFormTDTO.orderInfoList ?? [];
+  }, [currentData]);
 
   useEffect(() => {
     if (treeDatas && treeDatas.length > 0) {
@@ -91,8 +103,9 @@ const PanelAttr = () => {
   useEffect(() => {
     if (currentData?.attrType === EAttrTypes.Panel) {
       const billFormTDTONew = currentData.data as TBillFormTab;
-      setDto(billFormTDTONew);
+      setBillFormTab(billFormTDTONew);
       const newPropertyOptions: ReactNode[] = [];
+      const newPropertyArr: { value: string }[] = [];
       billFormTDTONew?.billFormFields?.forEach((field) => {
         const option = (
           <Option key={field.name!} value={field.name!}>
@@ -100,8 +113,11 @@ const PanelAttr = () => {
           </Option>
         );
         newPropertyOptions.push(option);
+        const propertyStr = { value: field.name! };
+        newPropertyArr.push(propertyStr);
       });
       setPropertyOptions(newPropertyOptions);
+      setPropertyArr(newPropertyArr);
 
       form.resetFields();
       form.setFieldsValue(billFormTDTONew);
@@ -141,6 +157,13 @@ const PanelAttr = () => {
           tabClassName: md.entityInfo?.className,
           firstLowerTabClassName: firstToLower(md.entityInfo?.className!),
           mainProperty: md.entityInfo?.pkAttributeInfo?.attributeName!,
+          orderInfoList: [
+            {
+              idOrderInfo: nanoid(),
+              orderProperty: md.entityInfo?.pkAttributeInfo?.attributeName!,
+              orderType: 'ASC',
+            },
+          ],
           orderProperty: md.entityInfo?.pkAttributeInfo?.attributeName!,
           orderType: 'ASC',
           refType:
@@ -152,7 +175,7 @@ const PanelAttr = () => {
             dto: { ...newvalues },
           }),
         );
-        setDto({ ...newvalues });
+        setBillFormTab({ ...newvalues });
         form.setFieldsValue({ ...newvalues });
       }
     }
@@ -166,18 +189,37 @@ const PanelAttr = () => {
           actions.updateBillFormTab({
             name: currentData?.name!,
             dto: {
-              ...dto,
+              ...billFormTab,
               ...validates,
             },
           }),
         );
-        setDto({
-          ...dto,
+        setBillFormTab({
+          ...billFormTab,
           ...validates,
         });
       }
       setActiveItem(tagetName);
     };
+  };
+
+  const orderInfoHandle = async (orderInfoList: TOrderInfo[]) => {
+    const validates = await form.validateFields();
+    dispatch(
+      actions.updateBillFormTab({
+        name: currentData?.name!,
+        dto: {
+          ...billFormTab,
+          ...validates,
+          orderInfoList: orderInfoList,
+        },
+      }),
+    );
+    setBillFormTab({
+      ...billFormTab,
+      ...validates,
+      orderInfoList: orderInfoList,
+    });
   };
 
   const handleClick = (msgKey: string) => {
@@ -214,7 +256,7 @@ const PanelAttr = () => {
                 <Input readOnly={true} />
               ) : (
                 <Row>
-                  <Col span={24}>{dto?.idBillFormTab}</Col>
+                  <Col span={24}>{billFormTab?.idBillFormTab}</Col>
                 </Row>
               )}
             </Form.Item>
@@ -255,7 +297,7 @@ const PanelAttr = () => {
                   onClick={hanleToggleInput('tabName')}
                   style={{ cursor: 'pointer', height: '16px' }}
                 >
-                  <Col span={24}>{dto?.tabName}</Col>
+                  <Col span={24}>{billFormTab?.tabName}</Col>
                 </Row>
               )}
             </Form.Item>
@@ -279,7 +321,7 @@ const PanelAttr = () => {
                   onClick={hanleToggleInput('tabCode')}
                   style={{ cursor: 'pointer', height: '16px' }}
                 >
-                  <Col span={24}>{dto?.tabCode}</Col>
+                  <Col span={24}>{billFormTab?.tabCode}</Col>
                 </Row>
               )}
             </Form.Item>
@@ -303,7 +345,7 @@ const PanelAttr = () => {
                   onClick={hanleToggleInput('firstUpperTabCode')}
                   style={{ cursor: 'pointer', height: '16px' }}
                 >
-                  <Col span={24}>{dto?.firstUpperTabCode}</Col>
+                  <Col span={24}>{billFormTab?.firstUpperTabCode}</Col>
                 </Row>
               )}
             </Form.Item>
@@ -346,7 +388,7 @@ const PanelAttr = () => {
                   onClick={hanleToggleInput('tabIndex')}
                   style={{ cursor: 'pointer', height: '16px' }}
                 >
-                  <Col span={24}>{dto?.tabIndex}</Col>
+                  <Col span={24}>{billFormTab?.tabIndex}</Col>
                 </Row>
               )}
             </Form.Item>
@@ -365,7 +407,7 @@ const PanelAttr = () => {
                   onClick={hanleToggleInput('tabClassName')}
                   style={{ cursor: 'pointer', height: '16px' }}
                 >
-                  <Col span={24}>{dto?.tabClassName}</Col>
+                  <Col span={24}>{billFormTab?.tabClassName}</Col>
                 </Row>
               )}
             </Form.Item>
@@ -388,7 +430,7 @@ const PanelAttr = () => {
                   onClick={hanleToggleInput('firstLowerTabClassName')}
                   style={{ cursor: 'pointer', height: '16px' }}
                 >
-                  <Col span={24}>{dto?.firstLowerTabClassName}</Col>
+                  <Col span={24}>{billFormTab?.firstLowerTabClassName}</Col>
                 </Row>
               )}
             </Form.Item>
@@ -407,7 +449,7 @@ const PanelAttr = () => {
                   onClick={hanleToggleInput('tabAttrName')}
                   style={{ cursor: 'pointer', height: '16px' }}
                 >
-                  <Col span={24}>{dto?.tabAttrName}</Col>
+                  <Col span={24}>{billFormTab?.tabAttrName}</Col>
                 </Row>
               )}
             </Form.Item>
@@ -426,7 +468,7 @@ const PanelAttr = () => {
                   onClick={hanleToggleInput('firstUpperTabAttrName')}
                   style={{ cursor: 'pointer', height: '16px' }}
                 >
-                  <Col span={24}>{dto?.firstUpperTabAttrName}</Col>
+                  <Col span={24}>{billFormTab?.firstUpperTabAttrName}</Col>
                 </Row>
               )}
             </Form.Item>
@@ -468,6 +510,23 @@ const PanelAttr = () => {
                 <Option value={'Array'}>Array</Option>
               </Select>
             </Form.Item>
+          </Col>
+        </Row>
+        <Row
+          className={classNames(styles.attrrow)}
+          onClick={(e) => {
+            handleClick('orderProperty');
+          }}
+        >
+          <Col span={8} style={{ borderRight: '1px solid #eeeeee' }}>
+            排序配置
+          </Col>
+          <Col span={16}>
+            <OrderConf
+              inputOptions={propertyArr}
+              sourceOrderInfoList={orderInfoList}
+              callback={orderInfoHandle}
+            />
           </Col>
         </Row>
         <Row

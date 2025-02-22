@@ -33,6 +33,14 @@ export type TCommonField = {
   dataType?: string;
 };
 
+export type TOrderInfo = {
+  idOrderInfo: string;
+  /**排序属性 */
+  orderProperty?: string;
+  /**排序类型 */
+  orderType?: 'ASC' | 'DESC';
+};
+
 /**标签信息 */
 export type TCommonTab = {
   idBillFormTab?: string;
@@ -52,6 +60,7 @@ export type TCommonTab = {
   mainProperty?: string;
   /**引用类型：Ref：多对1引用，SingleRef：1对1引用，Array：1对多引用，Single：1对1引用 */
   refType?: 'Ref' | 'SingleRef' | 'Single' | 'Array';
+  orderInfoList: TOrderInfo[];
   /**排序属性 */
   orderProperty?: string;
   /**排序类型 */

@@ -45,6 +45,7 @@ export const setFgForm: CaseReducer<TModuleStore, PayloadAction<boolean>> = (
   action,
 ) => {
   state.fgForm = action.payload;
+  state.current = undefined;
 };
 
 /**设置左树信息 */
@@ -88,6 +89,7 @@ export const syncFromForm: CaseReducer<TModuleStore, PayloadAction<void>> = (
       state.data.billFormType ?? 'Single',
     );
   }
+  state.current = undefined;
 };
 
 /**同步表格数据到表单配置 */
@@ -115,6 +117,7 @@ export const syncFromTable: CaseReducer<TModuleStore, PayloadAction<void>> = (
       state.data.billFormType ?? 'Single',
     );
   }
+  state.current = undefined;
 };
 
 /**从元数据创建表单数据 */
@@ -150,6 +153,13 @@ export const createFromMetaData: CaseReducer<
     firstUpperTabAttrName: firstToUpper(t1.attributeName || ''),
     billFormFields: [],
     refType: 'Array',
+    orderInfoList: [
+      {
+        idOrderInfo: nanoid(),
+        orderProperty: t1.entityInfo?.pkAttributeInfo?.attributeName!,
+        orderType: 'ASC',
+      },
+    ],
     orderProperty: t1.entityInfo?.pkAttributeInfo?.attributeName,
     orderType: 'ASC',
     fgDefaultTab: true,
@@ -214,6 +224,13 @@ export const createFromMetaData: CaseReducer<
         firstUpperTabAttrName: firstToUpper(t2.attributeName || ''),
         refType: t2.attributeTypeCode === 'InternalArray' ? 'Array' : 'Single',
         billFormFields: [],
+        orderInfoList: [
+          {
+            idOrderInfo: nanoid(),
+            orderProperty: t2.entityInfo?.pkAttributeInfo?.attributeName!,
+            orderType: 'ASC',
+          },
+        ],
         orderProperty: t2.entityInfo?.pkAttributeInfo?.attributeName,
         orderType: 'ASC',
         fgDefaultTab: false,
@@ -315,6 +332,7 @@ export const createFromMetaData: CaseReducer<
       state.data.billFormType ?? 'Single',
     );
   }
+  state.current = undefined;
 };
 
 /**修改表单基础数据 */
