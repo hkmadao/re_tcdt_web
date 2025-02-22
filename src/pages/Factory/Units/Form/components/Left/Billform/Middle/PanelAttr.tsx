@@ -164,8 +164,6 @@ const PanelAttr = () => {
               orderType: 'ASC',
             },
           ],
-          orderProperty: md.entityInfo?.pkAttributeInfo?.attributeName!,
-          orderType: 'ASC',
           refType:
             md.attributeTypeCode === 'InternalArray' ? 'Array' : 'Single',
         };
@@ -527,49 +525,6 @@ const PanelAttr = () => {
               sourceOrderInfoList={orderInfoList}
               callback={orderInfoHandle}
             />
-          </Col>
-        </Row>
-        <Row
-          className={classNames(styles.attrrow)}
-          onClick={(e) => {
-            handleClick('orderProperty');
-          }}
-        >
-          <Col span={8} style={{ borderRight: '1px solid #eeeeee' }}>
-            排序属性
-          </Col>
-          <Col span={16}>
-            <Form.Item label={''} name={'orderProperty'} noStyle={true}>
-              <Select
-                onChange={hanleToggleInput('')}
-                placeholder={'请选择'}
-                dropdownStyle={{ minWidth: '100px' }}
-              >
-                {propertyOptions}
-              </Select>
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row
-          className={classNames(styles.attrrow)}
-          onClick={(e) => {
-            handleClick('orderType');
-          }}
-        >
-          <Col span={8} style={{ borderRight: '1px solid #eeeeee' }}>
-            排序类型
-          </Col>
-          <Col span={16}>
-            <Form.Item label={''} name={'orderType'} noStyle={true}>
-              <Select
-                onChange={hanleToggleInput('')}
-                placeholder={'请选择'}
-                dropdownStyle={{ minWidth: '100px' }}
-              >
-                <Option value={'ASC'}>ASC</Option>
-                <Option value={'DESC'}>DESC</Option>
-              </Select>
-            </Form.Item>
           </Col>
         </Row>
       </Form>

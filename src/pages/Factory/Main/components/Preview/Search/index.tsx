@@ -33,6 +33,7 @@ const SearchPriview: FC<{ idConf: string }> = ({ idConf }) => {
           searcheRefs.forEach((searcheRef) => {
             let childNodeTemp = (
               <Form.Item
+                key={searcheRef.idBillSearchRef}
                 style={{
                   margin: 0,
                 }}
@@ -48,6 +49,7 @@ const SearchPriview: FC<{ idConf: string }> = ({ idConf }) => {
                 let refConfig = searcheRef.refConfig!;
                 childNodeTemp = (
                   <Form.Item
+                    key={searcheRef.idBillSearchRef}
                     style={{
                       margin: 0,
                     }}
@@ -61,6 +63,7 @@ const SearchPriview: FC<{ idConf: string }> = ({ idConf }) => {
               case 'Input':
                 childNodeTemp = (
                   <Form.Item
+                    key={searcheRef.idBillSearchRef}
                     style={{
                       margin: 0,
                     }}
@@ -74,6 +77,7 @@ const SearchPriview: FC<{ idConf: string }> = ({ idConf }) => {
               case 'Select':
                 childNodeTemp = (
                   <Form.Item
+                    key={searcheRef.idBillSearchRef}
                     style={{
                       margin: 0,
                     }}
@@ -100,6 +104,7 @@ const SearchPriview: FC<{ idConf: string }> = ({ idConf }) => {
               case 'Text':
                 childNodeTemp = (
                   <Form.Item
+                    key={searcheRef.idBillSearchRef}
                     style={{
                       margin: 0,
                     }}
@@ -113,6 +118,7 @@ const SearchPriview: FC<{ idConf: string }> = ({ idConf }) => {
               case 'InputNumber':
                 childNodeTemp = (
                   <Form.Item
+                    key={searcheRef.idBillSearchRef}
                     style={{
                       margin: 0,
                     }}
@@ -126,6 +132,7 @@ const SearchPriview: FC<{ idConf: string }> = ({ idConf }) => {
               case 'Checkbox':
                 childNodeTemp = (
                   <Form.Item
+                    key={searcheRef.idBillSearchRef}
                     style={{
                       margin: 0,
                     }}
@@ -140,6 +147,7 @@ const SearchPriview: FC<{ idConf: string }> = ({ idConf }) => {
               case 'Date':
                 childNodeTemp = (
                   <Form.Item
+                    key={searcheRef.idBillSearchRef}
                     style={{
                       margin: 0,
                     }}
@@ -153,6 +161,7 @@ const SearchPriview: FC<{ idConf: string }> = ({ idConf }) => {
               case 'Time':
                 childNodeTemp = (
                   <Form.Item
+                    key={searcheRef.idBillSearchRef}
                     style={{
                       margin: 0,
                     }}
@@ -166,6 +175,7 @@ const SearchPriview: FC<{ idConf: string }> = ({ idConf }) => {
               case 'DateTime':
                 childNodeTemp = (
                   <Form.Item
+                    key={searcheRef.idBillSearchRef}
                     style={{
                       margin: 0,
                     }}
@@ -179,6 +189,7 @@ const SearchPriview: FC<{ idConf: string }> = ({ idConf }) => {
               case 'Image':
                 childNodeTemp = (
                   <Form.Item
+                    key={searcheRef.idBillSearchRef}
                     style={{
                       margin: 0,
                     }}
@@ -195,6 +206,7 @@ const SearchPriview: FC<{ idConf: string }> = ({ idConf }) => {
               default:
                 childNodeTemp = (
                   <Form.Item
+                    key={searcheRef.idBillSearchRef}
                     style={{
                       margin: 0,
                     }}

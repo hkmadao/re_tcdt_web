@@ -160,8 +160,6 @@ export const createFromMetaData: CaseReducer<
         orderType: 'ASC',
       },
     ],
-    orderProperty: t1.entityInfo?.pkAttributeInfo?.attributeName,
-    orderType: 'ASC',
     fgDefaultTab: true,
   };
 
@@ -204,8 +202,6 @@ export const createFromMetaData: CaseReducer<
       }
       if (t2.fgPrimaryKey) {
         ht.mainProperty = t2.attributeName;
-        ht.orderProperty = t2.attributeName;
-        ht.orderType = 'ASC';
         newBillformB.fgDisplay = false;
       }
       ht.billFormFields?.push(newBillformB);
@@ -231,8 +227,6 @@ export const createFromMetaData: CaseReducer<
             orderType: 'ASC',
           },
         ],
-        orderProperty: t2.entityInfo?.pkAttributeInfo?.attributeName,
-        orderType: 'ASC',
         fgDefaultTab: false,
       };
 
@@ -274,8 +268,6 @@ export const createFromMetaData: CaseReducer<
           }
           if (t3.fgPrimaryKey) {
             bt.mainProperty = t3.attributeName;
-            bt.orderProperty = t3.attributeName;
-            bt.orderType = 'ASC';
             subBillformB.fgDisplay = false;
           }
           bt.billFormFields?.push(subBillformB);
@@ -287,7 +279,7 @@ export const createFromMetaData: CaseReducer<
         }
       });
       configForm.body?.push(bt);
-    } else {
+    } else if (t2.attributeTypeCode !== 'InternalArray') {
       //关联属性
       //控件属性配置
       const newBillformB: TBillFormField = getRefBillFormB(t2, index2);

@@ -118,8 +118,6 @@ const PanelTabs: FC<TPanelTabsProps> = ({ name }) => {
               orderType: 'ASC',
             },
           ],
-          orderProperty: md.entityInfo?.pkAttributeInfo?.attributeName!,
-          orderType: 'ASC',
           refType:
             md.attributeTypeCode === 'InternalArray' ? 'Array' : 'Single',
         };
@@ -249,19 +247,6 @@ const PanelTabs: FC<TPanelTabsProps> = ({ name }) => {
             rules={[{ required: true, message: 'Please input mainProperty!' }]}
           >
             <Input />
-          </Form.Item>
-          <Form.Item
-            label="排序属性"
-            name="orderProperty"
-            rules={[{ required: true, message: 'Please input orderProperty!' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item label="排序" name="orderType">
-            <Select defaultValue={'ASC'}>
-              <Select.Option value={'ASC'}>ASC</Select.Option>
-              <Select.Option value={'DESC'}>DESC</Select.Option>
-            </Select>
           </Form.Item>
           {name === EPartName.Body ? (
             <Form.Item label="引用类型" name="refType">

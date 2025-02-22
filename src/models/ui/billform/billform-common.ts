@@ -1,5 +1,4 @@
-import { EAttrTypes, EPartName } from '.';
-import { TBillRef, TEnumRef } from '@/pages/Factory/Units/common/model';
+import { TBillRef, TEnumRef } from '@/models';
 
 /**控件信息 */
 export type TCommonField = {
@@ -90,12 +89,4 @@ export type TCommonConfigForm = {
   // body?: TCommonTab[];
   // /**表尾的标签页信息 */
   // tail?: TCommonTab[];
-};
-
-/**表单选中数据 */
-export type TCommonSelectData = {
-  attrType: EAttrTypes;
-  name: EPartName;
-  tabCode?: string;
-  // data: TCommonTab | TCommonField;
 };

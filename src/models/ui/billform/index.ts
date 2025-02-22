@@ -2,6 +2,7 @@ import { TBillSearchRef, TBillTreeRef, TMetaData } from '..';
 import { TTableBillFormConfigList } from './table';
 import { TBillFormConfigForm } from './form';
 
+export * from './billform-common';
 export * from './form';
 export * from './table';
 export * from './enums';
