@@ -24,7 +24,6 @@ const DragTree: React.FC<{ treeData: TDescriptionInfo[] }> = ({ treeData }) => {
     showIcon: false,
     onExpand: (keys, { node }) => {
       setExpandedKeys(keys);
-      console.log(node);
     },
     onSelect: (keys, { node }) => {
       if (keys && keys.length > 0) {

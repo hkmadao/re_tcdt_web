@@ -12,7 +12,7 @@ const ContentLayout: FC = (props) => {
       if (middleLayout.current) {
         const width = middleLayout.current.getBoundingClientRect().width;
         const height = middleLayout.current.getBoundingClientRect().height;
-        // console.log(width, height);
+
         dispatch(actions.updateContentUi({ width, height }));
       }
     }, 500);

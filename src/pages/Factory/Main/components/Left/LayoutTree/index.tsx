@@ -35,7 +35,6 @@ const LayoutTree: FC = (props) => {
   }, [currentLayout]);
 
   const onSelect = (keys: React.Key[], { node }: { node: TLayout }) => {
-    // console.log('Trigger Select', keys, info);
     if (node.children && node.children.length > 0) {
       toggleExpand(node.key);
     }
@@ -56,7 +55,6 @@ const LayoutTree: FC = (props) => {
     keys: React.Key[],
     { node }: { node: TLayout; expanded: boolean },
   ) => {
-    // console.log('Trigger Expand');
     toggleExpand(node.key);
   };
 

@@ -22,7 +22,7 @@ export const fetchStringValue = (sourceValue: any) => {
     const backWritePropArr = sourceValue as string;
     return backWritePropArr;
   }
-  console.log('未知数据类型');
+  console.error('未知数据类型');
 };
 
 export const deepCopy = (sourceValue: any) => {

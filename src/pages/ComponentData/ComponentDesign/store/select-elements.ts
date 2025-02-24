@@ -101,7 +101,7 @@ export const deleteSelectElement: CaseReducer<
           return true;
         },
       );
-    // console.log(JSON.parse(JSON.stringify(state.component!.componentNodeUis)));
+
     //ui删除
     state.component!.componentNodeUis =
       state.component?.componentNodeUis?.filter((componentNodeUi) => {
@@ -111,7 +111,7 @@ export const deleteSelectElement: CaseReducer<
         componentNodeUi.action = DOStatus.DELETED;
         return true;
       });
-    // console.log(JSON.parse(JSON.stringify(state.component!.componentNodeUis)));
+
     //更新图表
     state.drawCount++;
     return;

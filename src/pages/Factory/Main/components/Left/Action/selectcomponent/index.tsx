@@ -43,7 +43,6 @@ const SelectComponent: FC = () => {
   useEffect(() => {}, []);
 
   const handleComponentSelect = (nodeData?: TCompUpTreeInfo) => {
-    console.log(nodeData);
     if (nodeData) {
       setCompUpTreeInfo({
         ...nodeData,

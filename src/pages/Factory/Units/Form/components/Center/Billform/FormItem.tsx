@@ -120,7 +120,6 @@ const FormItem: FC<TFormItemProps> = ({
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult<TBillFormField>();
       if (item && dropResult) {
-        // console.log(`You dropped ${item.name} into ${dropResult.name}!`);
       }
     },
     collect: (monitor) => ({
@@ -308,7 +307,7 @@ const FormItem: FC<TFormItemProps> = ({
       );
     } catch (errInfo) {
       // eslint-disable-next-line no-console
-      console.log('Save failed:', errInfo);
+      console.error('Save failed:', errInfo);
     }
   };
 

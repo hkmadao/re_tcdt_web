@@ -96,7 +96,6 @@ const SubProjectTree: FC<{
   };
 
   const onSelect = (keys: React.Key[], { node }: { node: TTree }) => {
-    // console.log('Trigger Select', keys, info);
     if (node.children && node.children.length > 0) {
       toggleExpand(node.key);
     }
@@ -132,7 +131,6 @@ const SubProjectTree: FC<{
     keys: React.Key[],
     { node }: { node: TTree; expanded: boolean },
   ) => {
-    // console.log('Trigger Expand');
     toggleExpand(node.key);
   };
 

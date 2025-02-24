@@ -37,7 +37,7 @@ baseAxios.interceptors.response.use(
     return response;
   },
   function (error) {
-    console.log(error);
+    console.error(error);
     if (Axios.isCancel('')) {
       return Promise.reject(error);
     } else {
@@ -125,7 +125,6 @@ export const GET_DOWNLOAD = async (uri: any, downloadFileName?: string) => {
         return Promise.reject('No Response Headers error');
       }
       let contentDisposition = res.headers['content-disposition'];
-      // console.log(res.headers);
       if (!contentDisposition) {
         return Promise.reject(
           'Response Headers Error: No Content-Disposition Header',

@@ -178,7 +178,7 @@ const findDelete = (
       .concat(deleteOutMdEnumNodes),
     deleteMdLinks,
   };
-  // console.log(result);
+
   return result;
 };
 

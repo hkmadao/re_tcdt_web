@@ -100,7 +100,6 @@ const Diagrams: React.FC = () => {
   }, [selectedLineIds]);
 
   const engine = useMemo(() => {
-    // console.log('createDiagramEngine');
     return createDiagramEngine({
       mdPortFactory,
       mdNodeFactory,
@@ -108,7 +107,6 @@ const Diagrams: React.FC = () => {
       mdLabelFactory,
     });
   }, []);
-  // console.log("==============")
 
   useEffect(() => {
     const cWidth = moduleUi.cWidth;
@@ -152,7 +150,6 @@ const Diagrams: React.FC = () => {
     /**偏移距离需要乘上缩放比例倒数，缩放比例为缩放值除以100 */
     const scaleOffsetX = offsetX * (moduleUi.zoomLevel / 100);
     const scaleOffsetY = offsetY * (moduleUi.zoomLevel / 100);
-    // console.log(cWidth, cHeight, moduleUi.hHeight, moduleUi.rWidth, moduleUi.bHeight, moduleUi.lWidth)
     //重设画布初始位置
     engine.getModel().setOffset(0, 0);
     //画布缩放
@@ -171,9 +168,7 @@ const Diagrams: React.FC = () => {
       }
     };
 
-    canvasRef.onwheel = (e) => {
-      // console.log('onwheel.........')
-    };
+    canvasRef.onwheel = (e) => {};
   }, []);
 
   /**重置画布 */
@@ -259,7 +254,6 @@ const Diagrams: React.FC = () => {
   }, [zoomToFitCount]);
 
   const onWheelCapture = (e: React.MouseEvent) => {
-    // console.log('onWheelCapture')
     if (engine.getModel()) {
       dispatch(actions.updateZoomLevel(engine.getModel().getZoomLevel()));
     }
@@ -315,9 +309,7 @@ const Diagrams: React.FC = () => {
     // );
   };
 
-  const handleClick = (e: React.MouseEvent) => {
-    // console.log('click');
-  };
+  const handleClick = (e: React.MouseEvent) => {};
 
   const handleMouseUp = (e: React.MouseEvent) => {
     const offsetX = engine.getModel().getOffsetX();
@@ -387,7 +379,7 @@ const Diagrams: React.FC = () => {
         }
       });
     });
-    // console.log(activeMdLinks);
+
     const selectNodes = activeMdNodes.map((node) => node.getExtras());
     const selectLines = activeMdLinks
       .map((link) => {

@@ -72,7 +72,6 @@ const CodeEditArea: FC = () => {
   };
 
   const handleSave = () => {
-    // console.log('value:', value);
     if (!templateFile) {
       message.error('未选中文件');
       return;

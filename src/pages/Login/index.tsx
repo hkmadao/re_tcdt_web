@@ -33,12 +33,11 @@ const Login: React.FC = () => {
   };
 
   const onFinish = (values: LoginParams) => {
-    console.log('Success:', values);
     handleSubmit(values);
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
+    console.error('Failed:', errorInfo);
   };
 
   return (

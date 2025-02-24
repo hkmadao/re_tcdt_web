@@ -84,13 +84,13 @@ export default function deltaUpdatesDiagramEngine(
   const model: DiagramModel = engine.getModel();
   // const modelListener: DiagramListener = {
   //   lockChanged: (event: any) => {
-  //     // console.log(event)
+  //
   //   },
   //   nodesUpdated: (event: any) => {
-  //     console.log(event)
+  //
   //   },
   //   linksUpdated: (event: any) => {
-  //     // console.log(event)
+  //
   //   }
   // };
   // model.clearListeners();

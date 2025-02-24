@@ -130,7 +130,7 @@ const RefColumnPickerInput: FC<TRefColumnPickerInputProps> = (props) => {
         }
         newFields.push(newField);
       });
-      console.log(newFields);
+
       setTableDatas(newFields);
       setIsModalVisible(true);
       return;

@@ -63,7 +63,6 @@ const TreePriview: FC<{ idConf: string }> = ({ idConf }) => {
     showIcon: false,
     onExpand: (keys, { node }) => {
       setExpandedKeys(keys);
-      console.log(node);
     },
     onSelect: (keys, { node }) => {
       if (keys && keys.length > 0) {

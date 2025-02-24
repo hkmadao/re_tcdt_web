@@ -32,9 +32,7 @@ const UriInput: FC<{
     setOptions(ops);
   };
 
-  const handleSelect = (data: string) => {
-    console.log('onSelect', data);
-  };
+  const handleSelect = (data: string) => {};
 
   const handleChange = (data: string) => {
     setInputValue(data);

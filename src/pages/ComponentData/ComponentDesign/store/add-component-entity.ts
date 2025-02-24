@@ -193,7 +193,7 @@ export const addComponentEntityAssos: CaseReducer<
   const allAssoIds = state.component.componentEntityAssociates?.map(
     (ceasso) => ceasso.idEntityAssociate!,
   );
-  console.log(action.payload);
+
   //加入关联连线
   action.payload.forEach((asso) => {
     if (!allAssoIds?.includes(asso.idEntityAssociate!)) {

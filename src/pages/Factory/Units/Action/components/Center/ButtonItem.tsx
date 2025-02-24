@@ -51,7 +51,6 @@ const ButtonItem: FC<TButton> = ({ ...bt }) => {
       end: (item, monitor) => {
         const dropResult = monitor.getDropResult<TButton>();
         if (item && dropResult) {
-          // console.log(`You dropped ${item.name} into ${dropResult.name}!`);
         }
       },
       collect: (monitor) => ({

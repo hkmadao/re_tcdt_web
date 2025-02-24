@@ -22,7 +22,7 @@ const GeneratePart: FC = () => {
       message.error('请填写包名！');
       return;
     }
-    console.log(window.tcdtAPI);
+
     if (window.tcdtAPI) {
       window.tcdtAPI.generateInputPart(
         Env.directServerUrl +

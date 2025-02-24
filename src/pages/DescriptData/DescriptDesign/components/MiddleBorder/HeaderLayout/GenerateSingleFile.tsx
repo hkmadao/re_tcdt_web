@@ -90,7 +90,6 @@ const GenerateSingleFile: FC = () => {
         const m = (res as string).match(reg);
         const tableNames =
           m?.map((mi) => {
-            console.log(mi);
             return mi
               .replace('CREATE TABLE ', '')
               .replaceAll('`', '')

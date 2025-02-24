@@ -81,9 +81,7 @@ const ClickEventNameInput: FC<{ attr: 'type' | 'clickEventName' }> = ({
     setOptions(ops);
   };
 
-  const onSelect = (data: string) => {
-    console.log('onSelect', data);
-  };
+  const onSelect = (data: string) => {};
 
   const onChange = (data: string) => {
     setInputValue(data);

@@ -27,7 +27,6 @@ const LeftTree: FC<TRefProps> = (props) => {
       selectedNodes: any[];
     },
   ) => {
-    // console.log('Trigger Select', keys, info);
     if (!props.billTreeRef) {
       return;
     }
@@ -54,9 +53,7 @@ const LeftTree: FC<TRefProps> = (props) => {
     );
   };
 
-  const onExpand = () => {
-    // console.log('Trigger Expand');
-  };
+  const onExpand = () => {};
   return (
     <>
       <Tree

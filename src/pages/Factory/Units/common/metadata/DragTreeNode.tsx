@@ -29,10 +29,6 @@ const DragTreeNode: React.FC<TDescriptionInfo> = (props) => {
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult<DropResult>();
       if (item && dropResult) {
-        // eslint-disable-next-line no-console
-        console.log(
-          `You dropped ${item.title} into ${dropResult.partName} ${dropResult.name}!`,
-        );
       }
     },
     collect: (monitor) => ({

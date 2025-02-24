@@ -28,30 +28,21 @@ export default function createDiagramEngine(factorys: {
   mdLinkFactory: MdLinkFactory<TConcreteDiagram>;
   mdLabelFactory: MdLabelFactory;
 }) {
-  // console.log('createDiagramEngine');
   const { mdPortFactory, mdNodeFactory, mdLinkFactory, mdLabelFactory } =
     factorys;
   // 创建engine
   const engine = createEngine({ registerDefaultDeleteItemsAction: false });
   const eListener: CanvasEngineListener = {
-    rendered: () => {
-      // console.log("CanvasEngine rendered")
-    },
+    rendered: () => {},
   };
   //注册事件
   engine.registerListener(eListener);
   // 创建model
   const model = new DiagramModel();
   const modelListener: DiagramListener = {
-    lockChanged: (event: any) => {
-      // console.log(event)
-    },
-    nodesUpdated: (event: any) => {
-      // console.log(event)
-    },
-    linksUpdated: (event: any) => {
-      // console.log(event)
-    },
+    lockChanged: (event: any) => {},
+    nodesUpdated: (event: any) => {},
+    linksUpdated: (event: any) => {},
   };
   //注册事件
   model.registerListener(modelListener);

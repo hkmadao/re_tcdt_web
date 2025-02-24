@@ -129,7 +129,6 @@ const TableColumn: FC<TTableColumnProps> = ({
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult<TBillFormField>();
       if (item && dropResult) {
-        // console.log(`You dropped ${item.name} into ${dropResult.name}!`);
       }
     },
     collect: (monitor) => ({
@@ -425,7 +424,6 @@ const TableColumn: FC<TTableColumnProps> = ({
   const save = async () => {
     try {
       const values = await form.validateFields();
-      // console.log(values);
       const billFormBNew: TBillFormField = { ...billformB };
       let newValue;
       switch (billformB.dataType) {
@@ -453,7 +451,7 @@ const TableColumn: FC<TTableColumnProps> = ({
       );
     } catch (errInfo) {
       // eslint-disable-next-line no-console
-      console.log('Save failed:', errInfo);
+      console.error('Save failed:', errInfo);
     }
   };
 

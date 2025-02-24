@@ -75,7 +75,6 @@ export const moveInEntities = createAsyncThunk(
     });
     entityCollection.enumAssociates =
       entityCollection?.enumAssociates?.concat(moveEnumAssociates);
-    // console.log(entityCollection.entityAssociates);
     const newEntityCollection: TEntityCollection =
       await API.entityCollectionSaveByAction(entityCollection);
     return newEntityCollection;
@@ -124,7 +123,6 @@ export const moveInEnnums = createAsyncThunk(
     });
     entityCollection.enums = entityCollection?.enums?.concat(moveInEnums);
 
-    // console.log(entityCollection.entityAssociates);
     const newEntityCollection: TEntityCollection =
       await API.entityCollectionSaveByAction(entityCollection);
     return newEntityCollection;

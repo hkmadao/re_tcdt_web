@@ -20,10 +20,6 @@ const Left: FC = () => {
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult<DropResult>();
       if (item && dropResult) {
-        // eslint-disable-next-line no-console
-        console.log(
-          `You dropped ${dropResult.id} into ${dropResult.idParent} !`,
-        );
       }
     },
     collect: (monitor) => ({
@@ -38,10 +34,6 @@ const Left: FC = () => {
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult<DropResult>();
       if (item && dropResult) {
-        // eslint-disable-next-line no-console
-        console.log(
-          `You dropped ${dropResult.id} into ${dropResult.idParent} !`,
-        );
       }
     },
     collect: (monitor) => ({
@@ -56,10 +48,6 @@ const Left: FC = () => {
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult<DropResult>();
       if (item && dropResult) {
-        // eslint-disable-next-line no-console
-        console.log(
-          `You dropped ${dropResult.id} into ${dropResult.idParent} !`,
-        );
       }
     },
     collect: (monitor) => ({
@@ -74,10 +62,6 @@ const Left: FC = () => {
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult<DropResult>();
       if (item && dropResult) {
-        // eslint-disable-next-line no-console
-        console.log(
-          `You dropped ${dropResult.id} into ${dropResult.idParent} !`,
-        );
       }
     },
     collect: (monitor) => ({
@@ -92,10 +76,6 @@ const Left: FC = () => {
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult<DropResult>();
       if (item && dropResult) {
-        // eslint-disable-next-line no-console
-        console.log(
-          `You dropped ${dropResult.id} into ${dropResult.idParent} !`,
-        );
       }
     },
     collect: (monitor) => ({
@@ -110,10 +90,6 @@ const Left: FC = () => {
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult<DropResult>();
       if (item && dropResult) {
-        // eslint-disable-next-line no-console
-        console.log(
-          `You dropped ${dropResult.id} into ${dropResult.idParent} !`,
-        );
       }
     },
     collect: (monitor) => ({
@@ -128,10 +104,6 @@ const Left: FC = () => {
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult<DropResult>();
       if (item && dropResult) {
-        // eslint-disable-next-line no-console
-        console.log(
-          `You dropped ${dropResult.id} into ${dropResult.idParent} !`,
-        );
       }
     },
     collect: (monitor) => ({
@@ -146,10 +118,6 @@ const Left: FC = () => {
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult<DropResult>();
       if (item && dropResult) {
-        // eslint-disable-next-line no-console
-        console.log(
-          `You dropped ${dropResult.id} into ${dropResult.idParent} !`,
-        );
       }
     },
     collect: (monitor) => ({
@@ -164,10 +132,6 @@ const Left: FC = () => {
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult<DropResult>();
       if (item && dropResult) {
-        // eslint-disable-next-line no-console
-        console.log(
-          `You dropped ${dropResult.id} into ${dropResult.idParent} !`,
-        );
       }
     },
     collect: (monitor) => ({

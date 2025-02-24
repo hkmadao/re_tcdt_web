@@ -21,7 +21,6 @@ const Module: FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // console.log('reset')
     dispatch(actions.reset());
   }, []);
 

@@ -83,12 +83,6 @@ export const copyAddElements: CaseReducer<
       attribute.idAttribute = nanoid();
       attribute.action = DOStatus.NEW;
     });
-    // console.log(
-    //   moduleUi.hHeight,
-    //   moduleUi.rWidth,
-    //   moduleUi.bHeight,
-    //   moduleUi.lWidth,
-    // );
     const width = moduleUi.cWidth - moduleUi.lWidth - moduleUi.rWidth;
     const height = moduleUi.cHeight - moduleUi.hHeight - moduleUi.bHeight;
     const x =

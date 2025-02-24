@@ -10,7 +10,7 @@ const SelectPath: FC<{
     if (result.canceled) {
       return;
     }
-    console.log(result);
+
     if (result.filePaths.length === 1 && onChange) {
       onChange(result.filePaths.join());
     }

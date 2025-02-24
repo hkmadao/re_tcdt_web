@@ -72,7 +72,6 @@ export const updateFormData: CaseReducer<TFormStore, PayloadAction<TMenu>> = (
   state,
   action,
 ) => {
-  console.log(action.payload);
   state.formData = {
     ...state.formData,
     ...action.payload,

@@ -88,7 +88,6 @@ const MdAssoLinkWidget = <T,>(props: TMdLinkWidgetProps<T>) => {
     extraProps: any,
     id: string | number,
   ): JSX.Element => {
-    // console.log(path);
     const sourceId = (props.link.getSourcePort() as MdPortModel).getExtras()
       .idElement;
     let targetId = '';
@@ -245,7 +244,7 @@ const MdAssoLinkWidget = <T,>(props: TMdLinkWidgetProps<T>) => {
     if (props.link.getTargetPort() && props.link.getExtras()) {
       id = (props.link.getExtras() as unknown as TConcreteDiagram).idElement!;
     }
-    // console.log(id);
+
     paths.push(
       generateLink(
         props.link.getSVGPath(),

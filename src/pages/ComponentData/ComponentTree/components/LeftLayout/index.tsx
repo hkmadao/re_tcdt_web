@@ -53,7 +53,6 @@ const LeftLayout: FC = (props) => {
     keys: React.Key[],
     { node, nativeEvent }: { node: TTree; nativeEvent: MouseEvent },
   ) => {
-    // console.log('Trigger Select', keys, info);
     if (node.children && node.children.length > 0) {
       dispatch(treeActions.toggleExpand(node.key));
     }

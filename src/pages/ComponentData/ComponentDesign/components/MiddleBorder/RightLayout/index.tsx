@@ -86,9 +86,7 @@ const RightLayout: FC = (props) => {
     }
   };
 
-  useEffect(() => {
-    // console.log(Math.floor(moduleUi.cHeight - moduleUi.hHeight));
-  }, [moduleUi]);
+  useEffect(() => {}, [moduleUi]);
 
   return (
     <>

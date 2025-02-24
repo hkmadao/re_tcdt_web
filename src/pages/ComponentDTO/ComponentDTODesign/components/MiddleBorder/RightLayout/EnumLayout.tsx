@@ -64,7 +64,6 @@ const EnumLayout: FC = () => {
   };
 
   const hanleleSync = () => {
-    console.log(ddEnum);
     if (ddEnum?.idRef) {
       dispatch(fetchEnums([ddEnum?.idRef]));
     }

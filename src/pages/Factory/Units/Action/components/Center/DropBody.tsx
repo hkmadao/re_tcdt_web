@@ -19,7 +19,7 @@ const DropBody: FC = () => {
         if (didDrop) {
           return;
         }
-        console.log(monitor.getItemType());
+
         if (monitor.getItemType() === dragItemTypeMap.COMPONENT) {
           dispatch(
             actions.addCondition({

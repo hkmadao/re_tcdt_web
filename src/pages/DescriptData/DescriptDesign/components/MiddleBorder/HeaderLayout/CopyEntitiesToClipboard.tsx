@@ -55,13 +55,7 @@ const CopyEntitiesToClipboard: FC = () => {
 
   return (
     <>
-      <CopyToClipboard
-        text={copyText || ''}
-        onCopy={(text, result) => {
-          console.log(text);
-          console.log(result);
-        }}
-      >
+      <CopyToClipboard text={copyText || ''} onCopy={(text, result) => {}}>
         <Tooltip overlay={'复制选中实体到剪贴板'}>
           <Button
             className={['copyAddButton', 'specialButton'].join(' ')}

@@ -101,7 +101,6 @@ const FormItem: FC<TFormItemProps> = ({ form, billSearchRef }) => {
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult<TBillSearchRef>();
       if (item && dropResult) {
-        // console.log(`You dropped ${item.name} into ${dropResult.name}!`);
       }
     },
     collect: (monitor) => ({
@@ -329,7 +328,7 @@ const FormItem: FC<TFormItemProps> = ({ form, billSearchRef }) => {
       dispatch(actions.updateCondition(billFormBNew));
     } catch (errInfo) {
       // eslint-disable-next-line no-console
-      console.log('Save failed:', errInfo);
+      console.error('Save failed:', errInfo);
     }
   };
 

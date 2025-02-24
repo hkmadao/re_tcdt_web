@@ -36,13 +36,7 @@ const Layout: FC<
         if (didDrop) {
           return;
         }
-        console.log(monitor.getItemType());
-        console.log(nodeData, id);
-        // const fl = currentLayout?.children.find(cl => cl.type === 'component');
-        // if (fl) {
-        //   message.error(`布局${currentLayout?.title}已存在组件，不能放置单布局！`);
-        //   return;
-        // }
+
         if (monitor.getItemType() === dragItemTypeMap.LAYOUT) {
           if (nodeData.name === dragItemNameMap.LAYOUT_SINGLE) {
             dispatch(

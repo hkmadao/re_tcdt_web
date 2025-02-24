@@ -30,7 +30,7 @@ const OrderConf: FC<{
       setDisplayValue(undefined);
       setOrderInfoList([]);
     }
-  }, []);
+  }, [sourceOrderInfoList]);
 
   const selectOptions = useMemo(() => inputOptions, [inputOptions]);
 

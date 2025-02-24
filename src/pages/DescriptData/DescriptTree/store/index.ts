@@ -52,7 +52,7 @@ export const treeSlice = createSlice({
       .addCase(fetchEntityProjectTree.rejected, (state, action) => {})
       .addCase(fetchEntityProjectTree.fulfilled, (state, action) => {
         const treeArr = action.payload;
-        console.log(treeArr);
+
         const datas = fillTreeKey(treeArr);
         const newTreeData: TTree[] = [{ ...rootTree, children: datas }];
         state.sourchTreeData = JSON.parse(JSON.stringify(newTreeData));

@@ -71,7 +71,6 @@ const TemplateSelect: FC<{
   };
 
   const handleSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
     setSearchValue(e.target.value);
   };
 

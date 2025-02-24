@@ -55,7 +55,6 @@ const LeftLayout: FC = () => {
       selected,
     }: { node: TTree; nativeEvent: MouseEvent; selected: boolean },
   ) => {
-    // console.log('Trigger Select', keys, info);
     if (node.children && node.children.length > 0) {
       dispatch(treeActions.toggleExpand(node.key));
     }
