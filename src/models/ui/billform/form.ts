@@ -4,9 +4,6 @@ import { TCommonConfigForm, TCommonField, TCommonTab } from '.';
 /**控件信息 */
 export type TBillFormField = {
   placeholder?: string;
-  width?: string;
-  fgEllipsis?: boolean;
-  ellipsisLen?: number;
   inputType?: EInputType | string;
   /**只读属性 */
   readonly?: boolean;

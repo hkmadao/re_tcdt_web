@@ -8,6 +8,7 @@ import {
 
 /**控件信息 */
 export type TBillFormField = {
+  placeholder?: string;
   inputType?: EInputType | string;
   /**只读属性 */
   readonly?: boolean;

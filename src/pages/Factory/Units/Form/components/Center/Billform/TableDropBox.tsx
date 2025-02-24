@@ -81,6 +81,9 @@ const TableDropBox: FC<TTableDropBoxProps> = ({ partName, billformT }) => {
             dataType: selectedNode.attributeTypeCode,
             inputType: selectedNode.webInputType || 'Input',
             fgDisplay: true,
+            width: 150,
+            textLen: 140,
+            placeholder: selectedNode.displayName,
           };
           if (selectedNode.enumInfo) {
             newBillformB.enumConfig = {

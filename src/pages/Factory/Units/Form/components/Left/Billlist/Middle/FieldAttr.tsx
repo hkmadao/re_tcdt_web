@@ -1,5 +1,14 @@
 import { useEffect, useState } from 'react';
-import { Form, Row, Col, Input, Tabs, Select, Checkbox } from 'antd';
+import {
+  Form,
+  Row,
+  Col,
+  Input,
+  Tabs,
+  Select,
+  Checkbox,
+  InputNumber,
+} from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
 import {
@@ -41,6 +50,9 @@ const msgMap: TMsgMap = {
   dataType: { tipKey: 'dataType', tip: '数据的类型，自定义控件可修改' },
   refConfig: { tipKey: 'refConfig', tip: '引用配置' },
   enumConfig: { tipKey: 'enumConfig', tip: '枚举配置' },
+  width: { tipKey: 'width', tip: '宽度配置' },
+  textLen: { tipKey: 'textLen', tip: '文本长度配置' },
+  placeholder: { tipKey: 'placeholder', tip: '占位文本配置' },
 };
 
 const FieldAttr = () => {
@@ -218,6 +230,62 @@ const FieldAttr = () => {
             <Row
               className={classNames(styles.attrrow)}
               onClick={(e) => {
+                handleClick('width');
+              }}
+            >
+              <Col span={8} style={{ borderRight: '1px solid #eeeeee' }}>
+                宽度
+              </Col>
+              <Col span={16}>
+                <Form.Item label={''} name={'width'} noStyle={true}>
+                  {activeItem === 'width' ? (
+                    <InputNumber
+                      min={0}
+                      autoFocus
+                      onBlur={hanleToggleInput('')}
+                    />
+                  ) : (
+                    <Row
+                      onClick={hanleToggleInput('width')}
+                      style={{ cursor: 'pointer', height: '16px' }}
+                    >
+                      <Col span={24}>{billFormField?.width}</Col>
+                    </Row>
+                  )}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row
+              className={classNames(styles.attrrow)}
+              onClick={(e) => {
+                handleClick('textLen');
+              }}
+            >
+              <Col span={8} style={{ borderRight: '1px solid #eeeeee' }}>
+                文本长度
+              </Col>
+              <Col span={16}>
+                <Form.Item label={''} name={'textLen'} noStyle={true}>
+                  {activeItem === 'textLen' ? (
+                    <InputNumber
+                      min={0}
+                      autoFocus
+                      onBlur={hanleToggleInput('')}
+                    />
+                  ) : (
+                    <Row
+                      onClick={hanleToggleInput('textLen')}
+                      style={{ cursor: 'pointer', height: '16px' }}
+                    >
+                      <Col span={24}>{billFormField?.textLen}</Col>
+                    </Row>
+                  )}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row
+              className={classNames(styles.attrrow)}
+              onClick={(e) => {
                 handleClick('showOrder');
               }}
             >
@@ -227,7 +295,11 @@ const FieldAttr = () => {
               <Col span={16}>
                 <Form.Item label={''} name={'showOrder'} noStyle={true}>
                   {activeItem === 'showOrder' ? (
-                    <Input autoFocus onBlur={hanleToggleInput('')} />
+                    <InputNumber
+                      min={0}
+                      autoFocus
+                      onBlur={hanleToggleInput('')}
+                    />
                   ) : (
                     <Row
                       onClick={hanleToggleInput('showOrder')}

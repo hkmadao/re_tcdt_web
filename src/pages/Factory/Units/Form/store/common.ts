@@ -180,6 +180,9 @@ export const createFromMetaData: CaseReducer<
         readonly: false,
         inputType: t2.webInputType || 'Input',
         typeScriptType: t2.typeScriptType || 'string',
+        width: 150,
+        textLen: 140,
+        placeholder: t2.displayName,
       };
       if (t2.enumInfo) {
         newBillformB.enumConfig = {
@@ -246,6 +249,9 @@ export const createFromMetaData: CaseReducer<
             readonly: false,
             inputType: t3.webInputType || 'Input',
             typeScriptType: t3.typeScriptType || 'string',
+            width: 150,
+            textLen: 140,
+            placeholder: t3.displayName,
           };
           if (t3.enumInfo) {
             subBillformB.enumConfig = {

@@ -29,6 +29,10 @@ export type TCommonField = {
   /**前端TypeScript数据类型，未使用 */
   typeScriptType?: string;
   dataType?: string;
+  /**宽度 */
+  width?: number;
+  /**超过文本长度部分使用'...'显示 */
+  textLen?: number;
 };
 
 export type TOrderInfo = {
