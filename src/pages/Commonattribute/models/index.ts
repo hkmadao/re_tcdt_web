@@ -26,32 +26,17 @@ export type TCommonAttribute = {
   refDisplayName?: string;
   /**属性类别 */
   category?: string;
-  /**上级实体信息 */
-  refEntity?: TDdEntity;
-  idRefEntity?: string;
+  /**系统预置数据标识 */
+  fgPreset?: boolean;
   /**项目 */
   project?: TProject;
   idProject?: string;
   /**数据类型 */
   dataType?: TDataType;
   idDataType?: string;
-} & TAudit;
-/**实体信息 */
-export type TDdEntity = {
-  /**实体id */
-  idEntity?: string;
-  /**表名 */
-  tableName?: string;
-  /**主属性类型名称 */
-  pkAttributeTypeName?: string;
-  /**主属性code */
-  pkAttributeCode?: string;
-  /**主属性名称 */
-  pkAttributeName?: string;
-  /**类名 */
-  className?: string;
-  /**显示名称 */
-  displayName?: string;
+  /**上级实体信息 */
+  refEntity?: TDdEntity;
+  idRefEntity?: string;
 } & TAudit;
 /**项目 */
 export type TProject = {
@@ -72,44 +57,63 @@ export type TProject = {
 } & TAudit;
 /**数据类型 */
 export type TDataType = {
-  /**精度 */
-  pcs?: number;
-  /**备注 */
-  note?: string;
-  /**扩展属性6 */
-  ext6?: string;
-  /**TypeScript类型 */
-  typeScriptType?: string;
-  /**HTML5输入框类型 */
-  webInputType?: string;
-  /**数据类型编码 */
-  code?: string;
   /**扩展属性3 */
   ext3?: string;
-  /**扩展属性1 */
-  ext1?: string;
-  /**必填标志 */
-  fgMandatory?: boolean;
+  /**备注 */
+  note?: string;
+  /**系统预置数据标识 */
+  fgPreset?: boolean;
   /**扩展属性2 */
   ext2?: string;
-  /**对象类型名称 */
-  objectType?: string;
-  /**扩展属性4 */
-  ext4?: string;
-  /**显示名称 */
-  displayName?: string;
-  /**数据类型id */
-  idDataType?: string;
-  /**字段类型 */
-  columnType?: string;
-  /**对象类型包名 */
-  objectTypePackage?: string;
-  /**扩展属性5 */
-  ext5?: string;
-  /**默认值 */
-  defaultValue?: string;
   /**序列号 */
   sn?: number;
   /**长度 */
   len?: number;
+  /**默认值 */
+  defaultValue?: string;
+  /**扩展属性1 */
+  ext1?: string;
+  /**显示名称 */
+  displayName?: string;
+  /**TypeScript类型 */
+  typeScriptType?: string;
+  /**扩展属性4 */
+  ext4?: string;
+  /**必填标志 */
+  fgMandatory?: boolean;
+  /**对象类型名称 */
+  objectType?: string;
+  /**对象类型包名 */
+  objectTypePackage?: string;
+  /**精度 */
+  pcs?: number;
+  /**扩展属性6 */
+  ext6?: string;
+  /**数据类型编码 */
+  code?: string;
+  /**HTML5输入框类型 */
+  webInputType?: string;
+  /**数据类型id */
+  idDataType?: string;
+  /**字段类型 */
+  columnType?: string;
+  /**扩展属性5 */
+  ext5?: string;
+} & TAudit;
+/**实体信息 */
+export type TDdEntity = {
+  /**实体id */
+  idEntity?: string;
+  /**表名 */
+  tableName?: string;
+  /**主属性类型名称 */
+  pkAttributeTypeName?: string;
+  /**主属性code */
+  pkAttributeCode?: string;
+  /**主属性名称 */
+  pkAttributeName?: string;
+  /**类名 */
+  className?: string;
+  /**显示名称 */
+  displayName?: string;
 } & TAudit;

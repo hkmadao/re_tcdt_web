@@ -16,7 +16,7 @@ const queryConf: TQueryContent | undefined = {
   searchRefs: [
     {
       idBillSearchRef: '933hilQp_iFCLbnzFu5wA',
-      operatorCode: 'equal',
+      operatorCode: 'like',
       label: '数据类型编码',
       attributeName: 'code',
       searchAttributes: ['code'],
@@ -27,7 +27,7 @@ const queryConf: TQueryContent | undefined = {
     },
     {
       idBillSearchRef: 'rqDxsnStIUTdfgAmNid87',
-      operatorCode: 'equal',
+      operatorCode: 'like',
       label: '显示名称',
       attributeName: 'displayName',
       searchAttributes: ['displayName'],

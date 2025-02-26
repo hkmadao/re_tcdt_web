@@ -53,6 +53,7 @@ const msgMap: TMsgMap = {
   width: { tipKey: 'width', tip: '宽度配置' },
   textLen: { tipKey: 'textLen', tip: '文本长度配置' },
   placeholder: { tipKey: 'placeholder', tip: '占位文本配置' },
+  defaultValue: { tipKey: 'defaultValue', tip: '默认值' },
 };
 
 const FieldAttr = () => {
@@ -278,6 +279,30 @@ const FieldAttr = () => {
                       style={{ cursor: 'pointer', height: '16px' }}
                     >
                       <Col span={24}>{billFormField?.textLen}</Col>
+                    </Row>
+                  )}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row
+              className={classNames(styles.attrrow)}
+              onClick={(e) => {
+                handleClick('defaultValue');
+              }}
+            >
+              <Col span={8} style={{ borderRight: '1px solid #eeeeee' }}>
+                默认值
+              </Col>
+              <Col span={16}>
+                <Form.Item label={''} name={'defaultValue'} noStyle={true}>
+                  {activeItem === 'defaultValue' ? (
+                    <Input autoFocus onBlur={hanleToggleInput('')} />
+                  ) : (
+                    <Row
+                      onClick={hanleToggleInput('defaultValue')}
+                      style={{ cursor: 'pointer', height: '16px' }}
+                    >
+                      <Col span={24}>{billFormField?.defaultValue}</Col>
                     </Row>
                   )}
                 </Form.Item>

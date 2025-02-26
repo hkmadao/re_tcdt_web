@@ -1,10 +1,18 @@
-import { Checkbox, Dropdown, Menu, TableColumnType, message } from 'antd';
+import {
+  Checkbox,
+  Dropdown,
+  Menu,
+  TableColumnType,
+  message,
+  Popover,
+} from 'antd';
 import moment from 'moment';
 import { DownOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { EPartName } from '@/models';
 import { getRefByAttr } from '@/util';
 import { billformConf } from '../../../../conf';
+import CustomDateText from '@/components/CustomDateText';
 import { TDataType } from '../../../../models';
 export const useMainTableColumns: () => TableColumnType<TDataType>[] = () => {
   const dispatch = useDispatch();
@@ -37,11 +45,48 @@ export const useMainTableColumns: () => TableColumnType<TDataType>[] = () => {
   return [
     {
       width: 150,
+      title: '数据类型id',
+      dataIndex: 'idDataType',
+      key: 'idDataType',
+      render: (_dom: any, record: any) => {
+        const content = record.idDataType ? record.idDataType : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
+      },
+    },
+    {
+      width: 150,
       title: '数据类型编码',
       dataIndex: 'code',
       key: 'code',
       render: (_dom: any, record: any) => {
-        return <>{record.code ? record.code : '--'}</>;
+        const content = record.code ? record.code : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
       },
     },
     {
@@ -50,7 +95,21 @@ export const useMainTableColumns: () => TableColumnType<TDataType>[] = () => {
       dataIndex: 'displayName',
       key: 'displayName',
       render: (_dom: any, record: any) => {
-        return <>{record.displayName ? record.displayName : '--'}</>;
+        const content = record.displayName ? record.displayName : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
       },
     },
     {
@@ -59,7 +118,21 @@ export const useMainTableColumns: () => TableColumnType<TDataType>[] = () => {
       dataIndex: 'note',
       key: 'note',
       render: (_dom: any, record: any) => {
-        return <>{record.note ? record.note : '--'}</>;
+        const content = record.note ? record.note : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
       },
     },
     {
@@ -95,7 +168,21 @@ export const useMainTableColumns: () => TableColumnType<TDataType>[] = () => {
       dataIndex: 'columnType',
       key: 'columnType',
       render: (_dom: any, record: any) => {
-        return <>{record.columnType ? record.columnType : '--'}</>;
+        const content = record.columnType ? record.columnType : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
       },
     },
     {
@@ -104,7 +191,21 @@ export const useMainTableColumns: () => TableColumnType<TDataType>[] = () => {
       dataIndex: 'objectType',
       key: 'objectType',
       render: (_dom: any, record: any) => {
-        return <>{record.objectType ? record.objectType : '--'}</>;
+        const content = record.objectType ? record.objectType : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
       },
     },
     {
@@ -113,8 +214,255 @@ export const useMainTableColumns: () => TableColumnType<TDataType>[] = () => {
       dataIndex: 'objectTypePackage',
       key: 'objectTypePackage',
       render: (_dom: any, record: any) => {
+        const content = record.objectTypePackage
+          ? record.objectTypePackage
+          : '--';
         return (
-          <>{record.objectTypePackage ? record.objectTypePackage : '--'}</>
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
+      },
+    },
+    {
+      width: 150,
+      title: '扩展属性1',
+      dataIndex: 'ext1',
+      key: 'ext1',
+      render: (_dom: any, record: any) => {
+        const content = record.ext1 ? record.ext1 : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
+      },
+    },
+    {
+      width: 150,
+      title: '扩展属性2',
+      dataIndex: 'ext2',
+      key: 'ext2',
+      render: (_dom: any, record: any) => {
+        const content = record.ext2 ? record.ext2 : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
+      },
+    },
+    {
+      width: 150,
+      title: '扩展属性3',
+      dataIndex: 'ext3',
+      key: 'ext3',
+      render: (_dom: any, record: any) => {
+        const content = record.ext3 ? record.ext3 : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
+      },
+    },
+    {
+      width: 150,
+      title: '扩展属性4',
+      dataIndex: 'ext4',
+      key: 'ext4',
+      render: (_dom: any, record: any) => {
+        const content = record.ext4 ? record.ext4 : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
+      },
+    },
+    {
+      width: 150,
+      title: '扩展属性5',
+      dataIndex: 'ext5',
+      key: 'ext5',
+      render: (_dom: any, record: any) => {
+        const content = record.ext5 ? record.ext5 : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
+      },
+    },
+    {
+      width: 150,
+      title: '扩展属性6',
+      dataIndex: 'ext6',
+      key: 'ext6',
+      render: (_dom: any, record: any) => {
+        const content = record.ext6 ? record.ext6 : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
+      },
+    },
+    {
+      width: 150,
+      title: '默认值',
+      dataIndex: 'defaultValue',
+      key: 'defaultValue',
+      render: (_dom: any, record: any) => {
+        const content = record.defaultValue ? record.defaultValue : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
+      },
+    },
+    {
+      width: 150,
+      title: '必填标志',
+      dataIndex: 'fgMandatory',
+      key: 'fgMandatory',
+      render: (_dom: any, record: any) => {
+        return (
+          <>
+            <Checkbox checked={record.fgMandatory ?? false} />
+          </>
+        );
+      },
+    },
+    {
+      width: 150,
+      title: 'TypeScript类型',
+      dataIndex: 'typeScriptType',
+      key: 'typeScriptType',
+      render: (_dom: any, record: any) => {
+        const content = record.typeScriptType ? record.typeScriptType : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
+      },
+    },
+    {
+      width: 150,
+      title: 'HTML5输入框类型',
+      dataIndex: 'webInputType',
+      key: 'webInputType',
+      render: (_dom: any, record: any) => {
+        const content = record.webInputType ? record.webInputType : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
+      },
+    },
+    {
+      width: 150,
+      title: '系统预置数据标识',
+      dataIndex: 'fgPreset',
+      key: 'fgPreset',
+      render: (_dom: any, record: any) => {
+        return (
+          <>
+            <Checkbox checked={record.fgPreset ?? false} />
+          </>
         );
       },
     },
@@ -138,128 +486,5 @@ export const useMainTableColumns: () => TableColumnType<TDataType>[] = () => {
         }
       },
     },
-    {
-      width: 150,
-      title: '扩展属性1',
-      dataIndex: 'ext1',
-      key: 'ext1',
-      render: (_dom: any, record: any) => {
-        return <>{record.ext1 ? record.ext1 : '--'}</>;
-      },
-    },
-    {
-      width: 150,
-      title: '扩展属性2',
-      dataIndex: 'ext2',
-      key: 'ext2',
-      render: (_dom: any, record: any) => {
-        return <>{record.ext2 ? record.ext2 : '--'}</>;
-      },
-    },
-    {
-      width: 150,
-      title: '扩展属性3',
-      dataIndex: 'ext3',
-      key: 'ext3',
-      render: (_dom: any, record: any) => {
-        return <>{record.ext3 ? record.ext3 : '--'}</>;
-      },
-    },
-    {
-      width: 150,
-      title: '扩展属性4',
-      dataIndex: 'ext4',
-      key: 'ext4',
-      render: (_dom: any, record: any) => {
-        return <>{record.ext4 ? record.ext4 : '--'}</>;
-      },
-    },
-    {
-      width: 150,
-      title: '扩展属性5',
-      dataIndex: 'ext5',
-      key: 'ext5',
-      render: (_dom: any, record: any) => {
-        return <>{record.ext5 ? record.ext5 : '--'}</>;
-      },
-    },
-    {
-      width: 150,
-      title: '扩展属性6',
-      dataIndex: 'ext6',
-      key: 'ext6',
-      render: (_dom: any, record: any) => {
-        return <>{record.ext6 ? record.ext6 : '--'}</>;
-      },
-    },
-    {
-      width: 150,
-      title: '默认值',
-      dataIndex: 'defaultValue',
-      key: 'defaultValue',
-      render: (_dom: any, record: any) => {
-        return <>{record.defaultValue ? record.defaultValue : '--'}</>;
-      },
-    },
-    {
-      width: 150,
-      title: '必填标志',
-      dataIndex: 'fgMandatory',
-      key: 'fgMandatory',
-      render: (_dom: any, record: any) => {
-        return (
-          <>
-            <Checkbox checked={record.fgMandatory ?? false} />
-          </>
-        );
-      },
-    },
-    {
-      width: 150,
-      title: 'TypeScript类型',
-      dataIndex: 'typeScriptType',
-      key: 'typeScriptType',
-      render: (_dom: any, record: any) => {
-        return <>{record.typeScriptType ? record.typeScriptType : '--'}</>;
-      },
-    },
-    {
-      width: 150,
-      title: 'HTML5输入框类型',
-      dataIndex: 'webInputType',
-      key: 'webInputType',
-      render: (_dom: any, record: any) => {
-        return <>{record.webInputType ? record.webInputType : '--'}</>;
-      },
-    },
-    {
-      width: 150,
-      title: '系统预置数据标识',
-      dataIndex: 'fgPreset',
-      key: 'fgPreset',
-      render: (_dom: any, record: any) => {
-        return (
-          <>
-            <Checkbox checked={record.fgPreset ?? false} />
-          </>
-        );
-      },
-    },
-    /*[- */
-    {
-      width: 150,
-      fixed: 'right',
-      title: '操作',
-      key: 'action',
-      sorter: true,
-      render: () => (
-        <Dropdown overlay={menu} trigger={['click']}>
-          <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-            更多 <DownOutlined />
-          </a>
-        </Dropdown>
-      ),
-    },
-    /* -]*/
   ];
 };

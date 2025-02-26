@@ -25,9 +25,26 @@ export const formSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(toEdit.pending, (state, action) => {})
-      .addCase(toEdit.rejected, (state, action) => {})
+      .addCase(toEdit.pending, (state, action) => {
+        subject.publish({
+          topic: '/page/addLoadingCount',
+          producerId: state.idUiConf!,
+          data: undefined,
+        });
+      })
+      .addCase(toEdit.rejected, (state, action) => {
+        subject.publish({
+          topic: '/page/reduceLoadingCount',
+          producerId: state.idUiConf!,
+          data: undefined,
+        });
+      })
       .addCase(toEdit.fulfilled, (state, action) => {
+        subject.publish({
+          topic: '/page/reduceLoadingCount',
+          producerId: state.idUiConf!,
+          data: undefined,
+        });
         const { nodeData, detailData } = action.payload;
         state.treeSelectedNode = nodeData;
         state.selectedRow = detailData;
@@ -39,7 +56,13 @@ export const formSlice = createSlice({
           editStatus: 'toEdit',
         };
       })
-      .addCase(reflesh.pending, (state, action) => {})
+      .addCase(reflesh.pending, (state, action) => {
+        subject.publish({
+          topic: '/page/addLoadingCount',
+          producerId: state.idUiConf!,
+          data: undefined,
+        });
+      })
       .addCase(reflesh.rejected, (state, action) => {})
       .addCase(reflesh.fulfilled, (state, action) => {
         state.formData = action.payload;
@@ -48,9 +71,26 @@ export const formSlice = createSlice({
           editStatus: 'reflesh',
         };
       })
-      .addCase(save.pending, (state, action) => {})
-      .addCase(save.rejected, (state, action) => {})
+      .addCase(save.pending, (state, action) => {
+        subject.publish({
+          topic: '/page/addLoadingCount',
+          producerId: state.idUiConf!,
+          data: undefined,
+        });
+      })
+      .addCase(save.rejected, (state, action) => {
+        subject.publish({
+          topic: '/page/reduceLoadingCount',
+          producerId: state.idUiConf!,
+          data: undefined,
+        });
+      })
       .addCase(save.fulfilled, (state, action) => {
+        subject.publish({
+          topic: '/page/reduceLoadingCount',
+          producerId: state.idUiConf!,
+          data: undefined,
+        });
         const { actionType, saveData } = action.payload;
         if (actionType === 'add') {
           state.newDataArr.push(saveData);

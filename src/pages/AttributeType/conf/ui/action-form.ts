@@ -7,7 +7,7 @@ const actionFormConf: TActionContent | undefined = {
   idProject: '0000-8a8546d0-895e-414b-a722-4f70bfae3548',
   idSubProject: '0000-a4bb91a0-5ab4-41fb-b5c9-0accd88c6ad7',
   name: 'tree_table_edit_action',
-  projectName: null,
+  projectName: '模板代码设计工具',
   subProjectName: '模型管理',
   buttons: [
     {
@@ -18,6 +18,7 @@ const actionFormConf: TActionContent | undefined = {
       buttonSize: 'middle',
       type: 'primary',
       showOrder: 0,
+      nameScript: "'保存'",
     },
     {
       label: '保存并新增',
@@ -28,6 +29,7 @@ const actionFormConf: TActionContent | undefined = {
       buttonSize: 'middle',
       type: 'primary',
       showOrder: 1,
+      nameScript: "'保存并新增'",
     },
     {
       label: '取消',
@@ -37,6 +39,7 @@ const actionFormConf: TActionContent | undefined = {
       buttonSize: 'middle',
       type: 'primary',
       showOrder: 2,
+      nameScript: "'取消'",
     },
     {
       label: '刷新',
@@ -47,6 +50,7 @@ const actionFormConf: TActionContent | undefined = {
       buttonSize: 'middle',
       type: 'primary',
       showOrder: 3,
+      nameScript: "'刷新'",
     },
   ],
   gap: '10px',

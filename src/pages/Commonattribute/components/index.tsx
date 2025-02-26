@@ -11,8 +11,8 @@ import { subject } from '../conf';
 import TableLayout from './billform/tablelayout';
 import FormLayout from './billform/formlayout';
 import LeftTree from './lefttree';
-import TableToolBar from './toolbar/TableToolBar';
-import FormToolBar from './toolbar/FormToolBar';
+import TableToolBar from './toolbar/tabletoolbar';
+import FormToolBar from './toolbar/formtoolbar';
 import SearchArea from './searcharea';
 
 const Center: FC = () => {
@@ -41,8 +41,28 @@ const Center: FC = () => {
     };
     subject.subscribe(pageObserver);
 
+    const addLoadingCountObserver: Observer = {
+      topic: '/page/addLoadingCount',
+      consumerId: idUiConf,
+      update: function (message: TMessage): void {
+        dispatch(actions.addLoadingCount());
+      },
+    };
+    subject.subscribe(addLoadingCountObserver);
+
+    const reduceLoadingCountObserver: Observer = {
+      topic: '/page/reduceLoadingCount',
+      consumerId: idUiConf,
+      update: function (message: TMessage): void {
+        dispatch(actions.reduceLoadingCount());
+      },
+    };
+    subject.subscribe(reduceLoadingCountObserver);
+
     return () => {
       subject.unsubsribe(pageObserver);
+      subject.unsubsribe(addLoadingCountObserver);
+      subject.unsubsribe(reduceLoadingCountObserver);
     };
   }, []);
 
@@ -57,42 +77,66 @@ const Center: FC = () => {
         if (layout.component?.componentType === 'viewBillform') {
           return (
             <Layout {...param}>
-              <TableLayout idLayout={layout.id} fgDisabled={asso.disabled} />
+              <TableLayout
+                idLayout={layout.id}
+                fgDisabled={asso.disabled}
+                fgHidden={asso.hidden}
+              />
             </Layout>
           );
         }
         if (layout.component?.componentType === 'editBillform') {
           return (
             <Layout {...param}>
-              <FormLayout idLayout={layout.id} fgDisabled={asso.disabled} />
+              <FormLayout
+                idLayout={layout.id}
+                fgDisabled={asso.disabled}
+                fgHidden={asso.hidden}
+              />
             </Layout>
           );
         }
         if (layout.component?.componentType === 'tree') {
           return (
             <Layout {...param}>
-              <LeftTree idLayout={layout.id} fgDisabled={asso.disabled} />
+              <LeftTree
+                idLayout={layout.id}
+                fgDisabled={asso.disabled}
+                fgHidden={asso.hidden}
+              />
             </Layout>
           );
         }
         if (layout.component?.componentType === 'viewButton') {
           return (
             <Layout {...param}>
-              <TableToolBar idLayout={layout.id} fgDisabled={asso.disabled} />
+              <TableToolBar
+                idLayout={layout.id}
+                fgDisabled={asso.disabled}
+                fgHidden={asso.hidden}
+              />
             </Layout>
           );
         }
         if (layout.component?.componentType === 'editButton') {
           return (
             <Layout {...param}>
-              <FormToolBar idLayout={layout.id} fgDisabled={asso.disabled} />
+              <FormToolBar
+                idLayout={layout.id}
+                fgDisabled={asso.disabled}
+                fgHidden={asso.hidden}
+              />
             </Layout>
           );
         }
         if (layout.component?.componentType === 'search') {
           return (
             <Layout {...param}>
-              <SearchArea idLayout={layout.id} fgDisabled={asso.disabled} />
+              <SearchArea
+                idLayout={layout.id}
+                fgDisabled={asso.disabled}
+                fgHidden={asso.hidden}
+              />
             </Layout>
           );
         }

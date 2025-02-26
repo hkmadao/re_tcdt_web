@@ -242,8 +242,8 @@ const RightTable: (
   const handeldSelectedAttribute = (selectedAttrs: TDescriptionInfo[]) => {
     const newDataList = selectedAttrs
       .filter((extAttr) => {
-        return refDataList.find(
-          (refData) => refData.name !== extAttr.fullAttributeName,
+        return !refDataList.find(
+          (refData) => refData.name === extAttr.fullAttributeName,
         );
       })
       .map((extAttr) => {

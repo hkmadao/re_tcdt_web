@@ -226,7 +226,7 @@ export function buildFiltersBySearchRef(
           ) {
             return;
           }
-          value = value && value === 'true';
+          value = value || value === 'true';
         } else if (!value && value !== 0) {
           return;
         }

@@ -10,7 +10,7 @@ const queryConf: TQueryContent | undefined = {
   idProject: '0000-fe135b87-fb33-481f-81a6-53dff1808f43',
   idQuery: 'xNtwVTHuZJRvSowg54GiN',
   idSubProject: '0000-bb004a40-3b38-4c9c-9f30-b69a543b0598',
-  name: '公共属性查询',
+  name: 'Commonattribute',
   projectName: '模板代码设计工具RUST',
   subProjectName: '模型管理',
   searchRefs: [
@@ -23,7 +23,7 @@ const queryConf: TQueryContent | undefined = {
       htmlInputType: 'Input',
       valueType: 'String',
       showOrder: 0,
-      defaultValue: '',
+      defaultValue: null,
     },
     {
       idBillSearchRef: 'Je0zNzu3TdyM-ougSKXzd',
