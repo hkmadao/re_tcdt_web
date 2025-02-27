@@ -1,5 +1,13 @@
-import { FC, Key, useEffect, useRef, useState } from 'react';
-import { Button, TreeProps, Input, Tree, InputRef, Space } from 'antd';
+import { FC, Key, useEffect, useRef, useState, useMemo } from 'react';
+import {
+  Button,
+  TreeProps,
+  Input,
+  Tree,
+  InputRef,
+  Space,
+  Checkbox,
+} from 'antd';
 import {
   CloseCircleFilled,
   CloseOutlined,
@@ -17,6 +25,7 @@ import {
   useSelectedKeys,
   useFoundKeys,
   useFgDisabled,
+  useFgInnerDisabled,
 } from '../hooks';
 import { actions, fetchTree } from '../store';
 import NodeAction from './action';
@@ -26,6 +35,7 @@ type TOprationLayout = {};
 const LeftTreeLayout: FC<TOprationLayout> = () => {
   const idUiConf = useIdUiConf();
   const fgDisabled = useFgDisabled();
+  const fgInnerDisabled = useFgInnerDisabled();
   const treeDatas = useTreeData();
   const searchRef = useRef<InputRef>(null);
   const expandedKeys = useExpandedKeys();
@@ -34,6 +44,11 @@ const LeftTreeLayout: FC<TOprationLayout> = () => {
   const [searchValue, setSearchValue] = useState<string>();
 
   const dispatch = useDispatch();
+
+  const fgComponentDisabled = useMemo(
+    () => fgDisabled || fgInnerDisabled,
+    [fgDisabled, fgInnerDisabled],
+  );
 
   useEffect(() => {
     if (!idUiConf) {
@@ -47,7 +62,7 @@ const LeftTreeLayout: FC<TOprationLayout> = () => {
           if (!message || message.consumerIds.includes(idUiConf)) {
             return;
           }
-          dispatch(actions.cancelSelectedNode());
+          // dispatch(actions.cancelSelectedNode());
         })();
       },
     };
@@ -103,6 +118,13 @@ const LeftTreeLayout: FC<TOprationLayout> = () => {
     dispatch(actions.searchTreeNode(value));
   };
 
+  const handleToggleInnerDisabled = () => {
+    dispatch(actions.setFgInnerDisabled(!fgInnerDisabled));
+    if (!fgInnerDisabled) {
+      dispatch(actions.cancelSelectedNode());
+    }
+  };
+
   const handleChange = (e: any) => {
     setSearchValue(e.currentTarget.value);
   };
@@ -137,7 +159,7 @@ const LeftTreeLayout: FC<TOprationLayout> = () => {
 
   /** 树主配置 */
   const treeConfig: TreeProps<TTree & any> = {
-    disabled: fgDisabled,
+    disabled: fgComponentDisabled,
     treeData: treeDatas,
     expandedKeys,
     selectedKeys: selectedKeys,
@@ -186,7 +208,7 @@ const LeftTreeLayout: FC<TOprationLayout> = () => {
               ref={searchRef}
               value={searchValue}
               onChange={handleChange}
-              readOnly={fgDisabled}
+              readOnly={fgComponentDisabled}
               onKeyDown={handleKeyDown}
               suffix={
                 <Space direction="horizontal" size={2}>
@@ -204,14 +226,26 @@ const LeftTreeLayout: FC<TOprationLayout> = () => {
             <Button
               onClick={handleSearch}
               type={'primary'}
-              disabled={fgDisabled}
+              disabled={fgComponentDisabled}
             >
               <SearchOutlined />
             </Button>
-            <Button onClick={onReflesh} type={'primary'} disabled={fgDisabled}>
+            <Button
+              onClick={onReflesh}
+              type={'primary'}
+              disabled={fgComponentDisabled}
+            >
               <ReloadOutlined />
             </Button>
           </Space>
+          <div style={{ display: 'flex', justifyContent: 'end', gap: '10px' }}>
+            {'禁用状态:'}
+            <Checkbox
+              checked={fgInnerDisabled}
+              disabled={fgDisabled}
+              onClick={handleToggleInnerDisabled}
+            ></Checkbox>
+          </div>
           <NodeAction />
           <Tree {...treeConfig} />
         </div>

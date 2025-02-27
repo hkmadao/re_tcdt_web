@@ -6,33 +6,73 @@ import {
   PlusCircleOutlined,
 } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
+import { subject } from '../../../conf';
+import { useFgDisabled, useIdUiConf, useSelectedNode } from '../hooks';
+import { remove } from '../store';
 
 const NodeAction: FC = () => {
-  const handleToAdd = () => {};
+  const dispatch = useDispatch();
+  const idUiConf = useIdUiConf();
+  const fgDisabled = useFgDisabled();
+  const selectedNode = useSelectedNode();
 
-  const handleToEdit = () => {};
+  const handleToAdd = () => {
+    subject.publish({
+      topic: 'toAdd',
+      producerId: idUiConf!,
+      data: { treeSelectedNode: selectedNode },
+    });
+    subject.publish({
+      topic: '/page/change',
+      producerId: idUiConf!,
+      data: 'form',
+    });
+  };
 
-  const handleToDelete = () => {};
+  const handleToEdit = () => {
+    subject.publish({
+      topic: 'toEdit',
+      producerId: idUiConf!,
+      data: { selectedRow: selectedNode },
+    });
+    subject.publish({
+      topic: '/page/change',
+      producerId: idUiConf!,
+      data: 'form',
+    });
+  };
+
+  const handleToDelete = () => {
+    if (!(selectedNode?.children && selectedNode.children.length > 0)) {
+      dispatch(remove(selectedNode));
+    }
+  };
 
   return (
     <>
-      <div
-        style={{
-          marginBottom: '5px',
-        }}
-      >
-        <Space size={'small'}>
-          <Button onClick={handleToAdd} type={'default'}>
-            <PlusCircleOutlined />
-          </Button>
-          <Button onClick={handleToEdit} type={'default'}>
-            <EditOutlined />
-          </Button>
-          <Button onClick={handleToDelete} type={'default'}>
-            <DeleteOutlined />
-          </Button>
-        </Space>
-      </div>
+      <Space size={'small'}>
+        <Button onClick={handleToAdd} type={'default'} disabled={fgDisabled}>
+          <PlusCircleOutlined />
+        </Button>
+        <Button
+          onClick={handleToEdit}
+          type={'default'}
+          disabled={!selectedNode || fgDisabled}
+        >
+          <EditOutlined />
+        </Button>
+        <Button
+          onClick={handleToDelete}
+          type={'default'}
+          disabled={
+            !selectedNode ||
+            (selectedNode?.children && selectedNode.children.length > 0) ||
+            fgDisabled
+          }
+        >
+          <DeleteOutlined />
+        </Button>
+      </Space>
     </>
   );
 };

@@ -9,3 +9,12 @@ export const fetchTree = createAsyncThunk(
     return tree;
   },
 );
+
+export const remove = createAsyncThunk(
+  `${treeConf?.name}/remove`,
+  async (param: any, thunkAPI) => {
+    await BaseAPI.POST(`/menu/remove`, param);
+    const tree: any = await BaseAPI.POST(`${treeConf?.firstTreeRef?.uri!}`, {});
+    return tree;
+  },
+);

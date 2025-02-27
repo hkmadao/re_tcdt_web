@@ -1,8 +1,9 @@
 import { EPartName } from '@/models';
 import { ProColumns } from '@ant-design/pro-table';
-import { Checkbox } from 'antd';
+import { Checkbox, Popover } from 'antd';
 import moment from 'moment';
 import RefPicker from '@/components/Ref';
+import CustomDateText from '@/components/CustomDateText';
 import CustomDatePick from '@/components/CustomDatePick';
 import CustomTimePicker from '@/components/CustomTimePicker';
 import { getRefByAttr } from '@/util';
@@ -14,14 +15,30 @@ export * from '.';
 export const useUserRolesColumns: () => ProColumns<TUserRole>[] = () => {
   return [
     {
+      width: 150,
       title: '用户角色关系主属性',
       dataIndex: 'idSysUserRole',
       key: 'idSysUserRole',
       render: (text, record, _, action) => {
-        return <>{record.idSysUserRole ? record.idSysUserRole : '--'}</>;
+        const content = record.idSysUserRole ? record.idSysUserRole : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
       },
     },
     {
+      width: 150,
       title: '系统用户',
       dataIndex: 'user',
       key: 'user',
@@ -57,14 +74,30 @@ export const useUserRolesColumns: () => ProColumns<TUserRole>[] = () => {
 export const useRoleMenusColumns: () => ProColumns<TRoleMenu>[] = () => {
   return [
     {
+      width: 150,
       title: '角色与菜单id',
       dataIndex: 'idRoleMenu',
       key: 'idRoleMenu',
       render: (text, record, _, action) => {
-        return <>{record.idRoleMenu ? record.idRoleMenu : '--'}</>;
+        const content = record.idRoleMenu ? record.idRoleMenu : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
       },
     },
     {
+      width: 150,
       title: '系统菜单',
       dataIndex: 'menu',
       key: 'menu',

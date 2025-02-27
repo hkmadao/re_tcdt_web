@@ -1,10 +1,18 @@
-import { Checkbox, Dropdown, Menu, TableColumnType, message } from 'antd';
+import {
+  Checkbox,
+  Dropdown,
+  Menu,
+  TableColumnType,
+  message,
+  Popover,
+} from 'antd';
 import moment from 'moment';
 import { DownOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { EPartName } from '@/models';
 import { getRefByAttr } from '@/util';
 import { billformConf } from '../../../../conf';
+import CustomDateText from '@/components/CustomDateText';
 import { TMenu } from '../../../../models';
 export const useMainTableColumns: () => TableColumnType<TMenu>[] = () => {
   const dispatch = useDispatch();
@@ -41,7 +49,21 @@ export const useMainTableColumns: () => TableColumnType<TMenu>[] = () => {
       dataIndex: 'idMenu',
       key: 'idMenu',
       render: (_dom: any, record: any) => {
-        return <>{record.idMenu ? record.idMenu : '--'}</>;
+        const content = record.idMenu ? record.idMenu : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
       },
     },
     {
@@ -50,7 +72,21 @@ export const useMainTableColumns: () => TableColumnType<TMenu>[] = () => {
       dataIndex: 'name',
       key: 'name',
       render: (_dom: any, record: any) => {
-        return <>{record.name ? record.name : '--'}</>;
+        const content = record.name ? record.name : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
       },
     },
     {
@@ -59,7 +95,21 @@ export const useMainTableColumns: () => TableColumnType<TMenu>[] = () => {
       dataIndex: 'displayName',
       key: 'displayName',
       render: (_dom: any, record: any) => {
-        return <>{record.displayName ? record.displayName : '--'}</>;
+        const content = record.displayName ? record.displayName : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
       },
     },
     {
@@ -81,7 +131,21 @@ export const useMainTableColumns: () => TableColumnType<TMenu>[] = () => {
       dataIndex: 'query',
       key: 'query',
       render: (_dom: any, record: any) => {
-        return <>{record.query ? record.query : '--'}</>;
+        const content = record.query ? record.query : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
       },
     },
     {
@@ -90,7 +154,21 @@ export const useMainTableColumns: () => TableColumnType<TMenu>[] = () => {
       dataIndex: 'menuType',
       key: 'menuType',
       render: (_dom: any, record: any) => {
-        return <>{record.menuType ? record.menuType : '--'}</>;
+        const content = record.menuType ? record.menuType : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
       },
     },
     {
@@ -112,7 +190,21 @@ export const useMainTableColumns: () => TableColumnType<TMenu>[] = () => {
       dataIndex: 'webPerms',
       key: 'webPerms',
       render: (_dom: any, record: any) => {
-        return <>{record.webPerms ? record.webPerms : '--'}</>;
+        const content = record.webPerms ? record.webPerms : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
       },
     },
     {
@@ -121,7 +213,21 @@ export const useMainTableColumns: () => TableColumnType<TMenu>[] = () => {
       dataIndex: 'servicePerms',
       key: 'servicePerms',
       render: (_dom: any, record: any) => {
-        return <>{record.servicePerms ? record.servicePerms : '--'}</>;
+        const content = record.servicePerms ? record.servicePerms : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
       },
     },
     {
@@ -144,21 +250,5 @@ export const useMainTableColumns: () => TableColumnType<TMenu>[] = () => {
         }
       },
     },
-    /*[- */
-    {
-      width: 150,
-      fixed: 'right',
-      title: '操作',
-      key: 'action',
-      sorter: true,
-      render: () => (
-        <Dropdown overlay={menu} trigger={['click']}>
-          <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-            更多 <DownOutlined />
-          </a>
-        </Dropdown>
-      ),
-    },
-    /* -]*/
   ];
 };

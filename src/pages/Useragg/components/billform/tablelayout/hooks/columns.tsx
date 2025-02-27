@@ -1,10 +1,18 @@
-import { Checkbox, Dropdown, Menu, TableColumnType, message } from 'antd';
+import {
+  Checkbox,
+  Dropdown,
+  Menu,
+  TableColumnType,
+  message,
+  Popover,
+} from 'antd';
 import moment from 'moment';
 import { DownOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { EPartName } from '@/models';
 import { getRefByAttr } from '@/util';
 import { billformConf } from '../../../../conf';
+import CustomDateText from '@/components/CustomDateText';
 import { TUser, TUserRole } from '../../../../models';
 export const useMainTableColumns: () => TableColumnType<TUser>[] = () => {
   const dispatch = useDispatch();
@@ -41,7 +49,21 @@ export const useMainTableColumns: () => TableColumnType<TUser>[] = () => {
       dataIndex: 'idUser',
       key: 'idUser',
       render: (_dom: any, record: any) => {
-        return <>{record.idUser ? record.idUser : '--'}</>;
+        const content = record.idUser ? record.idUser : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
       },
     },
     {
@@ -50,7 +72,44 @@ export const useMainTableColumns: () => TableColumnType<TUser>[] = () => {
       dataIndex: 'account',
       key: 'account',
       render: (_dom: any, record: any) => {
-        return <>{record.account ? record.account : '--'}</>;
+        const content = record.account ? record.account : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
+      },
+    },
+    {
+      width: 150,
+      title: '用户密码 ',
+      dataIndex: 'userPwd',
+      key: 'userPwd',
+      render: (_dom: any, record: any) => {
+        const content = record.userPwd ? record.userPwd : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
       },
     },
     {
@@ -59,7 +118,21 @@ export const useMainTableColumns: () => TableColumnType<TUser>[] = () => {
       dataIndex: 'phone',
       key: 'phone',
       render: (_dom: any, record: any) => {
-        return <>{record.phone ? record.phone : '--'}</>;
+        const content = record.phone ? record.phone : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
       },
     },
     {
@@ -68,7 +141,21 @@ export const useMainTableColumns: () => TableColumnType<TUser>[] = () => {
       dataIndex: 'email',
       key: 'email',
       render: (_dom: any, record: any) => {
-        return <>{record.email ? record.email : '--'}</>;
+        const content = record.email ? record.email : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
       },
     },
     {
@@ -77,7 +164,21 @@ export const useMainTableColumns: () => TableColumnType<TUser>[] = () => {
       dataIndex: 'name',
       key: 'name',
       render: (_dom: any, record: any) => {
-        return <>{record.name ? record.name : '--'}</>;
+        const content = record.name ? record.name : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
       },
     },
     {
@@ -86,12 +187,25 @@ export const useMainTableColumns: () => TableColumnType<TUser>[] = () => {
       dataIndex: 'nickName',
       key: 'nickName',
       render: (_dom: any, record: any) => {
-        return <>{record.nickName ? record.nickName : '--'}</>;
+        const content = record.nickName ? record.nickName : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
       },
     },
     {
       width: 150,
-      fixed: 'right',
       title: '性别',
       dataIndex: 'gender',
       key: 'gender',
@@ -121,36 +235,36 @@ export const useMainTableColumns: () => TableColumnType<TUser>[] = () => {
         );
       },
     },
-    /*[- */
-    {
-      width: 150,
-      fixed: 'right',
-      title: '操作',
-      key: 'action',
-      sorter: true,
-      render: () => (
-        <Dropdown overlay={menu} trigger={['click']}>
-          <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-            更多 <DownOutlined />
-          </a>
-        </Dropdown>
-      ),
-    },
-    /* -]*/
   ];
 };
 /**系统用户 */
 export const useUserRolesColumns: () => TableColumnType<TUserRole>[] = () => {
   return [
     {
+      width: 150,
       title: '用户角色关系主属性',
       dataIndex: 'idSysUserRole',
       key: 'idSysUserRole',
       render: (_dom: any, record: any) => {
-        return <>{record.idSysUserRole ? record.idSysUserRole : '--'}</>;
+        const content = record.idSysUserRole ? record.idSysUserRole : '--';
+        return (
+          <div
+            style={{
+              overflow: 'hidden',
+              width: '140px',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Popover content={content} trigger="hover">
+              {content}
+            </Popover>
+          </div>
+        );
       },
     },
     {
+      width: 150,
       title: '角色',
       dataIndex: ['idRole', 'role'],
       key: 'idRole',

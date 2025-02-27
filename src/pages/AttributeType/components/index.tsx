@@ -54,7 +54,9 @@ const Center: FC = () => {
       topic: '/page/reduceLoadingCount',
       consumerId: idUiConf,
       update: function (message: TMessage): void {
-        dispatch(actions.reduceLoadingCount());
+        setTimeout(function () {
+          dispatch(actions.reduceLoadingCount());
+        }, 100);
       },
     };
     subject.subscribe(reduceLoadingCountObserver);

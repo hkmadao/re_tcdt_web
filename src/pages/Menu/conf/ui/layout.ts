@@ -14,121 +14,8 @@ const layoutConf: TUiFactoryContent = {
   name: 'Menu',
   projectName: '模板代码设计工具RUST',
   refIdContent:
-    '{"idEditBillform":"sOGFb8hc2U8WZVy4ISJkT","idTree":"sA1_14hfKg8CHhFB12BQg","idEditButtonAction":"_cWBpq9kJwJMQbnRf2oe4"}',
+    '{"idViewBillform":"sOGFb8hc2U8WZVy4ISJkT","idEditBillform":"sOGFb8hc2U8WZVy4ISJkT","idTree":"sA1_14hfKg8CHhFB12BQg","idEditButtonAction":"_cWBpq9kJwJMQbnRf2oe4"}',
   subProjectName: '模型管理',
-  modleType: {
-    mainType: {
-      id: 'KMfRfKrrDpit2ksJzupQc',
-      className: 'TMenu',
-      displayName: '系统菜单',
-      attributes: [
-        {
-          id: 'vrpD0DMMed417zEYpxhPQ',
-          attributeName: 'idMenu',
-          displayName: '系统菜单id',
-          attributeType: 'string',
-          fgPk: true,
-        },
-        {
-          id: '-UxR7oMLvdgtQkIpyPRYx',
-          attributeName: 'name',
-          displayName: '名称',
-          attributeType: 'string',
-          fgPk: false,
-        },
-        {
-          id: 'UYvNFRAOCCikji_mg2gPr',
-          attributeName: 'displayName',
-          displayName: '显示名称',
-          attributeType: 'string',
-          fgPk: false,
-        },
-        {
-          id: 'B-DotYRz4HuoMg_1zPhb9',
-          attributeName: 'fgShow',
-          displayName: '显示标志',
-          attributeType: 'boolean',
-          fgPk: false,
-        },
-        {
-          id: 'lfS8_aGbKZSHxayWaUkDy',
-          attributeName: 'query',
-          displayName: '路由参数',
-          attributeType: 'string',
-          fgPk: false,
-        },
-        {
-          id: 'DyOt3H6KN4bpmw4ZE5VcZ',
-          attributeName: 'menuType',
-          displayName: '菜单类型',
-          attributeType: 'string',
-          fgPk: false,
-        },
-        {
-          id: 'QKchRHjIJepA1B_pMdS6B',
-          attributeName: 'fgActive',
-          displayName: '启用标志',
-          attributeType: 'boolean',
-          fgPk: false,
-        },
-        {
-          id: 'M1RCR2IHIsx8UAjFt60hZ',
-          attributeName: 'webPerms',
-          displayName: '前端权限标识',
-          attributeType: 'string',
-          fgPk: false,
-        },
-        {
-          id: 'H4YEANLE6C2aXg_diJxdV',
-          attributeName: 'servicePerms',
-          displayName: '后台权限标识',
-          attributeType: 'string',
-          fgPk: false,
-        },
-        {
-          id: 'HDJ-DKhg01Cn0QiJr_bKO',
-          attributeName: 'parent',
-          displayName: '上级系统菜单',
-          attributeType: 'TMenu',
-          fgPk: false,
-        },
-        {
-          id: '6KaC8_DOXDjIj4Ivl5GjY',
-          attributeName: 'roleMenus',
-          displayName: '系统菜单',
-          attributeType: 'TRoleMenu[]',
-          fgPk: false,
-        },
-        {
-          id: 'QD7Rzvuvez9_jkHVz506-',
-          attributeName: 'children',
-          displayName: '上级系统菜单',
-          attributeType: 'TMenu[]',
-          fgPk: false,
-        },
-      ],
-      fgMain: true,
-      mainProperty: 'idMenu',
-    },
-    refTypes: [
-      {
-        id: 'S_b1vwHFRSoKJHb4jzsTS',
-        className: 'TRoleMenu',
-        displayName: '角色与菜单',
-        attributes: [
-          {
-            id: 'eLDIIJyxoqBMhpYdVkw2v',
-            attributeName: 'idRoleMenu',
-            displayName: '角色与菜单id',
-            attributeType: 'string',
-            fgPk: true,
-          },
-        ],
-        fgMain: false,
-        mainProperty: 'idRoleMenu',
-      },
-    ],
-  },
   pages: [
     { key: 'index', id: 'index', code: 'index', name: '首页' },
     {
@@ -203,8 +90,8 @@ const layoutConf: TUiFactoryContent = {
               children: [],
               component: {
                 componentType: 'editButton',
-                idRef: '_cWBpq9kJwJMQbnRf2oe4',
-                name: '树表单按钮',
+                idRef: '9KVIgtP5x1TBIpK4HnhIu',
+                name: '菜单编辑按钮',
               },
             },
             {

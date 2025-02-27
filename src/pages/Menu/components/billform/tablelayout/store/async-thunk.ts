@@ -3,7 +3,6 @@ import { TMessage } from '@/util';
 import { componentName } from '../conf';
 import {
   andLogicNode,
-  buildFilterValueBySearchRef,
   equalFilterNode,
   EDirection,
   TFilterNode,
@@ -11,6 +10,8 @@ import {
   TPageInfoInput,
   TTree,
   stringFilterParam,
+  buildFiltersBySearchRef,
+  andOrLogicNode,
 } from '@/models';
 import { TTableStore } from '../models';
 import { queryConf, tableConf } from '../../../../conf';
@@ -33,6 +34,13 @@ export const fetchByTreeNode = createAsyncThunk(
       );
       fns.push(treeIdFn);
     }
+    const state: TTableStore = (thunkAPI.getState() as any)[componentName];
+    const searchData = state.searchData;
+    const searchFilter = buildFiltersBySearchRef(searchData, searcheRefs);
+    if (!searchFilter) {
+      return;
+    }
+    fns.push(...searchFilter.andFilters);
     const params: TPageInfoInput = {
       pageIndex: 1,
       pageSize: 10,
@@ -62,35 +70,22 @@ export const search = createAsyncThunk(
     }
     const searchData = message.data;
     const fns: TFilterNode[] = [];
-    if (searchData) {
-      searcheRefs?.forEach((searcheRef) => {
-        if (
-          !(
-            searcheRef.operatorCode === 'isNull' ||
-            searcheRef.operatorCode === 'notNull'
-          ) &&
-          (searchData[searcheRef.attributeName!] === undefined ||
-            searchData[searcheRef.attributeName!] === null)
-        ) {
-          return;
-        }
-        if (searcheRef.operatorCode) {
-          const fn: TFilterNode = {
-            name: searcheRef.attributeName!,
-            operatorCode: searcheRef.operatorCode,
-            filterParams: buildFilterValueBySearchRef(
-              searcheRef,
-              searchData[searcheRef.attributeName!],
-            ),
-          };
-          fns.push(fn);
-        }
-      });
+    if (state.selectedTreeNode) {
+      const treeIdFn: TFilterNode = equalFilterNode(
+        'idParent',
+        stringFilterParam(state.selectedTreeNode['idMenu']),
+      );
+      fns.push(treeIdFn);
     }
+    const searchFilter = buildFiltersBySearchRef(searchData, searcheRefs);
+    if (!searchFilter) {
+      return;
+    }
+    fns.push(...searchFilter.andFilters);
     const params: TPageInfoInput = {
       pageIndex: 1,
       pageSize: 10,
-      logicNode: andLogicNode(fns)(),
+      logicNode: andOrLogicNode(fns, searchFilter.orFilters),
       orders: [
         {
           property: 'idMenu',
@@ -120,35 +115,15 @@ export const reflesh = createAsyncThunk(
       );
       fns.push(treeIdFn);
     }
-    if (searcheRefs && searchData) {
-      searcheRefs.forEach((searcheRef) => {
-        if (
-          !(
-            searcheRef.operatorCode === 'isNull' ||
-            searcheRef.operatorCode === 'notNull'
-          ) &&
-          (searchData[searcheRef.attributeName!] === undefined ||
-            searchData[searcheRef.attributeName!] === null)
-        ) {
-          return;
-        }
-        if (searcheRef.operatorCode) {
-          const fn: TFilterNode = {
-            name: searcheRef.attributeName!,
-            operatorCode: searcheRef.operatorCode,
-            filterParams: buildFilterValueBySearchRef(
-              searcheRef,
-              searchData[searcheRef.attributeName!],
-            ),
-          };
-          fns.push(fn);
-        }
-      });
+    const searchFilter = buildFiltersBySearchRef(searchData, searcheRefs);
+    if (!searchFilter) {
+      return;
     }
+    fns.push(...searchFilter.andFilters);
     const searchParam: TPageInfoInput = {
       pageIndex: 1,
       pageSize: 10,
-      logicNode: andLogicNode(fns)(),
+      logicNode: andOrLogicNode(fns, searchFilter.orFilters),
       orders: [
         {
           property: 'idMenu',
@@ -176,32 +151,15 @@ export const pageChange = createAsyncThunk(
       fns.push(treeIdFn);
     }
     const searchData = state.searchData;
-    if (searcheRefs && searchData) {
-      searcheRefs.forEach((searcheRef) => {
-        if (searchData[searcheRef.attributeName!]) {
-          if (
-            !(
-              searcheRef.operatorCode === 'isNull' ||
-              searcheRef.operatorCode === 'notNull'
-            ) &&
-            (searchData[searcheRef.attributeName!] === undefined ||
-              searchData[searcheRef.attributeName!] === null)
-          ) {
-            return;
-          }
-          const fn: TFilterNode = {
-            name: searcheRef.attributeName!,
-            operatorCode: searcheRef.operatorCode,
-            filterParams: [searchData[searcheRef.attributeName!]],
-          };
-          fns.push(fn);
-        }
-      });
+    const searchFilter = buildFiltersBySearchRef(searchData, searcheRefs);
+    if (!searchFilter) {
+      return;
     }
+    fns.push(...searchFilter.andFilters);
     const queyrParams: TPageInfoInput = {
       pageIndex: page,
       pageSize: pageSize,
-      logicNode: andLogicNode(fns)(),
+      logicNode: andOrLogicNode(fns, searchFilter.orFilters),
       orders: [
         {
           property: 'idMenu',
@@ -230,6 +188,19 @@ export const batchRemove = createAsyncThunk(
     }
     await ListAPI.batchRemove(deleteDatas);
     const fns: TFilterNode[] = [];
+    if (state.selectedTreeNode) {
+      const treeIdFn: TFilterNode = equalFilterNode(
+        'idParent',
+        stringFilterParam(state.selectedTreeNode['idMenu']),
+      );
+      fns.push(treeIdFn);
+    }
+    const searchData = state.searchData;
+    const searchFilter = buildFiltersBySearchRef(searchData, searcheRefs);
+    if (!searchFilter) {
+      return;
+    }
+    fns.push(...searchFilter.andFilters);
     const params: TPageInfoInput = {
       pageIndex: 1,
       pageSize: 10,

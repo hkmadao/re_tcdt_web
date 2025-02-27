@@ -2,6 +2,7 @@ import { TDomainStore } from './models';
 
 export const initialState: TDomainStore = {
   status: 'idle',
+  loadingCount: 0,
   pageCode: 'index',
   idUiConf: 'root',
   messages: {

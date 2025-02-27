@@ -7,11 +7,12 @@ import { deepCopy, getMatchKeys, getTreeByKeys, getTreeKeys } from '@/util';
 
 export const setComponentInfo: CaseReducer<
   TLeftTreeStore,
-  PayloadAction<{ idUiConf: string; fgDisabled: boolean }>
+  PayloadAction<{ idUiConf: string; fgDisabled: boolean; fgHidden: boolean }>
 > = (state, action) => {
-  const { idUiConf, fgDisabled } = action.payload;
+  const { idUiConf, fgDisabled, fgHidden } = action.payload;
   state.idUiConf = idUiConf;
   state.fgDisabled = fgDisabled;
+  state.fgHidden = fgHidden;
 };
 
 export const setSelectedNode: CaseReducer<
@@ -71,6 +72,18 @@ export const searchTreeNode: CaseReducer<
   );
   const foundTree = getTreeByKeys(foundKeys, state.sourchTreeData || []);
   state.expandedKeys = getTreeKeys(foundTree);
-  state.foundKeys = foundKeys;
+  if (!searchValue) {
+    state.foundKeys = [];
+  } else {
+    state.foundKeys = foundKeys;
+  }
   state.treeData = foundTree;
+};
+
+export const setFgInnerDisabled: CaseReducer<
+  TLeftTreeStore,
+  PayloadAction<boolean>
+> = (state, action) => {
+  const fgInnerDisabled = action.payload;
+  state.fgInnerDisabled = fgInnerDisabled;
 };

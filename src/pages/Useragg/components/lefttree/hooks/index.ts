@@ -38,6 +38,18 @@ export const useFgDisabled = () => {
   });
 };
 
+export const useFgHidden = () => {
+  return useSelector((state: { [x: string]: TLeftTreeStore }) => {
+    return state[componentName].fgHidden;
+  });
+};
+
+export const useFgInnerDisabled = () => {
+  return useSelector((state: { [x: string]: TLeftTreeStore }) => {
+    return state[componentName].fgInnerDisabled;
+  });
+};
+
 export const useSelectedNode = () => {
   return useSelector(selectSelectedNode);
 };

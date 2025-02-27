@@ -11,6 +11,7 @@ const FormLayout: FC<{
   fgDisabled: boolean;
   fgHidden: boolean;
 }> = ({ idLayout, fgDisabled, fgHidden }) => {
+  const { TabPane } = Tabs;
   const dispatch = useDispatch();
 
   useEffect(() => {
