@@ -57,8 +57,11 @@ const RootAction: FC = () => {
         onOk={handleAdd}
       >
         <Form form={form}>
-          <Form.Item label="模板编号" name={'templateCode'}>
-            <Input placeholder="请输入项目模板编号" />
+          <Form.Item label="后台项目模板编号" name={'templateCode'}>
+            <Input placeholder="请输入后台项目模板编号" />
+          </Form.Item>
+          <Form.Item label="前端项目模板编号" name={'webTemplateCode'}>
+            <Input placeholder="请输入前端项目模板编号" />
           </Form.Item>
           <Form.Item label="模板文件名称样式" name={'fileNameType'}>
             <Select placeholder={'请选择'}>

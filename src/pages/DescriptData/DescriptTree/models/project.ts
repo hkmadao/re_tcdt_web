@@ -19,8 +19,10 @@ export type TRoot = {
 export type TProject = {
   /**项目id */
   idProject?: string;
-  /**项目模板编号 */
+  /**后台项目模板编号 */
   templateCode?: string;
+  /**前端项目模板编号 */
+  webTemplateCode?: string;
   /**文件名样式 */
   fileNameType?: string;
   /**项目编号 */

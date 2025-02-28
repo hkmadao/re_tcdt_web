@@ -122,8 +122,11 @@ const ProjectNodeAction: FC = () => {
           <Form.Item label="项目ID" name={'idProject'} hidden>
             <Input />
           </Form.Item>
-          <Form.Item label="项目模板编号" name={'templateCode'}>
-            <Input placeholder="请输入项目模板编号" />
+          <Form.Item label="后台项目模板编号" name={'templateCode'}>
+            <Input placeholder="请输入后台项目模板编号" />
+          </Form.Item>
+          <Form.Item label="前端项目模板编号" name={'webTemplateCode'}>
+            <Input placeholder="请输入前端项目模板编号" />
           </Form.Item>
           <Form.Item label="模板文件名称样式" name={'fileNameType'}>
             <Select placeholder={'请选择'}>

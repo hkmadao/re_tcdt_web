@@ -226,7 +226,13 @@ export function buildFiltersBySearchRef(
           ) {
             return;
           }
-          value = value || value === 'true';
+          if (value === 'true') {
+            return true;
+          }
+          if (value === 'false') {
+            return false;
+          }
+          value = value;
         } else if (!value && value !== 0) {
           return;
         }
