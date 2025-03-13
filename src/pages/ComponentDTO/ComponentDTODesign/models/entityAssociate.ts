@@ -30,4 +30,6 @@ export type TDtoEntityAssociate = {
   fkAttributeName?: string;
   /**外键属性显示名称 */
   fkAttributeDisplayName?: string;
+  /**是否系统引用连线 */
+  fgSysRef?: boolean;
 } & TAudit;

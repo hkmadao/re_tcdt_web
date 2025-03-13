@@ -1,12 +1,17 @@
 import { DOStatus } from '@/models/enums';
 import { underlineToHump } from '@/util/name-convent';
 import { CaseReducer, PayloadAction } from '@reduxjs/toolkit';
-import { EnumDownAssociateType, EnumUpAssociateType } from '../conf';
+import {
+  EnumDownAssociateType,
+  EnumNodeUi,
+  EnumUpAssociateType,
+} from '../conf';
 import {
   TAttribute,
   TCommonAttribute,
   TEntityAssociate,
   TModuleStore,
+  TNodeUi,
 } from '../models';
 import { nanoid } from '@ant-design/pro-components';
 
@@ -281,9 +286,32 @@ export const addAttributesByCommAttr: CaseReducer<
       refAttributeDisplayName: assoCommAttr.refDisplayName,
       upAssociateType: EnumUpAssociateType.ZERO_ONE,
       downAssociateType: EnumDownAssociateType.ZERO_TO_MANY,
+      fgSysRef: true,
     };
     return asso;
   });
+  const existIdElementArr = state.entityCollection.nodeUis.map(
+    (nodeUi) => nodeUi.idElement!,
+  );
+  const newIdElementArr = newAssos
+    .filter((asso) => !existIdElementArr.includes(asso.idUp!))
+    .map((asso) => asso.idUp!);
+  const newNodeUiArr = newIdElementArr.map((idElement, index) => {
+    const nodeUi: TNodeUi = {
+      idNodeUi: nanoid(),
+      x: index * EnumNodeUi.ENTITY_SIMPLE_DEFAULT_WIDTH,
+      y: 0,
+      width: EnumNodeUi.ENTITY_SIMPLE_DEFAULT_WIDTH,
+      height: EnumNodeUi.ENTITY_SIMPLE_DEFAULT_HEIGHT,
+      idEntityCollection: state.entityCollection?.idEntityCollection,
+      idElement: idElement,
+      action: DOStatus.NEW,
+    };
+    return nodeUi;
+  });
+
+  state.entityCollection.nodeUis =
+    state.entityCollection.nodeUis.concat(newNodeUiArr);
   state.entityCollection.entityAssociates =
     state.entityCollection.entityAssociates.concat(newAssos);
   //更新图表

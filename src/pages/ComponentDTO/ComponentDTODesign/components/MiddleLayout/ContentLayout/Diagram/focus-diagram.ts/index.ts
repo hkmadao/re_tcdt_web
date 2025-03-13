@@ -328,6 +328,7 @@ function drawGraph(
       addLinks,
       enumAssociates,
       true,
+      false,
     );
   }
 

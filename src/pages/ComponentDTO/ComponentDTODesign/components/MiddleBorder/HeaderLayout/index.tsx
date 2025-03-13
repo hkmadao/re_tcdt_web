@@ -19,6 +19,7 @@ import GenerateInputPart from './GenerateInputPart';
 import GenerateInputFull from './GenerateInputFull';
 import GenerateOutputFull from './GenerateOutputFull';
 import GenerateOutputPart from './GenerateOutputPart';
+import ToggleFgShowSysRefAsso from './ToggleFgShowSysRefAsso';
 
 const HeaderLayout: FC = () => {
   const dispatch = useDispatch();
@@ -58,6 +59,7 @@ const HeaderLayout: FC = () => {
           <AddEntity />
           <AddEnum />
           <ElementAssociate />
+          <ToggleFgShowSysRefAsso />
           <CopyAddEntity />
           <DeleteElement />
           <CleanAllElement />

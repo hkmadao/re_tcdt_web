@@ -42,6 +42,8 @@ export type TEntityAssociate = {
   fkAttributeDisplayName?: string;
   /**是否建立物理外键 */
   fgForeignKey?: boolean;
+  /**是否系统引用连线 */
+  fgSysRef?: boolean;
   /**下级实体排序 */
   downOrderStr?: string;
   /**批量获取下级实体数量 */

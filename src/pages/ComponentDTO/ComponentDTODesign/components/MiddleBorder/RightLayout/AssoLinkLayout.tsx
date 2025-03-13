@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FC, useEffect, useState } from 'react';
-import { Input, Select, Button, Descriptions } from 'antd';
+import { Input, Select, Button, Descriptions, Checkbox } from 'antd';
 import { PauseOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -20,6 +20,7 @@ import {
   moduleName,
 } from '@/pages/ComponentDTO/ComponentDTODesign/conf';
 import { firstToLower } from '@/util/name-convent';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const AssoLinkLayout: FC = () => {
   const currentDiagramContent = useSelector(selectCurrentDiagramContent);
@@ -161,6 +162,17 @@ const AssoLinkLayout: FC = () => {
     fillAttr();
   };
 
+  const handleCheckBox = (targetName: keyof TDtoEntityAssociate) => {
+    return async (cp: CheckboxChangeEvent) => {
+      dispatch(
+        actions.updateAssociate({
+          ...assoLink,
+          [targetName]: cp.target.checked,
+        }),
+      );
+    };
+  };
+
   const handleSelect = (targetName: keyof TDtoEntityAssociate) => {
     return async (value: EnumUpAssociateType | EnumDownAssociateType) => {
       dispatch(
@@ -222,6 +234,12 @@ const AssoLinkLayout: FC = () => {
             }
           />
         </Descriptions.Item> */}
+        <Descriptions.Item label="是否系统引用连线">
+          <Checkbox
+            checked={assoLink?.fgSysRef}
+            onChange={handleCheckBox('fgSysRef')}
+          ></Checkbox>
+        </Descriptions.Item>
         <Descriptions.Item label="外键属性">
           <Input
             size={'small'}

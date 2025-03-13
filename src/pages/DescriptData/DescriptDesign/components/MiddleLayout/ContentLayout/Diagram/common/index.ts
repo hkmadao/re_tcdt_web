@@ -133,6 +133,7 @@ export function addEntityNodes(
 export function associateElements(
   entityAssos: TEntityAssociate[],
   allNodes: MdNodeModel<TConcreteDiagram>[],
+  fgShowSysRefAsso: boolean,
   fgShowOutEntities: boolean,
   mdLinkFactory: MdLinkFactory<TConcreteDiagram>,
   selectLineKeys: (string | undefined)[],
@@ -143,6 +144,9 @@ export function associateElements(
 ) {
   entityAssos?.forEach((entityAsso) => {
     if (entityAsso.action === DOStatus.DELETED) {
+      return;
+    }
+    if (entityAsso.fgSysRef && !fgShowSysRefAsso) {
       return;
     }
     const source = allNodes.find((node) => {

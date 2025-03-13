@@ -338,6 +338,7 @@ function drawGraph(
       entityAssociates,
       allNodes,
       true,
+      true,
       mdLinkFactory,
       selectLineKeys,
       addLinks,

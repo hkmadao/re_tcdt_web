@@ -37,6 +37,7 @@ import {
   selectConnectionMode,
   selectModuleUi,
   selectDiagramUi,
+  selectFgShowSysRefAsso,
 } from '@/pages/DescriptData/DescriptDesign/store';
 import {
   TNodeUi,
@@ -68,6 +69,7 @@ const Diagrams: React.FC = () => {
   const dispatch = useDispatch();
   const fgShowOutEntities = useSelector(selectFgShowOutEntities);
   const fgShowEnumAsso = useSelector(selectFgShowEnumAsso);
+  const fgShowSysRefAsso = useSelector(selectFgShowSysRefAsso);
   const zoomToFitCount = useSelector(selectZoomToFitCount);
   const nodeUis = useSelector(selectNodeUis);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -179,6 +181,7 @@ const Diagrams: React.FC = () => {
         entityCollection,
         selectLines!,
         selectNodes!,
+        fgShowSysRefAsso,
         fgShowOutEntities,
         fgShowEnumAsso,
         fgFocus,
@@ -204,6 +207,7 @@ const Diagrams: React.FC = () => {
       entityCollection,
       selectLines!,
       selectNodes!,
+      fgShowSysRefAsso,
       fgShowOutEntities,
       fgShowEnumAsso,
     );
@@ -244,6 +248,7 @@ const Diagrams: React.FC = () => {
         entityCollection,
         selectLines!,
         selectNodes!,
+        fgShowSysRefAsso,
         fgShowOutEntities,
         fgShowEnumAsso,
         fgFocus,

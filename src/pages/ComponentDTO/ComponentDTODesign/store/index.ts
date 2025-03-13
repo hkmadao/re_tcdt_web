@@ -38,6 +38,12 @@ export const designSlice = createSlice({
     reset: (state, action: PayloadAction<void>) => {
       state.dtoCollection = initialState.dtoCollection;
     },
+    /**切换显示系统引用连线 */
+    toggleShowSysRefAsso: (state, action: PayloadAction<void>) => {
+      state.fgShowSysRefAsso = !state.fgShowSysRefAsso;
+      //更新图表
+      state.drawCount++;
+    },
     updateEntityCollection: (
       state,
       action: PayloadAction<TDtoEntityCollection>,

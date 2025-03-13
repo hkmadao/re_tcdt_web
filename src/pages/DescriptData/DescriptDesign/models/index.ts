@@ -68,6 +68,7 @@ export type TModuleStore = {
   fgShowOutEntities: boolean;
   /**是否显示枚举连线 */
   fgShowEnumAsso: boolean;
+  fgShowSysRefAsso: boolean;
   /**画布重绘次数 */
   drawCount: number;
   /**单个选中的元素 */

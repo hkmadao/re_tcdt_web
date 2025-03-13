@@ -299,6 +299,12 @@ const AssoLinkLayout: FC = () => {
             }
           />
         </Descriptions.Item>
+        <Descriptions.Item label="是否系统引用连线">
+          <Checkbox
+            checked={assoLink?.fgSysRef}
+            onChange={handleCheckBox('fgSysRef')}
+          ></Checkbox>
+        </Descriptions.Item>
         <Descriptions.Item label="是否建立物理外键">
           <Checkbox
             checked={assoLink?.fgForeignKey}

@@ -39,6 +39,7 @@ export type TModuleStore = {
   focusDrawCount: number;
   /**适合画布操作次数 */
   zoomToFitCount: number;
+  fgShowSysRefAsso: boolean;
 };
 
 /**图表元素内容 */

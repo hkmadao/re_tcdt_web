@@ -27,6 +27,7 @@ export default function deltaUpdatesDiagramEngine(
   entityCollection: TEntityCollection,
   selectLines: TConcreteDiagram[],
   selectNodes: TConcreteDiagram[],
+  fgShowSysRefAsso: boolean,
   fgShowOutEntities: boolean,
   fgShowEnumAsso: boolean,
 ) {
@@ -151,6 +152,7 @@ export default function deltaUpdatesDiagramEngine(
     associateElements(
       entityAssociates,
       allNodes,
+      fgShowSysRefAsso,
       fgShowOutEntities,
       mdLinkFactory,
       selectLineKeys,

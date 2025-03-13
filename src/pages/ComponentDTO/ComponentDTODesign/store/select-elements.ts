@@ -47,6 +47,7 @@ export const setSelectElement: CaseReducer<
         idDown: newLine.sourceId,
         idDtoEntityAssociate: idElementNew,
         action: DOStatus.NEW,
+        fgSysRef: false,
       };
       findAssos.push(asso);
       //为连线生成序列号

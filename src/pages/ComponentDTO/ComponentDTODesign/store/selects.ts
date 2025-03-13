@@ -29,6 +29,12 @@ export const selectEntityCollection = (state: {
 }) => {
   return state[moduleName].dtoCollection;
 };
+/**选择显示系统引用连线 */
+export const selectFgShowSysRefAsso = (state: {
+  [x: string]: TModuleStore;
+}) => {
+  return state[moduleName].fgShowSysRefAsso;
+};
 /**选择绘图次数 */
 export const selectDrawCount = (state: { [x: string]: TModuleStore }) => {
   return state[moduleName].drawCount;

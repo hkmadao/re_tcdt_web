@@ -23,6 +23,7 @@ export default function resetDiagramEngine(
   entityCollection: TEntityCollection,
   selectLines: TConcreteDiagram[],
   selectNodes: TConcreteDiagram[],
+  fgShowSysRefAsso: boolean,
   fgShowOutEntities: boolean,
   fgShowEnumAsso: boolean,
   fgFocus: boolean,
@@ -115,6 +116,7 @@ export default function resetDiagramEngine(
     associateElements(
       entityAssociates,
       allNodes,
+      fgShowSysRefAsso,
       fgShowOutEntities,
       mdLinkFactory,
       selectLineKeys,

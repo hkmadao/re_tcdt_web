@@ -25,6 +25,7 @@ export default function resetDiagramEngine(
   selectNodes: TConcreteDiagram[],
   fgFocus: boolean,
   zoomLevel: number,
+  fgShowSysRefAsso: boolean,
 ) {
   const mdNodeFactory = engine
     .getNodeFactories()
@@ -94,6 +95,7 @@ export default function resetDiagramEngine(
       addLinks,
       enumAssociates,
       fgFocus,
+      fgShowSysRefAsso,
     );
   }
 

@@ -139,9 +139,13 @@ export function associateElements(
   addLinks: MdLinkModel<TConcreteDiagram>[],
   enumAssos: TDtoEnumAssociate[],
   fgFocus: boolean,
+  fgShowSysRefAsso: boolean,
 ) {
   entityAssos?.forEach((entityAsso) => {
     if (entityAsso.action === DOStatus.DELETED) {
+      return;
+    }
+    if (entityAsso.fgSysRef && !fgShowSysRefAsso) {
       return;
     }
     const source = allNodes.find((node) => {

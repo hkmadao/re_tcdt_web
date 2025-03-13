@@ -27,6 +27,7 @@ export default function deltaUpdatesDiagramEngine(
   entityCollection: TDtoEntityCollection,
   selectLines: TConcreteDiagram[],
   selectNodes: TConcreteDiagram[],
+  fgShowSysRefAsso: boolean,
 ) {
   const mdNodeFactory = engine
     .getNodeFactories()
@@ -133,6 +134,7 @@ export default function deltaUpdatesDiagramEngine(
       addLinks,
       enumAssociates,
       false,
+      fgShowSysRefAsso,
     );
   }
 

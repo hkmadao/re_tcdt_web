@@ -27,6 +27,7 @@ import ToggleFgShowEnumAsso from './ToggleFgShowEnumAsso';
 import { actions, selectBorderWH } from '../../../store';
 import DbTableComparison from './DbTableComparison';
 import GenerateSingleFile from './GenerateSingleFile';
+import ToggleFgShowSysRefAsso from './ToggleFgShowSysRefAsso';
 
 const HeaderLayout: FC = () => {
   const dispatch = useDispatch();
@@ -70,6 +71,7 @@ const HeaderLayout: FC = () => {
           <JoinEntity />
           <CopyAddEntity />
           <ImportOutEntity />
+          <ToggleFgShowSysRefAsso />
           <ToggleFgShowOutEntites />
           <ToggleFgShowEnumAsso />
           <DeleteElement />

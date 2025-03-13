@@ -38,6 +38,7 @@ const initialState: TModuleStore = {
   currentSelect: {
     concreteType: EnumConcreteDiagramType.EMPTY,
   },
+  fgShowSysRefAsso: false,
   fgShowOutEntities: false,
   fgShowEnumAsso: false,
   selectLines: [],
@@ -68,6 +69,7 @@ export const resetState = (state: TModuleStore) => {
   state.currentSelect = {
     concreteType: EnumConcreteDiagramType.EMPTY,
   };
+  state.fgShowSysRefAsso = false;
   state.fgShowOutEntities = false;
   state.fgShowEnumAsso = false;
   state.selectLines = [];

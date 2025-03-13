@@ -34,6 +34,7 @@ import {
   selectAddElementStatus,
   selectConnectionMode,
   selectModuleUi,
+  selectFgShowSysRefAsso,
 } from '@/pages/ComponentDTO/ComponentDTODesign/store';
 import {
   TDtoNodeUi,
@@ -66,6 +67,7 @@ const Diagrams: React.FC = () => {
   const zoomToFitCount = useSelector(selectZoomToFitCount);
   const nodeUis = useSelector(selectNodeUis);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const fgShowSysRefAsso = useSelector(selectFgShowSysRefAsso);
   const entityCollection = useSelector(selectEntityCollection);
   const addElementStatus = useSelector(selectAddElementStatus);
   const connectionMode = useSelector(selectConnectionMode);
@@ -177,6 +179,7 @@ const Diagrams: React.FC = () => {
         selectNodes!,
         fgFocus,
         moduleUi.zoomLevel,
+        fgShowSysRefAsso,
       );
       if (!moduleUi.goToId) {
         fitMultipleGraph(engine, moduleUi, nodeUis);
@@ -198,6 +201,7 @@ const Diagrams: React.FC = () => {
       entityCollection,
       selectLines!,
       selectNodes!,
+      fgShowSysRefAsso,
     );
   }, [drawCount]);
 
@@ -238,6 +242,7 @@ const Diagrams: React.FC = () => {
         selectNodes!,
         fgFocus,
         moduleUi.zoomLevel,
+        fgShowSysRefAsso,
       );
       fitMultipleGraph(engine, moduleUi, nodeUis);
     }

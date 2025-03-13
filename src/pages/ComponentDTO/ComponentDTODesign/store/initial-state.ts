@@ -41,6 +41,7 @@ const initialState: TModuleStore = {
   drawCount: 1,
   focusDrawCount: 0,
   zoomToFitCount: 0,
+  fgShowSysRefAsso: false,
 };
 
 export const resetState = (state: TModuleStore) => {
@@ -66,6 +67,7 @@ export const resetState = (state: TModuleStore) => {
   state.drawCount = 0;
   state.focusDrawCount = 0;
   state.zoomToFitCount = 0;
+  state.fgShowSysRefAsso = false;
 };
 
 export default initialState;
