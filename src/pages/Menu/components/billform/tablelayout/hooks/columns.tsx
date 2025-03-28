@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { EPartName } from '@/models';
 import { getRefByAttr } from '@/util';
 import { billformConf } from '../../../../conf';
-import CustomDateText from '@/components/CustomDateText';
+import CustomDateTimeText from '@/components/CustomDateTimeText';
 import { TMenu } from '../../../../models';
 export const useMainTableColumns: () => TableColumnType<TMenu>[] = () => {
   const dispatch = useDispatch();

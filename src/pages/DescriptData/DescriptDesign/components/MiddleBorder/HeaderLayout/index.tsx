@@ -28,6 +28,7 @@ import { actions, selectBorderWH } from '../../../store';
 import DbTableComparison from './DbTableComparison';
 import GenerateSingleFile from './GenerateSingleFile';
 import ToggleFgShowSysRefAsso from './ToggleFgShowSysRefAsso';
+import FromCreateSql from './FromCreateSql';
 
 const HeaderLayout: FC = () => {
   const dispatch = useDispatch();
@@ -89,6 +90,7 @@ const HeaderLayout: FC = () => {
           <ImportCollection />
           <ExportCollection />
           <DbTableComparison />
+          <FromCreateSql />
           {/* <Note /> */}
         </Space>
       </div>

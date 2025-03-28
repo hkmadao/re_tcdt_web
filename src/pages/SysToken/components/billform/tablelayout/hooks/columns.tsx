@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { EPartName } from '@/models';
 import { getRefByAttr } from '@/util';
 import { billformConf } from '../../../../conf';
-import CustomDateText from '@/components/CustomDateText';
+import CustomDateTimeText from '@/components/CustomDateTimeText';
 import { TToken } from '../../../../models';
 export const useMainTableColumns: () => TableColumnType<TToken>[] = () => {
   const dispatch = useDispatch();
@@ -71,7 +71,7 @@ export const useMainTableColumns: () => TableColumnType<TToken>[] = () => {
       render: (_dom: any, record: any) => {
         return (
           <>
-            <CustomDateText
+            <CustomDateTimeText
               value={record.createTime}
               format="YYYY-MM-DDTHH:mm:ssZ"
               displayFormat="YYYY-MM-DD HH:mm:ss"
@@ -97,7 +97,7 @@ export const useMainTableColumns: () => TableColumnType<TToken>[] = () => {
       render: (_dom: any, record: any) => {
         return (
           <>
-            <CustomDateText
+            <CustomDateTimeText
               value={record.expiredTime}
               format="YYYY-MM-DDTHH:mm:ssZ"
               displayFormat="YYYY-MM-DD HH:mm:ss"
