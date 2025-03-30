@@ -39,7 +39,7 @@ export const patseEntities: CaseReducer<
   TModuleStore,
   PayloadAction<TEntity[]>
 > = (state, action) => {
-  const newEntities: TEntity[] = action.payload;
+  const newEntities: TEntity[] = JSON.parse(JSON.stringify(action.payload));
   const newNodeUis: TNodeUi[] = [];
   newEntities.forEach((newEntity, index) => {
     newEntity.idEntity = nanoid();
@@ -59,8 +59,8 @@ export const patseEntities: CaseReducer<
       attr.idEntity = newEntity.idEntity;
       attr.idAttribute = nanoid();
       attr.action = DOStatus.NEW;
-      attr.idAttributeType = undefined;
-      if (!!attr.attributeName) {
+      attr.idAttributeType = attr.idAttributeType;
+      if (!attr.attributeName) {
         attr.attributeName = attr.columnName
           ? underlineToHump(attr.columnName)
           : undefined;

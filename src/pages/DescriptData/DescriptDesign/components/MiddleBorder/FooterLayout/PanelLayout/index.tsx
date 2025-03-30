@@ -3,9 +3,9 @@ import { Tabs } from 'antd';
 import EnumAssociate from './EnumAssociate';
 import EnityAssociate from './EnityAssociate';
 import DdEnum from './DdEnum';
-import EntityLayout from './Entity';
 import OutEnum from './OutEnum';
 import OutEntity from './OutEntity';
+import EntitiesEditTable from './EntitiesEditTable';
 
 const PanelLayout: FC = () => {
   const { TabPane } = Tabs;
@@ -14,7 +14,7 @@ const PanelLayout: FC = () => {
     <>
       <Tabs defaultActiveKey={'1'} style={{ margin: '0px' }}>
         <TabPane tab={'实体'} key="1" style={{ margin: '0px' }}>
-          <EntityLayout />
+          <EntitiesEditTable />
         </TabPane>
         <TabPane tab={'外部实体'} key="2" style={{ margin: '0px' }}>
           <OutEntity />

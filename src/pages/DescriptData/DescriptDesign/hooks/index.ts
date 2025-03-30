@@ -96,3 +96,14 @@ export const useFgLoadData = () => {
     return !!state[moduleName].entityCollection.idEntityCollection;
   });
 };
+
+export const useNotDeleteEntities = () => {
+  return useSelector((state: { [x: string]: TModuleStore }) => {
+    const notDeleteEnities = state[moduleName].entityCollection.entities.filter(
+      (entity) => {
+        return entity.action !== DOStatus.DELETED;
+      },
+    );
+    return notDeleteEnities;
+  });
+};

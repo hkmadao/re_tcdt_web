@@ -18,7 +18,6 @@ import CopyCollection from './CopyCollection';
 import ElementAssociate from './ElementAssociate';
 import GeneratePart from './GeneratePart';
 import CopyEntitiesToClipboard from './CopyEntitiesToClipboard';
-import PasteEntities from './PasteEntities';
 import CopyEnumsToClipboard from './CopyEnumsToClipboard';
 import PasteEnums from './PasteEnums';
 import ImportCollection from './ImportCollection';
@@ -29,6 +28,7 @@ import DbTableComparison from './DbTableComparison';
 import GenerateSingleFile from './GenerateSingleFile';
 import ToggleFgShowSysRefAsso from './ToggleFgShowSysRefAsso';
 import FromCreateSql from './FromCreateSql';
+import FromPaste from './FromPaste';
 
 const HeaderLayout: FC = () => {
   const dispatch = useDispatch();
@@ -84,7 +84,7 @@ const HeaderLayout: FC = () => {
           <ZoomToFit />
           <CopyCollection />
           <CopyEntitiesToClipboard />
-          <PasteEntities />
+          <FromPaste />
           <CopyEnumsToClipboard />
           <PasteEnums />
           <ImportCollection />

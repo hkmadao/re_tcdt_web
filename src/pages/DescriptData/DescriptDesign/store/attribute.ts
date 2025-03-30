@@ -180,11 +180,11 @@ export const updateAttributeType: CaseReducer<
 };
 
 /**底部属性新增 */
-export const addAttribute: CaseReducer<TModuleStore, PayloadAction<any>> = (
-  state,
-  action,
-) => {
-  const newAttributes = action.payload as TAttribute;
+export const addAttribute: CaseReducer<
+  TModuleStore,
+  PayloadAction<TAttribute>
+> = (state, action) => {
+  const newAttributes = action.payload;
   const newEntity = state.entityCollection.entities?.find(
     (ddEnum) =>
       ddEnum.action !== DOStatus.DELETED &&
