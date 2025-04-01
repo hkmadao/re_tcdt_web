@@ -1,11 +1,5 @@
-import { Button, Input, InputRef, message, Popover } from 'antd';
+import { Button, Input, InputRef, Popover, Table, TableColumnType } from 'antd';
 import { FC, useEffect, useMemo, useRef, useState } from 'react';
-import {
-  ActionType,
-  EditableProTable,
-  ProColumns,
-} from '@ant-design/pro-components';
-import { nanoid } from '@reduxjs/toolkit';
 import styles from './index.less';
 import {
   TEntity,
@@ -17,25 +11,22 @@ import {
   fetchEntityAttributes,
 } from '@/pages/DescriptData/DescriptDesign/store';
 import { useDispatch, useSelector } from 'react-redux';
-import AttributeTypeSelect from './AttributeTypeSelect';
 import {
   useIdCollection,
   useLoadStatus,
+  useHasDeleteFlagEntities,
   useModuleUi,
-  useNotDeleteEntities,
 } from '@/pages/DescriptData/DescriptDesign/hooks';
 import { DOStatus } from '@/models';
 
-const EntitiesEditTable: FC = () => {
+const ToRemoveEntity: FC = () => {
   const dispatch = useDispatch();
   const moduleUi = useModuleUi();
-  const actionRef = useRef<ActionType>();
-  const attrActionRef = useRef<ActionType>();
-  const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
+  const [entityTableKeys, setEntityTableRowKeys] = useState<React.Key[]>([]);
   const [attrEditableKeys, setAttrEditableRowKeys] = useState<React.Key[]>([]);
   const [attrs, setAttrs] = useState<TAttribute[]>([]);
   const { typeColumns, attrColumns } = useColumns();
-  const notDeleteEntities = useNotDeleteEntities();
+  const hasDeleteFlagEntities = useHasDeleteFlagEntities();
   const loadStatus = useLoadStatus();
   const idCollection = useIdCollection();
   const searchRef = useRef<InputRef>(null);
@@ -43,14 +34,14 @@ const EntitiesEditTable: FC = () => {
   const [searchValue, setSearchValue] = useState<string>();
 
   useEffect(() => {
-    setEditableRowKeys([]);
+    setEntityTableRowKeys([]);
     setAttrEditableRowKeys([]);
     setAttrs([]);
     setSearchValue(undefined);
   }, [idCollection]);
 
   const filterEntities = useMemo(() => {
-    const filterEntities = notDeleteEntities.filter((entity) => {
+    const filterEntities = hasDeleteFlagEntities.filter((entity) => {
       if (!searchValue) {
         return true;
       }
@@ -64,60 +55,45 @@ const EntitiesEditTable: FC = () => {
       return false;
     });
     return filterEntities;
-  }, [notDeleteEntities]);
+  }, [hasDeleteFlagEntities]);
 
   const handleChange = (e: any) => {
     const searchValue = e.currentTarget.value;
     setSearchValue(searchValue);
-    setEditableRowKeys([]);
+    setEntityTableRowKeys([]);
   };
 
   useEffect(() => {
     setAttrEditableRowKeys([]);
-  }, [editableKeys]);
+  }, [entityTableKeys]);
 
   useEffect(() => {
     const childAttrs =
-      filterEntities.find((m) => editableKeys.includes(m.idEntity))
+      filterEntities.find((m) => entityTableKeys.includes(m.idEntity))
         ?.attributes ?? [];
-    setAttrs(childAttrs.filter((attr) => attr.action !== DOStatus.DELETED));
-  }, [editableKeys, attrEditableKeys, loadStatus]);
+    setAttrs(childAttrs.filter((attr) => attr.action === DOStatus.DELETED));
+  }, [entityTableKeys, attrEditableKeys, loadStatus]);
 
-  /**添加行 */
-  const handleAddRow = () => {
-    const newEntity: TEntity = {
-      idEntity: nanoid(),
-      tableName: 'new_table' + (notDeleteEntities.length + 1),
-      className: 'NewTable' + (notDeleteEntities.length + 1),
-      displayName: 'NewTable' + (notDeleteEntities.length + 1),
-      attributes: [],
-    };
-    dispatch(actions.addEntity(newEntity));
-    setSearchValue(undefined);
-    editableKeys.forEach((editableKey) =>
-      actionRef.current?.cancelEditable(editableKey),
+  /**恢复删除实体 */
+  const handleEntityRestore = () => {
+    const reStoreEntity = filterEntities.find((entity) =>
+      entityTableKeys.includes(entity.idEntity!),
     );
-    actionRef.current?.startEditable(newEntity.idEntity as React.Key);
+    if (reStoreEntity) {
+      dispatch(actions.recoverEntity(reStoreEntity));
+    }
+    setEntityTableRowKeys([]);
+    setSearchValue(undefined);
   };
 
-  /**编辑行内容改变处理 */
-  const handleFormChange: (record: TEntity, dataSource: TEntity[]) => void = (
-    record: TEntity,
-    dataSource: TEntity[],
-  ) => {
-    dispatch(actions.updateEntity(record));
-  };
   /**行操作 */
   const handleRow = (record: TEntity) => {
     return {
       onClick: async (_event: any) => {
+        setEntityTableRowKeys([record.idEntity!]);
         if (record && (!record.attributes || record.attributes.length === 0)) {
           dispatch(fetchEntityAttributes([record.idEntity!]));
         }
-        editableKeys.forEach((editableKey) =>
-          actionRef.current?.cancelEditable(editableKey),
-        );
-        actionRef.current?.startEditable(record.idEntity);
       }, // 点击行
       onDoubleClick: (_event: any) => {},
       onContextMenu: (_event: any) => {},
@@ -126,70 +102,32 @@ const EntitiesEditTable: FC = () => {
     };
   };
 
-  /**添加行 */
-  const handleAttrAddRow = () => {
-    const findEntity = filterEntities.find((entity) =>
-      editableKeys.includes(entity.idEntity),
-    );
-    if (!findEntity) {
-      message.error('找不到实体');
-    }
-    const newAttr: TAttribute = {
-      idEntity: findEntity?.idEntity,
-      idAttribute: nanoid(),
-      columnName: 'column_name' + (attrs.length + 1),
-      attributeName: 'attributeName' + (attrs.length + 1),
-      displayName: 'displayName' + (attrs.length + 1),
-      idAttributeType: '',
-      fgPrimaryKey: false,
-    };
-
-    dispatch(actions.addAttribute(newAttr));
-    attrEditableKeys.forEach((editableKey) =>
-      attrActionRef.current?.cancelEditable(editableKey),
-    );
-    attrActionRef.current?.startEditable(newAttr.idAttribute as React.Key);
-  };
-
-  const handleSetToPk = () => {
-    const updateAttribute = attrs.find((attr) =>
+  const handleAttrRestore = () => {
+    const updateAttributes = attrs.filter((attr) =>
       attrEditableKeys.includes(attr.idAttribute!),
     );
 
-    if (updateAttribute) {
-      dispatch(
-        actions.updateAttribute({ ...updateAttribute, fgPrimaryKey: true }),
-      );
+    if (updateAttributes) {
+      const notExistsAttr = attrs.length === updateAttributes.length;
+      dispatch(actions.recoverAttributes(updateAttributes));
+      if (notExistsAttr) {
+        setEntityTableRowKeys([]);
+      }
+      setAttrEditableRowKeys([]);
     }
   };
 
-  /**删除行 */
-  const handleAttrDelete = () => {
-    if (attrEditableKeys && attrEditableKeys.length === 1) {
-      const deleteAttribute = attrs.find((attr) =>
-        attrEditableKeys.includes(attr.idAttribute!),
-      );
-      if (deleteAttribute) {
-        dispatch(actions.deleteAttribute(deleteAttribute));
-        setAttrEditableRowKeys([]);
-      }
-    }
-  };
-  /**编辑行内容改变处理 */
-  const handleAttrFormChange: (
-    record: TAttribute,
-    dataSource: TAttribute[],
-  ) => void = (record: TAttribute, dataSource: TAttribute[]) => {
-    dispatch(actions.updateAttribute(record));
-  };
   /**行操作 */
   const handleAttrRow = (record: TAttribute) => {
     return {
       onClick: async (_event: any) => {
-        attrEditableKeys.forEach((editableKey) =>
-          attrActionRef.current?.cancelEditable(editableKey),
-        );
-        attrActionRef.current?.startEditable(record.idAttribute!);
+        if (attrEditableKeys.includes(record.idAttribute!)) {
+          setAttrEditableRowKeys(
+            attrEditableKeys.filter((id) => id !== record.idAttribute),
+          );
+          return;
+        }
+        setAttrEditableRowKeys([...attrEditableKeys, record.idAttribute!]);
       }, // 点击行
       onDoubleClick: (_event: any) => {},
       onContextMenu: (_event: any) => {},
@@ -210,12 +148,12 @@ const EntitiesEditTable: FC = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
           <div style={{ display: 'flex', gap: '5px' }}>
             <Button
-              onClick={handleAddRow}
+              onClick={handleEntityRestore}
               size={'small'}
               type={'primary'}
               disabled={!idCollection}
             >
-              添加
+              恢复
             </Button>
             <span>
               总共
@@ -226,7 +164,7 @@ const EntitiesEditTable: FC = () => {
                   fontSize: '18px',
                 }}
               >
-                {notDeleteEntities?.length ?? 0}
+                {hasDeleteFlagEntities?.length ?? 0}
               </span>
               条目，
             </span>
@@ -252,74 +190,52 @@ const EntitiesEditTable: FC = () => {
               onChange={handleChange}
             />
           </div>
-          <EditableProTable<TEntity>
+          <Table<TEntity>
             className={styles['my-ant-pro-table']}
-            actionRef={actionRef}
             rowKey={'idEntity'}
-            headerTitle={false}
             bordered={true}
             size={'small'}
             scroll={{ y: (moduleUi.bHeight as number) - 160 }}
-            maxLength={5}
-            recordCreatorProps={false}
-            value={filterEntities}
+            dataSource={filterEntities}
             columns={typeColumns}
-            editable={{
-              type: 'multiple',
-              editableKeys,
-              onChange: setEditableRowKeys,
-              onValuesChange: handleFormChange,
-            }}
             onRow={handleRow}
+            rowSelection={{
+              type: 'radio',
+              selectedRowKeys: entityTableKeys,
+              onChange(selectedRowKeys, selectedRows, info) {
+                setEntityTableRowKeys(selectedRowKeys);
+              },
+            }}
             pagination={false}
           />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
           <div style={{ display: 'flex', gap: '5px' }}>
             <Button
-              onClick={handleAttrAddRow}
+              onClick={handleAttrRestore}
               size={'small'}
               type={'primary'}
-              disabled={editableKeys.length !== 1}
+              disabled={attrEditableKeys.length < 1}
             >
-              添加
-            </Button>
-            <Button
-              onClick={handleSetToPk}
-              size={'small'}
-              type={'primary'}
-              disabled={attrEditableKeys.length !== 1}
-            >
-              设为主属性
-            </Button>
-            <Button
-              onClick={handleAttrDelete}
-              size={'small'}
-              type={'primary'}
-              disabled={attrEditableKeys.length !== 1}
-            >
-              删除
+              恢复
             </Button>
           </div>
-          <EditableProTable<TAttribute>
+          <Table<TAttribute>
             className={styles['my-ant-pro-table']}
-            actionRef={attrActionRef}
             rowKey={'idAttribute'}
-            headerTitle={false}
             bordered={true}
             size={'small'}
             scroll={{ y: (moduleUi.bHeight as number) - 160 }}
-            maxLength={5}
-            recordCreatorProps={false}
-            value={attrs}
+            dataSource={attrs}
             columns={attrColumns}
-            editable={{
-              type: 'multiple',
-              editableKeys: attrEditableKeys,
-              onChange: setAttrEditableRowKeys,
-              onValuesChange: handleAttrFormChange,
-            }}
             onRow={handleAttrRow}
+            rowSelection={{
+              type: 'checkbox',
+              selectedRowKeys: attrEditableKeys,
+              onChange(selectedRowKeys, selectedRows, info) {
+                setAttrEditableRowKeys(selectedRowKeys);
+              },
+            }}
             pagination={false}
           />
         </div>
@@ -328,27 +244,25 @@ const EntitiesEditTable: FC = () => {
   );
 };
 
-export default EntitiesEditTable;
+export default ToRemoveEntity;
 
 const useColumns = () => {
   const dispatch = useDispatch();
   const sysDataTypes = useSelector(selectSysDataTypes);
-  const notDeleteEntities = useNotDeleteEntities();
+  const hasDeleteFlagEntities = useHasDeleteFlagEntities();
 
-  const typeColumns: ProColumns<TEntity>[] = [
+  const typeColumns: TableColumnType<TEntity>[] = [
     {
       title: '序号',
       dataIndex: 'sn',
       width: '50px',
-      editable: false,
-      render: (text, record, index, action) => {
+      render: (text, record, index) => {
         return <span>{index + 1}</span>;
       },
     },
     {
       dataIndex: 'idEntity',
       title: 'ID',
-      editable: false,
       render: (value: any) => {
         const content = value ? value : '--';
         return (
@@ -363,7 +277,7 @@ const useColumns = () => {
             <Popover content={content} trigger="hover">
               <span
                 style={{ color: 'blue', cursor: 'pointer' }}
-                onClick={() => dispatch(actions.updateGoToId(content))}
+                // onClick={() => dispatch(actions.updateGoToId(content))}
               >
                 {content}
               </span>
@@ -375,14 +289,6 @@ const useColumns = () => {
     {
       title: '表名',
       dataIndex: 'tableName',
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '此项为必填项',
-          },
-        ],
-      },
       render: (value: any) => {
         const content = value ? value : '--';
         return (
@@ -404,14 +310,6 @@ const useColumns = () => {
     {
       title: '类名',
       dataIndex: 'className',
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '此项为必填项',
-          },
-        ],
-      },
       render: (value: any) => {
         const content = value ? value : '--';
         return (
@@ -433,14 +331,6 @@ const useColumns = () => {
     {
       title: '类注释名',
       dataIndex: 'displayName',
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '此项为必填项',
-          },
-        ],
-      },
       render: (value: any) => {
         const content = value ? value : '--';
         return (
@@ -461,13 +351,12 @@ const useColumns = () => {
     },
   ];
 
-  const attrColumns: ProColumns<TAttribute>[] = [
+  const attrColumns: TableColumnType<TAttribute>[] = [
     {
       title: '序号',
       dataIndex: 'sn',
       width: '50px',
-      editable: false,
-      render: (text, record, index, action) => {
+      render: (text, record) => {
         return <span>{record.sn}</span>;
       },
     },
@@ -475,23 +364,12 @@ const useColumns = () => {
       title: 'P',
       dataIndex: 'fgPrimaryKey',
       width: '50px',
-      editable: false,
-      renderFormItem: (_schema, config) => {
-        const findAttr = notDeleteEntities
-          .find((entity) => entity.idEntity === config.record?.idEntity)
-          ?.attributes?.find(
-            (attr) =>
-              attr.action !== DOStatus.DELETED &&
-              attr.idAttribute === config.record?.idAttribute,
-          );
-        return findAttr?.fgPrimaryKey ? '是' : '否';
-      },
-      render: (text, record, _, action) => {
-        const findAttr = notDeleteEntities
+      render: (text, record) => {
+        const findAttr = hasDeleteFlagEntities
           .find((entity) => entity.idEntity === record?.idEntity)
           ?.attributes?.find(
             (attr) =>
-              attr.action !== DOStatus.DELETED &&
+              attr.action === DOStatus.DELETED &&
               attr.idAttribute === record?.idAttribute,
           );
         return findAttr?.fgPrimaryKey ? '是' : '否';
@@ -500,14 +378,6 @@ const useColumns = () => {
     {
       title: '字段名',
       dataIndex: 'columnName',
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '此项为必填项',
-          },
-        ],
-      },
       render: (value: any) => {
         const content = value ? value : '--';
         return (
@@ -529,14 +399,6 @@ const useColumns = () => {
     {
       title: '属性名',
       dataIndex: 'attributeName',
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '此项为必填项',
-          },
-        ],
-      },
       render: (value: any) => {
         const content = value ? value : '--';
         return (
@@ -558,14 +420,6 @@ const useColumns = () => {
     {
       title: '属性显示名称名',
       dataIndex: 'displayName',
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '此项为必填项',
-          },
-        ],
-      },
       render: (value: any) => {
         const content = value ? value : '--';
         return (
@@ -587,13 +441,6 @@ const useColumns = () => {
     {
       title: '数据类型',
       dataIndex: 'idAttributeType',
-      renderFormItem: (_schema, config) => {
-        const record = config.record;
-        const attributeType = sysDataTypes.find((dataType) => {
-          return record?.idAttributeType === dataType.idDataType;
-        });
-        return <AttributeTypeSelect {...record} />;
-      },
       render: (_dom, record) => {
         const attributeType = sysDataTypes.find((dataType) => {
           return record.idAttributeType === dataType.idDataType;

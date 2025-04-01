@@ -6,6 +6,7 @@ import DdEnum from './DdEnum';
 import OutEnum from './OutEnum';
 import OutEntity from './OutEntity';
 import EntitiesEditTable from './EntitiesEditTable';
+import ToRemoveEntity from './ToRemoveEntity';
 
 const PanelLayout: FC = () => {
   const { TabPane } = Tabs;
@@ -30,6 +31,9 @@ const PanelLayout: FC = () => {
         </TabPane>
         <TabPane tab={'枚举连线'} key="9" style={{ margin: '0px' }}>
           <EnumAssociate />
+        </TabPane>
+        <TabPane tab={'待删除实体'} key="10" style={{ margin: '0px' }}>
+          <ToRemoveEntity />
         </TabPane>
       </Tabs>
     </>

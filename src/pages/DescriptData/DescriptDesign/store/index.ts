@@ -15,6 +15,7 @@ import * as enumAssociateCaseReducer from './enum-associate';
 import * as moduleUiCaseReducer from './module-ui';
 import * as focusCaseReducer from './focus';
 import * as outElementsCaseReducer from './out-elements';
+import * as recoverCaseReducer from './recover';
 import {
   fetchEntityAttributes,
   fetchOutEntityAttribute,
@@ -156,6 +157,7 @@ export const designSlice = createSlice({
     ...moduleUiCaseReducer,
     ...focusCaseReducer,
     ...outElementsCaseReducer,
+    ...recoverCaseReducer,
   },
   extraReducers: (builder) => {
     builder
@@ -281,13 +283,20 @@ export const designSlice = createSlice({
         const resEntities = action.payload;
         if (resEntities) {
           state.entityCollection.entities?.forEach((entity) => {
-            const resEntity = resEntities.find((resE) => {
-              return entity.idEntity === resE.idEntity;
+            const resEntity = resEntities.find((resEnti) => {
+              return entity.idEntity === resEnti.idEntity;
             });
             if (!resEntity) {
               return;
             }
+            if (entity.action === DOStatus.DELETED) {
+              entity.attributes = resEntity.attributes?.map((attr) => {
+                attr.action = DOStatus.DELETED;
+                return attr;
+              });
+            }
             entity.attributes = resEntity.attributes;
+            return;
           });
           state.entityCollection.outEntities?.forEach((entity) => {
             const resEntity = resEntities.find((resE) => {

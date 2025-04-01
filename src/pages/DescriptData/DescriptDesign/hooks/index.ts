@@ -107,3 +107,77 @@ export const useNotDeleteEntities = () => {
     return notDeleteEnities;
   });
 };
+
+export const useHasDeleteFlagEntities = () => {
+  return useSelector((state: { [x: string]: TModuleStore }) => {
+    const deleteEnities = state[moduleName].entityCollection.entities.filter(
+      (entity) => {
+        if (entity.action === DOStatus.DELETED) {
+          return true;
+        }
+        return entity.attributes?.find(
+          (attr) => attr.action === DOStatus.DELETED,
+        );
+      },
+    );
+    return deleteEnities;
+  });
+};
+
+export const useHasDeleteFlagEnums = () => {
+  return useSelector((state: { [x: string]: TModuleStore }) => {
+    const deleteEnums = state[moduleName].entityCollection.enums.filter(
+      (ddEnum) => {
+        if (ddEnum.action === DOStatus.DELETED) {
+          return true;
+        }
+        return ddEnum.attributes?.find(
+          (attr) => attr.action === DOStatus.DELETED,
+        );
+      },
+    );
+    return deleteEnums;
+  });
+};
+
+export const useHasDeleteFLagEntityAsso = () => {
+  return useSelector((state: { [x: string]: TModuleStore }) => {
+    const deleteAsso = state[
+      moduleName
+    ].entityCollection.entityAssociates.filter((asso) => {
+      if (asso.action === DOStatus.DELETED) {
+        return true;
+      }
+      return false;
+    });
+    return deleteAsso;
+  });
+};
+
+export const useHasDeleteFLagEnumAsso = () => {
+  return useSelector((state: { [x: string]: TModuleStore }) => {
+    const deleteEnumAsso = state[
+      moduleName
+    ].entityCollection.enumAssociates.filter((asso) => {
+      if (asso.action === DOStatus.DELETED) {
+        return true;
+      }
+      return false;
+    });
+    return deleteEnumAsso;
+  });
+};
+
+/**选择模块ui */
+export const useModuleUi = () => {
+  return useSelector((state: { [x: string]: TModuleStore }) => {
+    return state[moduleName].moduleUi;
+  });
+};
+
+/**选择绘图次数 */
+export const useDrawCount = () => {
+  return useSelector((state: { [x: string]: TModuleStore }) => {
+    return state[moduleName].drawCount;
+  });
+};
