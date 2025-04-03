@@ -8,36 +8,29 @@ import {
 import { nanoid } from '@reduxjs/toolkit';
 import styles from './index.less';
 import {
-  TEntity,
-  TAttribute,
+  TEnum,
+  TEnumAttribute,
 } from '@/pages/DescriptData/DescriptDesign/models';
-import {
-  selectSysDataTypes,
-  actions,
-  fetchEntityAttributes,
-} from '@/pages/DescriptData/DescriptDesign/store';
-import { useDispatch, useSelector } from 'react-redux';
-import AttributeTypeSelect from './AttributeTypeSelect';
+import { actions } from '@/pages/DescriptData/DescriptDesign/store';
+import { useDispatch } from 'react-redux';
 import {
   useIdCollection,
   useLoadStatus,
   useModuleUi,
-  useNotDeleteEntities,
+  useNotDeleteEnums,
 } from '@/pages/DescriptData/DescriptDesign/hooks';
 import { DOStatus } from '@/models';
-import AttributeNameInput from './AttributeNameInput';
-import ColumnNameInput from './ColumnNameInput';
 
-const EntitiesEditTable: FC = () => {
+const EnumEditTable: FC = () => {
   const dispatch = useDispatch();
   const moduleUi = useModuleUi();
   const actionRef = useRef<ActionType>();
   const attrActionRef = useRef<ActionType>();
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
   const [attrEditableKeys, setAttrEditableRowKeys] = useState<React.Key[]>([]);
-  const [attrs, setAttrs] = useState<TAttribute[]>([]);
+  const [attrs, setAttrs] = useState<TEnumAttribute[]>([]);
   const { typeColumns, attrColumns } = useColumns();
-  const notDeleteEntities = useNotDeleteEntities();
+  const notDeleteEnums = useNotDeleteEnums();
   const loadStatus = useLoadStatus();
   const idCollection = useIdCollection();
   const searchRef = useRef<InputRef>(null);
@@ -51,13 +44,12 @@ const EntitiesEditTable: FC = () => {
     setSearchValue(undefined);
   }, [idCollection]);
 
-  const filterEntities = useMemo(() => {
-    const filterEntities = notDeleteEntities.filter((entity) => {
+  const filterEnums = useMemo(() => {
+    const filterEntities = notDeleteEnums.filter((entity) => {
       if (!searchValue) {
         return true;
       }
       if (
-        entity.tableName?.includes(searchValue) ||
         entity.className?.includes(searchValue) ||
         entity.displayName?.includes(searchValue)
       ) {
@@ -66,7 +58,7 @@ const EntitiesEditTable: FC = () => {
       return false;
     });
     return filterEntities;
-  }, [notDeleteEntities]);
+  }, [notDeleteEnums]);
 
   const handleChange = (e: any) => {
     const searchValue = e.currentTarget.value;
@@ -80,46 +72,42 @@ const EntitiesEditTable: FC = () => {
 
   useEffect(() => {
     const childAttrs =
-      filterEntities.find((m) => editableKeys.includes(m.idEntity))
-        ?.attributes ?? [];
+      filterEnums.find((m) => editableKeys.includes(m.idEnum))?.attributes ??
+      [];
     setAttrs(childAttrs.filter((attr) => attr.action !== DOStatus.DELETED));
   }, [editableKeys, attrEditableKeys, loadStatus]);
 
   /**添加行 */
   const handleAddRow = () => {
-    const newEntity: TEntity = {
-      idEntity: nanoid(),
-      tableName: 'new_table' + (notDeleteEntities.length + 1),
-      className: 'NewTable' + (notDeleteEntities.length + 1),
-      displayName: 'NewTable' + (notDeleteEntities.length + 1),
+    const newEntity: TEnum = {
+      idEnum: nanoid(),
+      className: 'NewTable' + (notDeleteEnums.length + 1),
+      displayName: 'NewTable' + (notDeleteEnums.length + 1),
       attributes: [],
     };
-    dispatch(actions.addEntity(newEntity));
+    dispatch(actions.addEnum(newEntity));
     setSearchValue(undefined);
     editableKeys.forEach((editableKey) =>
       actionRef.current?.cancelEditable(editableKey),
     );
-    actionRef.current?.startEditable(newEntity.idEntity as React.Key);
+    actionRef.current?.startEditable(newEntity.idEnum as React.Key);
   };
 
   /**编辑行内容改变处理 */
-  const handleFormChange: (record: TEntity, dataSource: TEntity[]) => void = (
-    record: TEntity,
-    dataSource: TEntity[],
+  const handleFormChange: (record: TEnum, dataSource: TEnum[]) => void = (
+    record: TEnum,
+    dataSource: TEnum[],
   ) => {
-    dispatch(actions.updateEntity(record));
+    dispatch(actions.updateEnum(record));
   };
   /**行操作 */
-  const handleRow = (record: TEntity) => {
+  const handleRow = (record: TEnum) => {
     return {
       onClick: async (_event: any) => {
-        if (record && (!record.attributes || record.attributes.length === 0)) {
-          dispatch(fetchEntityAttributes([record.idEntity!]));
-        }
         editableKeys.forEach((editableKey) =>
           actionRef.current?.cancelEditable(editableKey),
         );
-        actionRef.current?.startEditable(record.idEntity);
+        actionRef.current?.startEditable(record.idEnum);
       }, // 点击行
       onDoubleClick: (_event: any) => {},
       onContextMenu: (_event: any) => {},
@@ -130,68 +118,53 @@ const EntitiesEditTable: FC = () => {
 
   /**添加行 */
   const handleAttrAddRow = () => {
-    const findEntity = filterEntities.find((entity) =>
-      editableKeys.includes(entity.idEntity),
+    const findEntity = filterEnums.find((entity) =>
+      editableKeys.includes(entity.idEnum),
     );
     if (!findEntity) {
-      message.error('找不到实体');
+      message.error('找不到枚举');
     }
-    const newAttr: TAttribute = {
-      idEntity: findEntity?.idEntity,
-      idAttribute: nanoid(),
-      columnName: 'column_name' + (attrs.length + 1),
-      attributeName: 'attributeName' + (attrs.length + 1),
+    const newAttr: TEnumAttribute = {
+      idEnum: findEntity?.idEnum,
+      idEnumAttribute: nanoid(),
+      code: 'Code' + (attrs.length + 1),
       displayName: 'displayName' + (attrs.length + 1),
-      idAttributeType: '',
-      fgPrimaryKey: false,
     };
 
-    dispatch(actions.addAttribute(newAttr));
+    dispatch(actions.addEnumAttribute(newAttr));
     attrEditableKeys.forEach((editableKey) =>
       attrActionRef.current?.cancelEditable(editableKey),
     );
-    attrActionRef.current?.startEditable(newAttr.idAttribute as React.Key);
-  };
-
-  const handleSetToPk = () => {
-    const updateAttribute = attrs.find((attr) =>
-      attrEditableKeys.includes(attr.idAttribute!),
-    );
-
-    if (updateAttribute) {
-      dispatch(
-        actions.updateAttribute({ ...updateAttribute, fgPrimaryKey: true }),
-      );
-    }
+    attrActionRef.current?.startEditable(newAttr.idEnumAttribute as React.Key);
   };
 
   /**删除行 */
   const handleAttrDelete = () => {
     if (attrEditableKeys && attrEditableKeys.length === 1) {
       const deleteAttribute = attrs.find((attr) =>
-        attrEditableKeys.includes(attr.idAttribute!),
+        attrEditableKeys.includes(attr.idEnumAttribute!),
       );
       if (deleteAttribute) {
-        dispatch(actions.deleteAttribute(deleteAttribute));
+        dispatch(actions.deleteEnumAttribute(deleteAttribute));
         setAttrEditableRowKeys([]);
       }
     }
   };
   /**编辑行内容改变处理 */
   const handleAttrFormChange: (
-    record: TAttribute,
-    dataSource: TAttribute[],
-  ) => void = (record: TAttribute, dataSource: TAttribute[]) => {
-    dispatch(actions.updateAttribute(record));
+    record: TEnumAttribute,
+    dataSource: TEnumAttribute[],
+  ) => void = (record: TEnumAttribute, dataSource: TEnumAttribute[]) => {
+    dispatch(actions.updateEnumAttribute(record));
   };
   /**行操作 */
-  const handleAttrRow = (record: TAttribute) => {
+  const handleAttrRow = (record: TEnumAttribute) => {
     return {
       onClick: async (_event: any) => {
         attrEditableKeys.forEach((editableKey) =>
           attrActionRef.current?.cancelEditable(editableKey),
         );
-        attrActionRef.current?.startEditable(record.idAttribute!);
+        attrActionRef.current?.startEditable(record.idEnumAttribute!);
       }, // 点击行
       onDoubleClick: (_event: any) => {},
       onContextMenu: (_event: any) => {},
@@ -228,7 +201,7 @@ const EntitiesEditTable: FC = () => {
                   fontSize: '18px',
                 }}
               >
-                {notDeleteEntities?.length ?? 0}
+                {notDeleteEnums?.length ?? 0}
               </span>
               条目，
             </span>
@@ -241,7 +214,7 @@ const EntitiesEditTable: FC = () => {
                   fontSize: '18px',
                 }}
               >
-                {filterEntities.length ?? 0}
+                {filterEnums.length ?? 0}
               </span>
               条目
             </span>
@@ -254,17 +227,17 @@ const EntitiesEditTable: FC = () => {
               onChange={handleChange}
             />
           </div>
-          <EditableProTable<TEntity>
+          <EditableProTable<TEnum>
             className={styles['my-ant-pro-table']}
             actionRef={actionRef}
-            rowKey={'idEntity'}
+            rowKey={'idEnum'}
             headerTitle={false}
             bordered={true}
             size={'small'}
             scroll={{ y: (moduleUi.bHeight as number) - 160 }}
             maxLength={5}
             recordCreatorProps={false}
-            value={filterEntities}
+            value={filterEnums}
             columns={typeColumns}
             editable={{
               type: 'multiple',
@@ -287,14 +260,6 @@ const EntitiesEditTable: FC = () => {
               添加
             </Button>
             <Button
-              onClick={handleSetToPk}
-              size={'small'}
-              type={'primary'}
-              disabled={attrEditableKeys.length !== 1}
-            >
-              设为主属性
-            </Button>
-            <Button
               onClick={handleAttrDelete}
               size={'small'}
               type={'primary'}
@@ -303,10 +268,10 @@ const EntitiesEditTable: FC = () => {
               删除
             </Button>
           </div>
-          <EditableProTable<TAttribute>
+          <EditableProTable<TEnumAttribute>
             className={styles['my-ant-pro-table']}
             actionRef={attrActionRef}
-            rowKey={'idAttribute'}
+            rowKey={'idEnumAttribute'}
             headerTitle={false}
             bordered={true}
             size={'small'}
@@ -330,14 +295,12 @@ const EntitiesEditTable: FC = () => {
   );
 };
 
-export default EntitiesEditTable;
+export default EnumEditTable;
 
 const useColumns = () => {
   const dispatch = useDispatch();
-  const sysDataTypes = useSelector(selectSysDataTypes);
-  const notDeleteEntities = useNotDeleteEntities();
 
-  const typeColumns: ProColumns<TEntity>[] = [
+  const typeColumns: ProColumns<TEnum>[] = [
     {
       title: '序号',
       dataIndex: 'sn',
@@ -348,7 +311,7 @@ const useColumns = () => {
       },
     },
     {
-      dataIndex: 'idEntity',
+      dataIndex: 'idEnum',
       title: 'ID',
       editable: false,
       render: (value: any) => {
@@ -369,35 +332,6 @@ const useColumns = () => {
               >
                 {content}
               </span>
-            </Popover>
-          </div>
-        );
-      },
-    },
-    {
-      title: '表名',
-      dataIndex: 'tableName',
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '此项为必填项',
-          },
-        ],
-      },
-      render: (value: any) => {
-        const content = value ? value : '--';
-        return (
-          <div
-            style={{
-              overflow: 'hidden',
-              maxWidth: '150px',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            <Popover content={content} trigger="hover">
-              {content}
             </Popover>
           </div>
         );
@@ -463,7 +397,7 @@ const useColumns = () => {
     },
   ];
 
-  const attrColumns: ProColumns<TAttribute>[] = [
+  const attrColumns: ProColumns<TEnumAttribute>[] = [
     {
       title: '序号',
       dataIndex: 'sn',
@@ -474,34 +408,8 @@ const useColumns = () => {
       },
     },
     {
-      title: 'P',
-      dataIndex: 'fgPrimaryKey',
-      width: '50px',
-      editable: false,
-      renderFormItem: (_schema, config) => {
-        const findAttr = notDeleteEntities
-          .find((entity) => entity.idEntity === config.record?.idEntity)
-          ?.attributes?.find(
-            (attr) =>
-              attr.action !== DOStatus.DELETED &&
-              attr.idAttribute === config.record?.idAttribute,
-          );
-        return findAttr?.fgPrimaryKey ? '是' : '否';
-      },
-      render: (text, record, _, action) => {
-        const findAttr = notDeleteEntities
-          .find((entity) => entity.idEntity === record?.idEntity)
-          ?.attributes?.find(
-            (attr) =>
-              attr.action !== DOStatus.DELETED &&
-              attr.idAttribute === record?.idAttribute,
-          );
-        return findAttr?.fgPrimaryKey ? '是' : '否';
-      },
-    },
-    {
-      title: '字段名',
-      dataIndex: 'columnName',
+      title: '枚举编号',
+      dataIndex: 'code',
       formItemProps: {
         rules: [
           {
@@ -509,16 +417,6 @@ const useColumns = () => {
             message: '此项为必填项',
           },
         ],
-      },
-      renderFormItem: (_schema, config) => {
-        //从config.record获取不到经过renderFormItem的属性
-        const findEntity = notDeleteEntities.find(
-          (entity) => entity.idEntity === config.record?.idEntity,
-        );
-        const attribute = findEntity?.attributes?.find(
-          (attrData) => attrData.idAttribute === config.recordKey,
-        );
-        return <ColumnNameInput {...attribute} />;
       },
       render: (value: any) => {
         const content = value ? value : '--';
@@ -539,8 +437,8 @@ const useColumns = () => {
       },
     },
     {
-      title: '属性名',
-      dataIndex: 'attributeName',
+      title: '枚举值',
+      dataIndex: 'enumValue',
       formItemProps: {
         rules: [
           {
@@ -548,16 +446,6 @@ const useColumns = () => {
             message: '此项为必填项',
           },
         ],
-      },
-      renderFormItem: (_schema, config) => {
-        //从config.record获取不到经过renderFormItem的属性
-        const findEntity = notDeleteEntities.find(
-          (entity) => entity.idEntity === config.record?.idEntity,
-        );
-        const attribute = findEntity?.attributes?.find(
-          (attrData) => attrData.idAttribute === config.recordKey,
-        );
-        return <AttributeNameInput {...attribute} />;
       },
       render: (value: any) => {
         const content = value ? value : '--';
@@ -578,7 +466,7 @@ const useColumns = () => {
       },
     },
     {
-      title: '属性显示名称',
+      title: '显示名称',
       dataIndex: 'displayName',
       formItemProps: {
         rules: [
@@ -604,23 +492,6 @@ const useColumns = () => {
             </Popover>
           </div>
         );
-      },
-    },
-    {
-      title: '数据类型',
-      dataIndex: 'idAttributeType',
-      renderFormItem: (_schema, config) => {
-        const record = config.record;
-        const attributeType = sysDataTypes.find((dataType) => {
-          return record?.idAttributeType === dataType.idDataType;
-        });
-        return <AttributeTypeSelect {...record} />;
-      },
-      render: (_dom, record) => {
-        const attributeType = sysDataTypes.find((dataType) => {
-          return record.idAttributeType === dataType.idDataType;
-        });
-        return <>{attributeType?.displayName}</>;
       },
     },
   ];

@@ -49,7 +49,10 @@ const AttributeTypePickerInput: FC<TRefPickerProps> = ({
       <Space direction="horizontal" size={2}>
         <Form form={form} onValuesChange={handleChange}>
           <Form.Item name={'idAttributeType'} noStyle>
-            <Select placeholder={'请选择'} style={{ maxWidth: '150px' }}>
+            <Select
+              placeholder={'请选择'}
+              style={{ minWidth: '100px', maxWidth: '150px' }}
+            >
               {attributeTypeOptions}
             </Select>
           </Form.Item>

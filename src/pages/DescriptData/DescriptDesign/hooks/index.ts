@@ -82,6 +82,12 @@ export const useIdCollection = () => {
   });
 };
 
+export const useCollection = () => {
+  return useSelector((state: { [x: string]: TModuleStore }) => {
+    return state[moduleName].entityCollection;
+  });
+};
+
 export const useCurentSelectType = () => {
   return useSelector((state: { [x: string]: TModuleStore }) => {
     if (!state[moduleName].entityCollection.idEntityCollection) {
@@ -105,6 +111,17 @@ export const useNotDeleteEntities = () => {
       },
     );
     return notDeleteEnities;
+  });
+};
+
+export const useNotDeleteEnums = () => {
+  return useSelector((state: { [x: string]: TModuleStore }) => {
+    const notDeleteEnums = state[moduleName].entityCollection.enums.filter(
+      (entity) => {
+        return entity.action !== DOStatus.DELETED;
+      },
+    );
+    return notDeleteEnums;
   });
 };
 
@@ -179,5 +196,29 @@ export const useModuleUi = () => {
 export const useDrawCount = () => {
   return useSelector((state: { [x: string]: TModuleStore }) => {
     return state[moduleName].drawCount;
+  });
+};
+
+export const useAllEntities = () => {
+  return useSelector((state: { [x: string]: TModuleStore }) => {
+    return [
+      ...state[moduleName].entityCollection.entities,
+      ...state[moduleName].entityCollection.outEntities,
+    ];
+  });
+};
+
+export const useAllEnums = () => {
+  return useSelector((state: { [x: string]: TModuleStore }) => {
+    return [
+      ...state[moduleName].entityCollection.enums,
+      ...state[moduleName].entityCollection.outEnums,
+    ];
+  });
+};
+
+export const useSysDataTypes = () => {
+  return useSelector((state: { [x: string]: TModuleStore }) => {
+    return state[moduleName].entityCollection.sysDataTypes;
   });
 };

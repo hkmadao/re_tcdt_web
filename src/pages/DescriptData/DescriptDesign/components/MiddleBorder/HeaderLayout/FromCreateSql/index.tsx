@@ -17,13 +17,18 @@ import { nanoid } from '@reduxjs/toolkit';
 import { firstToUpper, underlineToHump } from '@/util';
 import { DOStatus } from '@/models';
 import ImportEntityEditTable from './ImportEntityEditTable';
+import {
+  useIdCollection,
+  useSysDataTypes,
+} from '@/pages/DescriptData/DescriptDesign/hooks';
 
 const FromCreateSql: FC = () => {
   const { Panel } = Collapse;
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const inputRef = useRef<TextAreaRef>(null);
-  const collection = useSelector(selectEntityCollection);
+  const idCollection = useIdCollection();
+  const sysDataTypes = useSysDataTypes();
   const [entities, setEntities] = useState<TEntity[]>([]);
   const importEntitiesEditTableRef = useRef<{ getEntities: () => TEntity[] }>(
     null,
@@ -118,14 +123,52 @@ const FromCreateSql: FC = () => {
                 attribute.displayName = commentSqlMatch[1];
                 subCommentSql = subCommentSql.replace(commentSqlMatch[0], '');
               }
-              const crateColumnReg: RegExp = /^\s*`+(\S+)`+.*/;
+              const crateColumnReg: RegExp = /^\s*`+(\S+)`+\s+(\S+)\s+.*/;
               const crateColumnSqlMatch =
                 columnFragmentSqlStr.match(crateColumnReg);
               if (!crateColumnSqlMatch || crateColumnSqlMatch.length < 2) {
                 return attribute;
               }
               attribute.columnName = crateColumnSqlMatch[1];
+              let attributeType = sysDataTypes.find((dataType) => {
+                if (dataType.code === 'PK' || dataType.code === 'FK') {
+                  return false;
+                }
+                if (
+                  `${dataType.columnType}(${dataType.len})` ===
+                  crateColumnSqlMatch[2]
+                ) {
+                  return true;
+                }
+              });
+              if (!attributeType) {
+                attributeType = sysDataTypes.find((dataType) => {
+                  if (dataType.code === 'PK' || dataType.code === 'FK') {
+                    return false;
+                  }
+                  if (
+                    `${dataType.columnType}(${dataType.len},${dataType.pcs})` ===
+                    crateColumnSqlMatch[2]
+                  ) {
+                    return true;
+                  }
+                });
+              }
+              if (!attributeType) {
+                attributeType = sysDataTypes.find((dataType) => {
+                  if (dataType.code === 'PK' || dataType.code === 'FK') {
+                    return false;
+                  }
+                  return (
+                    crateColumnSqlMatch[2].indexOf(
+                      `${dataType.columnType}(`,
+                    ) === 0
+                  );
+                });
+              }
+              console.log(attributeType);
               attribute.attributeName = underlineToHump(crateColumnSqlMatch[1]);
+              attribute.idAttributeType = attributeType?.idDataType;
               // console.log('attribute: ', attribute);
               return attribute;
             })
@@ -160,7 +203,7 @@ const FromCreateSql: FC = () => {
         <Button
           icon={<BlockOutlined />}
           onClick={handleOpenModal}
-          disabled={!collection?.idEntityCollection}
+          disabled={!idCollection}
           size={'small'}
         />
       </Tooltip>

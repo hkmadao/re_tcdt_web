@@ -94,21 +94,33 @@ export const deleteEnumAttribute: CaseReducer<
   newEnum.action === DOStatus.UNCHANGED
     ? (newEnum.action = DOStatus.UPDATED)
     : undefined;
-  let newEntityAttrs = newEnum.attributes?.filter((enumAttribute) => {
-    if (enumAttribute.idEnum === deleteEnumAttribute.idEnum) {
-      if (
-        deleteEnumAttribute.idEnumAttribute === enumAttribute.idEnumAttribute
-      ) {
-        //没有保存过的数据直接删除
-        if (enumAttribute.action === DOStatus.NEW) {
-          return false;
-        }
-        enumAttribute.action = DOStatus.DELETED;
+  let newEnumAttrs = newEnum.attributes?.filter((entityAttr) => {
+    if (entityAttr.idEnumAttribute === deleteEnumAttribute.idEnumAttribute) {
+      //没有保存过的数据直接删除
+      if (entityAttr.action === DOStatus.NEW) {
+        return false;
       }
+      entityAttr.sn = 9999;
+      entityAttr.action = DOStatus.DELETED;
     }
     return true;
   });
-  newEnum.attributes = newEntityAttrs;
+  newEnumAttrs?.sort((a1, a2) => {
+    return a1.sn! - a2.sn!;
+  });
+  newEnumAttrs = newEnumAttrs?.filter((entityAttr, index) => {
+    if (entityAttr.action === DOStatus.DELETED) {
+      entityAttr.sn = 9999;
+      return true;
+    }
+    entityAttr.action =
+      entityAttr.action === DOStatus.UNCHANGED
+        ? DOStatus.UPDATED
+        : entityAttr.action;
+    entityAttr.sn = index + 1;
+    return true;
+  });
+  newEnum.attributes = newEnumAttrs;
   state.entityCollection.enums = state.entityCollection.enums?.map((ddEnum) => {
     if (ddEnum.idEnum == newEnum.idEnum) {
       ddEnum.action = newEnum.action;

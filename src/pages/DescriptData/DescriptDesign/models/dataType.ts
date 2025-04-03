@@ -16,4 +16,8 @@ export type TAttributeType = {
   objectType?: string;
   /** 类型所在包 */
   objectTypePackage?: string;
+  /**长度 */
+  len?: number;
+  /**精度 */
+  pcs?: number;
 };

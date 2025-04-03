@@ -137,7 +137,7 @@ const ImportEntityEditTable: ForwardRefExoticComponent<
       idAttribute: nanoid(),
       attributeName: '',
       displayName: '',
-      idAttributeType: '',
+      idAttributeType: undefined,
       fgPrimaryKey: false,
     };
     const newAttrs = [...attrs, newAttr];

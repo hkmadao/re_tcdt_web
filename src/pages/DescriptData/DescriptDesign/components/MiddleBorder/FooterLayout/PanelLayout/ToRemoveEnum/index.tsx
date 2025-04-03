@@ -2,32 +2,31 @@ import { Button, Input, InputRef, Popover, Table, TableColumnType } from 'antd';
 import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './index.less';
 import {
-  TEntity,
-  TAttribute,
+  TEnum,
+  TEnumAttribute,
 } from '@/pages/DescriptData/DescriptDesign/models';
 import {
-  selectSysDataTypes,
   actions,
   fetchEntityAttributes,
 } from '@/pages/DescriptData/DescriptDesign/store';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
   useIdCollection,
   useLoadStatus,
-  useHasDeleteFlagEntities,
   useModuleUi,
   useCollection,
+  useHasDeleteFlagEnums,
 } from '@/pages/DescriptData/DescriptDesign/hooks';
 import { DOStatus } from '@/models';
 
-const ToRemoveEntity: FC = () => {
+const ToRemoveEnum: FC = () => {
   const dispatch = useDispatch();
   const moduleUi = useModuleUi();
-  const [entityTableKeys, setEntityTableRowKeys] = useState<React.Key[]>([]);
+  const [enumTableKeys, setEnumTableRowKeys] = useState<React.Key[]>([]);
   const [attrEditableKeys, setAttrEditableRowKeys] = useState<React.Key[]>([]);
-  const [attrs, setAttrs] = useState<TAttribute[]>([]);
+  const [attrs, setAttrs] = useState<TEnumAttribute[]>([]);
   const { typeColumns, attrColumns } = useColumns();
-  const hasDeleteFlagEntities = useHasDeleteFlagEntities();
+  const hasDeleteFlagEnums = useHasDeleteFlagEnums();
   const loadStatus = useLoadStatus();
   const idCollection = useIdCollection();
   const collection = useCollection();
@@ -36,19 +35,18 @@ const ToRemoveEntity: FC = () => {
   const [searchValue, setSearchValue] = useState<string>();
 
   useEffect(() => {
-    setEntityTableRowKeys([]);
+    setEnumTableRowKeys([]);
     setAttrEditableRowKeys([]);
     setAttrs([]);
     setSearchValue(undefined);
   }, [idCollection]);
 
   const filterEntities = useMemo(() => {
-    const filterEntities = hasDeleteFlagEntities.filter((entity) => {
+    const filterEntities = hasDeleteFlagEnums.filter((entity) => {
       if (!searchValue) {
         return true;
       }
       if (
-        entity.tableName?.includes(searchValue) ||
         entity.className?.includes(searchValue) ||
         entity.displayName?.includes(searchValue)
       ) {
@@ -57,44 +55,44 @@ const ToRemoveEntity: FC = () => {
       return false;
     });
     return filterEntities;
-  }, [hasDeleteFlagEntities]);
+  }, [hasDeleteFlagEnums]);
 
   const handleChange = (e: any) => {
     const searchValue = e.currentTarget.value;
     setSearchValue(searchValue);
-    setEntityTableRowKeys([]);
+    setEnumTableRowKeys([]);
   };
 
   useEffect(() => {
     setAttrEditableRowKeys([]);
-  }, [entityTableKeys]);
+  }, [enumTableKeys]);
 
   useEffect(() => {
     const childAttrs =
-      filterEntities.find((m) => entityTableKeys.includes(m.idEntity))
+      filterEntities.find((m) => enumTableKeys.includes(m.idEnum))
         ?.attributes ?? [];
     setAttrs(childAttrs.filter((attr) => attr.action === DOStatus.DELETED));
-  }, [entityTableKeys, attrEditableKeys, loadStatus, collection]);
+  }, [enumTableKeys, attrEditableKeys, loadStatus, collection]);
 
   /**恢复删除实体 */
   const handleEntityRestore = () => {
-    const reStoreEntity = filterEntities.find((entity) =>
-      entityTableKeys.includes(entity.idEntity!),
+    const reStoreEnum = filterEntities.find((entity) =>
+      enumTableKeys.includes(entity.idEnum!),
     );
-    if (reStoreEntity) {
-      dispatch(actions.recoverEntity(reStoreEntity));
+    if (reStoreEnum) {
+      dispatch(actions.recoverEnum(reStoreEnum));
     }
-    setEntityTableRowKeys([]);
+    setEnumTableRowKeys([]);
     setSearchValue(undefined);
   };
 
   /**行操作 */
-  const handleRow = (record: TEntity) => {
+  const handleRow = (record: TEnum) => {
     return {
       onClick: async (_event: any) => {
-        setEntityTableRowKeys([record.idEntity!]);
+        setEnumTableRowKeys([record.idEnum!]);
         if (record && (!record.attributes || record.attributes.length === 0)) {
-          dispatch(fetchEntityAttributes([record.idEntity!]));
+          dispatch(fetchEntityAttributes([record.idEnum!]));
         }
       }, // 点击行
       onDoubleClick: (_event: any) => {},
@@ -106,30 +104,30 @@ const ToRemoveEntity: FC = () => {
 
   const handleAttrRestore = () => {
     const updateAttributes = attrs.filter((attr) =>
-      attrEditableKeys.includes(attr.idAttribute!),
+      attrEditableKeys.includes(attr.idEnumAttribute!),
     );
 
     if (updateAttributes) {
       const notExistsAttr = attrs.length === updateAttributes.length;
-      dispatch(actions.recoverAttributes(updateAttributes));
+      dispatch(actions.recoverEnumAttributes(updateAttributes));
       if (notExistsAttr) {
-        setEntityTableRowKeys([]);
+        setEnumTableRowKeys([]);
       }
       setAttrEditableRowKeys([]);
     }
   };
 
   /**行操作 */
-  const handleAttrRow = (record: TAttribute) => {
+  const handleAttrRow = (record: TEnumAttribute) => {
     return {
       onClick: async (_event: any) => {
-        if (attrEditableKeys.includes(record.idAttribute!)) {
+        if (attrEditableKeys.includes(record.idEnumAttribute!)) {
           setAttrEditableRowKeys(
-            attrEditableKeys.filter((id) => id !== record.idAttribute),
+            attrEditableKeys.filter((id) => id !== record.idEnumAttribute),
           );
           return;
         }
-        setAttrEditableRowKeys([...attrEditableKeys, record.idAttribute!]);
+        setAttrEditableRowKeys([...attrEditableKeys, record.idEnumAttribute!]);
       }, // 点击行
       onDoubleClick: (_event: any) => {},
       onContextMenu: (_event: any) => {},
@@ -166,7 +164,7 @@ const ToRemoveEntity: FC = () => {
                   fontSize: '18px',
                 }}
               >
-                {hasDeleteFlagEntities?.length ?? 0}
+                {hasDeleteFlagEnums?.length ?? 0}
               </span>
               条目，
             </span>
@@ -192,9 +190,9 @@ const ToRemoveEntity: FC = () => {
               onChange={handleChange}
             />
           </div>
-          <Table<TEntity>
+          <Table<TEnum>
             className={styles['my-ant-pro-table']}
-            rowKey={'idEntity'}
+            rowKey={'idEnum'}
             bordered={true}
             size={'small'}
             scroll={{ y: (moduleUi.bHeight as number) - 160 }}
@@ -203,9 +201,9 @@ const ToRemoveEntity: FC = () => {
             onRow={handleRow}
             rowSelection={{
               type: 'radio',
-              selectedRowKeys: entityTableKeys,
+              selectedRowKeys: enumTableKeys,
               onChange(selectedRowKeys, selectedRows, info) {
-                setEntityTableRowKeys(selectedRowKeys);
+                setEnumTableRowKeys(selectedRowKeys);
               },
             }}
             pagination={false}
@@ -222,9 +220,9 @@ const ToRemoveEntity: FC = () => {
               恢复
             </Button>
           </div>
-          <Table<TAttribute>
+          <Table<TEnumAttribute>
             className={styles['my-ant-pro-table']}
-            rowKey={'idAttribute'}
+            rowKey={'idEnumAttribute'}
             bordered={true}
             size={'small'}
             scroll={{ y: (moduleUi.bHeight as number) - 160 }}
@@ -246,14 +244,10 @@ const ToRemoveEntity: FC = () => {
   );
 };
 
-export default ToRemoveEntity;
+export default ToRemoveEnum;
 
 const useColumns = () => {
-  const dispatch = useDispatch();
-  const sysDataTypes = useSelector(selectSysDataTypes);
-  const hasDeleteFlagEntities = useHasDeleteFlagEntities();
-
-  const typeColumns: TableColumnType<TEntity>[] = [
+  const typeColumns: TableColumnType<TEnum>[] = [
     {
       title: '序号',
       dataIndex: 'sn',
@@ -263,7 +257,7 @@ const useColumns = () => {
       },
     },
     {
-      dataIndex: 'idEntity',
+      dataIndex: 'idEnum',
       title: 'ID',
       render: (value: any) => {
         const content = value ? value : '--';
@@ -283,27 +277,6 @@ const useColumns = () => {
               >
                 {content}
               </span>
-            </Popover>
-          </div>
-        );
-      },
-    },
-    {
-      title: '表名',
-      dataIndex: 'tableName',
-      render: (value: any) => {
-        const content = value ? value : '--';
-        return (
-          <div
-            style={{
-              overflow: 'hidden',
-              maxWidth: '150px',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            <Popover content={content} trigger="hover">
-              {content}
             </Popover>
           </div>
         );
@@ -331,7 +304,7 @@ const useColumns = () => {
       },
     },
     {
-      title: '类注释名',
+      title: '显示名称',
       dataIndex: 'displayName',
       render: (value: any) => {
         const content = value ? value : '--';
@@ -353,7 +326,7 @@ const useColumns = () => {
     },
   ];
 
-  const attrColumns: TableColumnType<TAttribute>[] = [
+  const attrColumns: TableColumnType<TEnumAttribute>[] = [
     {
       title: '序号',
       dataIndex: 'sn',
@@ -363,23 +336,8 @@ const useColumns = () => {
       },
     },
     {
-      title: 'P',
-      dataIndex: 'fgPrimaryKey',
-      width: '50px',
-      render: (text, record) => {
-        const findAttr = hasDeleteFlagEntities
-          .find((entity) => entity.idEntity === record?.idEntity)
-          ?.attributes?.find(
-            (attr) =>
-              attr.action === DOStatus.DELETED &&
-              attr.idAttribute === record?.idAttribute,
-          );
-        return findAttr?.fgPrimaryKey ? '是' : '否';
-      },
-    },
-    {
-      title: '字段名',
-      dataIndex: 'columnName',
+      title: '编号',
+      dataIndex: 'code',
       render: (value: any) => {
         const content = value ? value : '--';
         return (
@@ -399,28 +357,7 @@ const useColumns = () => {
       },
     },
     {
-      title: '属性名',
-      dataIndex: 'attributeName',
-      render: (value: any) => {
-        const content = value ? value : '--';
-        return (
-          <div
-            style={{
-              overflow: 'hidden',
-              maxWidth: '150px',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            <Popover content={content} trigger="hover">
-              {content}
-            </Popover>
-          </div>
-        );
-      },
-    },
-    {
-      title: '属性显示名称名',
+      title: '显示名称',
       dataIndex: 'displayName',
       render: (value: any) => {
         const content = value ? value : '--';
@@ -438,16 +375,6 @@ const useColumns = () => {
             </Popover>
           </div>
         );
-      },
-    },
-    {
-      title: '数据类型',
-      dataIndex: 'idAttributeType',
-      render: (_dom, record) => {
-        const attributeType = sysDataTypes.find((dataType) => {
-          return record.idAttributeType === dataType.idDataType;
-        });
-        return <>{attributeType?.displayName}</>;
       },
     },
   ];
