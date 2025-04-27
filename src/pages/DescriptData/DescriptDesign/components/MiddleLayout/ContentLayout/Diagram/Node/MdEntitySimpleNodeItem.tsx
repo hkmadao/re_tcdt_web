@@ -106,8 +106,8 @@ const MdEntitySimpleNodeItem: FC<TMdEntityItemProps> = (
     );
     const entityUI: TNodeUi = {
       ...nodeUi,
-      width,
-      height,
+      width: Math.floor(width),
+      height: Math.floor(height),
     };
     dispatch(actions.updateNodeUi(entityUI));
   };

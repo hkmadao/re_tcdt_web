@@ -1,12 +1,9 @@
 import { FC, useRef } from 'react';
 import { useState } from 'react';
-import { Button, Collapse, Input, Modal, Tooltip } from 'antd';
+import { Button, Collapse, Input, Modal, Select, Tooltip } from 'antd';
 import { BlockOutlined } from '@ant-design/icons';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  actions,
-  selectEntityCollection,
-} from '@/pages/DescriptData/DescriptDesign/store';
+import { useDispatch } from 'react-redux';
+import { actions } from '@/pages/DescriptData/DescriptDesign/store';
 import type {
   TAttribute,
   TEntity,
@@ -33,6 +30,15 @@ const FromCreateSql: FC = () => {
   const importEntitiesEditTableRef = useRef<{ getEntities: () => TEntity[] }>(
     null,
   );
+  const [dbType, setDbType] = useState<string>('mysql');
+
+  const handleDbTypeChange = (value: string) => {
+    if (value !== 'mysql') {
+      message.warn('暂时只支持Mysq建表语句解析');
+      return;
+    }
+    setDbType(value);
+  };
 
   const handleOpenModal = () => {
     setEntities([]);
@@ -225,7 +231,18 @@ const FromCreateSql: FC = () => {
                   gap: '10px',
                 }}
               >
-                <div>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <Select
+                    size={'small'}
+                    value={dbType}
+                    style={{ minWidth: '150px' }}
+                    onChange={handleDbTypeChange}
+                  >
+                    <Select.Option value="mysql">Mysql</Select.Option>
+                    <Select.Option value="oracle">Oracle</Select.Option>
+                    <Select.Option value="postgres">Postgres</Select.Option>
+                    <Select.Option value="sqlserver">SqlServer</Select.Option>
+                  </Select>
                   <Button size={'small'} type={'primary'} onClick={handleParse}>
                     解析
                   </Button>

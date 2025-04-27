@@ -14,7 +14,7 @@ import { TComponentEntityAssociate } from '@/pages/ComponentData/ComponentDesign
 import { DOStatus } from '@/models/enums';
 
 const EnityAssociate: FC = () => {
-  const CEntities = useSelector(selectNotDeleteCompEntitys);
+  const componentEntities = useSelector(selectNotDeleteCompEntitys);
   const outEntities = useSelector(selectOutEntities);
   const moduleUi = useSelector(selectModuleUi);
   const entityAssociates = useSelector(selectNotDeleteEntityAssos);
@@ -28,16 +28,7 @@ const EnityAssociate: FC = () => {
       dataIndex: 'upEntityId',
       title: '上级实体',
       render: (value, record) => {
-        let parentComponentEntity = CEntities?.find(
-          (entity) =>
-            entity?.ddEntity?.idEntity === record.entityAssociate?.idUp,
-        );
-        let parentEntity = parentComponentEntity?.ddEntity;
-        if (!parentEntity) {
-          parentEntity = outEntities?.find(
-            (entity) => entity.idEntity === value,
-          );
-        }
+        const parentEntity = record.entityAssociate?.upEntity;
         return <>{parentEntity?.displayName}</>;
       },
     },
@@ -45,25 +36,16 @@ const EnityAssociate: FC = () => {
       dataIndex: 'downEntityId',
       title: '下级实体',
       render: (value, record) => {
-        const childComponentEntity = CEntities?.find(
-          (entity) => entity.idEntity === record.entityAssociate?.idDown,
-        );
-        let childEntity = childComponentEntity?.ddEntity;
-        return <>{childEntity?.displayName}</>;
+        const downEntity = record.entityAssociate?.downEntity;
+        return <>{downEntity?.displayName}</>;
       },
     },
     {
       dataIndex: 'fkColumnName',
       title: '外键',
       render: (value, record) => {
-        const fkAttribute = CEntities?.find(
-          (entity) => entity.idEntity === record?.entityAssociate?.idDown,
-        )?.ddEntity?.attributes?.find(
-          (attribute) =>
-            attribute.action !== DOStatus.DELETED &&
-            attribute.idAttribute === record?.entityAssociate?.fkColumnName,
-        );
-        return <>{fkAttribute?.note}</>;
+        const entityAssociate = record.entityAssociate;
+        return <>{entityAssociate?.fkColumnName}</>;
       },
     },
   ];

@@ -78,6 +78,7 @@ export type TAudit = {
   updator?: string;
   updateTime?: string;
   action?: DOStatus;
+  mvcc?: number;
 };
 
 /**

@@ -5,13 +5,16 @@ import { EnumNodeUi } from '../conf';
 import { TEntity, TModuleStore, TNodeUi } from '../models';
 
 /**添加实体 */
-export const addEntity: CaseReducer<TModuleStore, PayloadAction<any>> = (
-  state,
-  action,
-) => {
-  const idEntity = nanoid();
+export const addEntity: CaseReducer<
+  TModuleStore,
+  PayloadAction<TEntity & { alreadyExistsId?: boolean }>
+> = (state, action) => {
+  const entityParam = action.payload;
+  const idEntity = entityParam.alreadyExistsId
+    ? entityParam.idEntity
+    : nanoid();
   state.entityCollection?.entities?.push({
-    ...action.payload,
+    ...entityParam,
     idEntity,
     action: DOStatus.NEW,
   });

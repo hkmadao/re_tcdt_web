@@ -35,6 +35,28 @@ export const fetchEntityCollection = createAsyncThunk(
   },
 );
 
+export const fetchFullCollection = createAsyncThunk(
+  `/fetchFullCollection`,
+  async (
+    params: {
+      id?: string;
+    },
+    thunkAPI,
+  ) => {
+    const state: TModuleStore = (thunkAPI.getState() as any)[moduleName];
+    const { id } = params;
+    const collection: TEntityCollection = await DescriptDataAPI.getFullColl({
+      id: id!,
+    });
+    return {
+      fgCurrent: false,
+      idElement: undefined,
+      concreteType: EnumConcreteDiagramType.PANEL,
+      collection,
+    };
+  },
+);
+
 export const saveEntityCollection = createAsyncThunk(
   `/save`,
   async (params: TEntityCollection, { dispatch }) => {

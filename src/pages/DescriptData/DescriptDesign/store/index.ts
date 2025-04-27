@@ -20,7 +20,11 @@ import {
   fetchEntityAttributes,
   fetchOutEntityAttribute,
 } from './fetch-entity-attribute';
-import { fetchEntityCollection, saveEntityCollection } from './async-thunk';
+import {
+  fetchEntityCollection,
+  fetchFullCollection,
+  saveEntityCollection,
+} from './async-thunk';
 
 export * from './async-thunk';
 export * from './selects';
@@ -168,6 +172,54 @@ export const designSlice = createSlice({
         state.status = 'failed';
       })
       .addCase(fetchEntityCollection.fulfilled, (state, action) => {
+        const { fgCurrent, idElement, concreteType, collection } =
+          action.payload;
+        if (fgCurrent) {
+          state.status = 'succeeded';
+          state.moduleUi.goToId = idElement;
+          state.moduleUi.zoomLevel = 100;
+          if (concreteType) {
+            state.currentSelect = {
+              concreteType: concreteType,
+              idElement: idElement,
+            };
+            state.selectNodes = [
+              {
+                concreteType: concreteType,
+                idElement: idElement,
+              },
+            ];
+          }
+          return;
+        }
+        if (!collection) {
+          return;
+        }
+        resetState(state);
+        state.entityCollection = fillEntityCollection(collection);
+        state.status = 'succeeded';
+        state.moduleUi.goToId = idElement;
+        state.moduleUi.zoomLevel = 100;
+        if (concreteType) {
+          state.currentSelect = {
+            concreteType: concreteType,
+            idElement: idElement,
+          };
+          state.selectNodes = [
+            {
+              concreteType: concreteType,
+              idElement: idElement,
+            },
+          ];
+        }
+      })
+      .addCase(fetchFullCollection.pending, (state, action) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchFullCollection.rejected, (state, action) => {
+        state.status = 'failed';
+      })
+      .addCase(fetchFullCollection.fulfilled, (state, action) => {
         const { fgCurrent, idElement, concreteType, collection } =
           action.payload;
         if (fgCurrent) {

@@ -119,8 +119,8 @@ const MdEnumSimpleNodeItem: FC<TMdEnumItemProps> = (
     );
     const entityUI: TNodeUi = {
       ...nodeUi,
-      width,
-      height,
+      width: Math.floor(width),
+      height: Math.floor(height),
     };
     dispatch(actions.updateNodeUi(entityUI));
   };
