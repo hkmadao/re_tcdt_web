@@ -46,7 +46,7 @@ export const addTableBillFormTab: CaseReducer<
   PayloadAction<{ name: EPartName; billFormTab: TTableBillFormTab }>
 > = (state, action) => {
   const { name, billFormTab } = action.payload;
-  const existBillformTab = state?.data.configList![action.payload.name]?.find(
+  const existBillformTab = state.data.configList![action.payload.name]?.find(
     (billFormTabFind) => billFormTabFind.tabCode === billFormTab.tabCode,
   );
   if (existBillformTab) {
@@ -58,8 +58,8 @@ export const addTableBillFormTab: CaseReducer<
     billFormFields: [],
     idBillFormTab: nanoid(),
   };
-  state?.data.configList![name]?.push(newBillformTab);
-  state?.data.configList![name]?.forEach(
+  state.data.configList![name]?.push(newBillformTab);
+  state.data.configList![name]?.forEach(
     (billFormTab, index) => (billFormTab.tabIndex = index),
   );
   state.current = undefined;
@@ -71,7 +71,7 @@ export const updateTableBillFormTab: CaseReducer<
   PayloadAction<{ name: EPartName; dto: TTableBillFormTab }>
 > = (state, action) => {
   const { name, dto } = action.payload;
-  const existBillformTab = state?.data.configList![action.payload.name]?.find(
+  const existBillformTab = state.data.configList![action.payload.name]?.find(
     (billFormTabFind) =>
       billFormTabFind.tabCode === dto.tabCode &&
       billFormTabFind.idBillFormTab !== dto.idBillFormTab,
@@ -80,12 +80,21 @@ export const updateTableBillFormTab: CaseReducer<
     message.error('编号已存在！');
     return;
   }
-  state!.data.configList![name] = state?.data.configList![name]?.map((bt) => {
+  const newTabs = state.data.configList![name]?.map((bt) => {
     if (bt.idBillFormTab === dto.idBillFormTab) {
       bt = { ...bt, ...dto };
     }
     return bt;
   });
+
+  state.data.configList![name] = newTabs;
+
+  const newTab = newTabs?.find(
+    (item) => item.idBillFormTab === dto.idBillFormTab,
+  );
+  if (state.current && newTab) {
+    state.current.data = newTab;
+  }
 };
 
 /**列表删除Tab信息 */
@@ -188,6 +197,14 @@ export const updateTableBillFormField: CaseReducer<
   state.data.configList![name]!.find(
     (billFormTab) => billFormTab.tabCode === tabCode,
   )!.billFormFields = newBillformFields;
+
+  const newFiled = newBillformFields?.find(
+    (item) => item.idBillFormField === dto.idBillFormField,
+  );
+
+  if (state.current && newFiled) {
+    state.current.data = newFiled;
+  }
 };
 
 /**列表删除控件信息 */

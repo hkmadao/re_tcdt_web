@@ -1,19 +1,27 @@
 import React, { FC, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Select } from 'antd';
-import { actions, selectCurrentSearchRef } from '../../../store';
+import { actions } from '../../../../../store';
 import { EValueType } from '@/pages/Factory/Units/common/model';
+import { useCurrentData, useBillFormField } from '../../../../../hooks';
 
 const ValueType: FC = () => {
   const { Option } = Select;
-  const searchRef = useSelector(selectCurrentSearchRef);
+  const currentData = useCurrentData();
+  const billFormField = useBillFormField();
   const dispatch = useDispatch();
 
   useEffect(() => {}, []);
 
   const handleChange = (value: EValueType) => {
-    if (searchRef) {
-      dispatch(actions.updateCondition({ ...searchRef, valueType: value }));
+    if (currentData) {
+      dispatch(
+        actions.updateBillFormField({
+          name: currentData.name,
+          tabCode: currentData.tabCode!,
+          dto: { ...billFormField, valueType: value },
+        }),
+      );
     }
   };
 
@@ -21,7 +29,7 @@ const ValueType: FC = () => {
     <>
       <Select
         size={'small'}
-        value={searchRef?.valueType}
+        value={billFormField?.valueType}
         onChange={handleChange}
         placeholder={'请选择'}
         style={{ minWidth: '100px' }}

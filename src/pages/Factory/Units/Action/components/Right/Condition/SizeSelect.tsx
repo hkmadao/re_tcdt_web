@@ -11,7 +11,7 @@ const SizeSelect: FC = () => {
 
   useEffect(() => {}, []);
 
-  const hanleleChange = (value: 'small' | 'middle' | 'large' | undefined) => {
+  const handleChange = (value: 'small' | 'middle' | 'large' | undefined) => {
     if (searchRef) {
       dispatch(actions.updateCondition({ ...searchRef, buttonSize: value }));
     }
@@ -22,7 +22,7 @@ const SizeSelect: FC = () => {
       <Select
         size={'small'}
         value={searchRef?.buttonSize}
-        onChange={hanleleChange}
+        onChange={handleChange}
         placeholder={'请选择'}
         style={{ minWidth: '100px' }}
       >

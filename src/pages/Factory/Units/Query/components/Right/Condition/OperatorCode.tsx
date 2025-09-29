@@ -11,7 +11,7 @@ const OperatorCode: FC = () => {
 
   useEffect(() => {}, []);
 
-  const hanleleChange = (value: EOperatorCode) => {
+  const handleChange = (value: EOperatorCode) => {
     if (searchRef) {
       dispatch(actions.updateCondition({ ...searchRef, operatorCode: value }));
     }
@@ -22,7 +22,7 @@ const OperatorCode: FC = () => {
       <Select
         size={'small'}
         value={searchRef?.operatorCode}
-        onChange={hanleleChange}
+        onChange={handleChange}
         placeholder={'请选择'}
         style={{ minWidth: '100px' }}
       >

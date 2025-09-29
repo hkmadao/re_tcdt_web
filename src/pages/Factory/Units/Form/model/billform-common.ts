@@ -1,5 +1,10 @@
 import { EAttrTypes, EPartName } from '.';
-import { TBillRef, TEnumRef } from '@/pages/Factory/Units/common/model';
+import {
+  EInputType,
+  EValueType,
+  TBillRef,
+  TEnumRef,
+} from '@/pages/Factory/Units/common/model';
 
 /**控件信息 */
 export type TCommonField = {
@@ -16,7 +21,8 @@ export type TCommonField = {
   /**是否主键 */
   fgMainProperty?: boolean;
   /**输入框类型，用来给前端区分 */
-  inputType?: string;
+  inputType?: EInputType;
+  valueType?: EValueType;
   /**引用配置 */
   refConfig?: TBillRef;
   /**枚举配置 */
@@ -63,7 +69,7 @@ export type TCommonTab = {
   mainProperty?: string;
   /**引用类型：Ref：多对1引用，SingleRef：1对1引用，Array：1对多引用，Single：1对1引用 */
   refType?: 'Ref' | 'SingleRef' | 'Single' | 'Array';
-  orderInfoList: TOrderInfo[];
+  orderInfoList?: TOrderInfo[];
   /**标签类名，使用typescript时需要用的类名称 */
   tabClassName?: string;
   /**元数据属性名，用做回显，和实际使用无关 */

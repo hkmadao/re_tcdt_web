@@ -19,7 +19,7 @@ const NormalInput: FC<{
     setInputValue(undefined);
   }, [searchRef]);
 
-  const hanleleChange = (e: any) => {
+  const handleChange = (e: any) => {
     setInputValue(inputRef.current?.input?.value);
   };
 
@@ -35,7 +35,7 @@ const NormalInput: FC<{
         size={'small'}
         ref={inputRef}
         value={inputValue}
-        onChange={hanleleChange}
+        onChange={handleChange}
         onBlur={handleBlur}
       />
     </>

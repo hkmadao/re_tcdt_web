@@ -11,7 +11,7 @@ const Method: FC = () => {
 
   useEffect(() => {}, []);
 
-  const hanleleChange = (value: 'POST' | 'GET') => {
+  const handleChange = (value: 'POST' | 'GET') => {
     if (treeRef) {
       dispatch(actions.updateNodeTreeRef({ ...treeRef, method: value }));
     }
@@ -22,7 +22,7 @@ const Method: FC = () => {
       <Select
         size={'small'}
         value={treeRef?.method || 'POST'}
-        onChange={hanleleChange}
+        onChange={handleChange}
       >
         <Option value={'POST'}>POST</Option>
         <Option value={'GET'}>GET</Option>

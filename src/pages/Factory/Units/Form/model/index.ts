@@ -5,7 +5,10 @@ import {
   TDescriptionInfo,
 } from '@/pages/Factory/Units/common/model';
 import { TBillFormConfigForm, TBillFormSelectData } from './billform';
-import { TTableBillFormConfigList } from './billTable';
+import {
+  TTableBillFormConfigList,
+  TTableBillFormSelectData,
+} from './billTable';
 
 export * from './billform';
 export * from './billTable';
@@ -66,5 +69,5 @@ export type TModuleStore = {
   fgForm: boolean;
   tip?: TTip;
   data: TBillFormContent;
-  current?: TBillFormSelectData;
+  current?: TBillFormSelectData | TTableBillFormSelectData;
 };

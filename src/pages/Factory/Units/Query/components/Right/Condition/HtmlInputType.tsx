@@ -11,7 +11,7 @@ const HtmlInputType: FC = () => {
 
   useEffect(() => {}, []);
 
-  const hanleleChange = (value: EInputType) => {
+  const handleChange = (value: EInputType) => {
     if (searchRef) {
       dispatch(actions.updateCondition({ ...searchRef, htmlInputType: value }));
     }
@@ -22,7 +22,7 @@ const HtmlInputType: FC = () => {
       <Select
         size={'small'}
         value={searchRef?.htmlInputType}
-        onChange={hanleleChange}
+        onChange={handleChange}
         placeholder={'请选择'}
         style={{ minWidth: '100px' }}
       >

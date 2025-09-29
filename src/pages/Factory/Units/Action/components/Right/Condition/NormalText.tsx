@@ -19,7 +19,7 @@ const NormalText: FC<{
     setInputValue(undefined);
   }, [searchRef]);
 
-  const hanleleChange = (event: any) => {
+  const handleChange = (event: any) => {
     setInputValue(event.target.value);
   };
 
@@ -36,7 +36,7 @@ const NormalText: FC<{
       <Input.TextArea
         autoSize={{ minRows: 3, maxRows: 5 }}
         value={inputValue}
-        onChange={hanleleChange}
+        onChange={handleChange}
         onBlur={handleBlur}
       />
     </>

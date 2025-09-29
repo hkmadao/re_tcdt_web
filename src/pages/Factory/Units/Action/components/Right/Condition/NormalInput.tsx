@@ -17,7 +17,7 @@ const NormalInput: FC<{ attr: 'label' | 'clickEventName' }> = ({ attr }) => {
     setInputValue(undefined);
   }, [searchRef]);
 
-  const hanleleChange = (event: any) => {
+  const handleChange = (event: any) => {
     setInputValue(event.target.value);
   };
 
@@ -32,7 +32,7 @@ const NormalInput: FC<{ attr: 'label' | 'clickEventName' }> = ({ attr }) => {
       <Input
         size={'small'}
         value={inputValue}
-        onChange={hanleleChange}
+        onChange={handleChange}
         onBlur={handleBlur}
       />
     </>

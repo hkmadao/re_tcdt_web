@@ -46,7 +46,7 @@ export const addBillFormTab: CaseReducer<
   PayloadAction<{ name: EPartName; billFormTab: TBillFormTab }>
 > = (state, action) => {
   const { name, billFormTab } = action.payload;
-  const existBillFormTab = state?.data.configForm![action.payload.name]?.find(
+  const existBillFormTab = state.data.configForm![action.payload.name]?.find(
     (billFormTabFind) => billFormTabFind.tabCode === billFormTab.tabCode,
   );
   if (existBillFormTab) {
@@ -58,8 +58,8 @@ export const addBillFormTab: CaseReducer<
     billFormFields: [],
     idBillFormTab: nanoid(),
   };
-  state?.data.configForm![name]?.push(newBillFormTab);
-  state?.data.configForm![name]?.forEach(
+  state.data.configForm![name]?.push(newBillFormTab);
+  state.data.configForm![name]?.forEach(
     (billFormTab, index) => (billFormTab.tabIndex = index),
   );
   state.current = undefined;
@@ -71,7 +71,7 @@ export const updateBillFormTab: CaseReducer<
   PayloadAction<{ name: EPartName; dto: TBillFormTab }>
 > = (state, action) => {
   const { name, dto } = action.payload;
-  const existBillFormTab = state?.data.configForm![action.payload.name]?.find(
+  const existBillFormTab = state.data.configForm![action.payload.name]?.find(
     (billFormTabFind) =>
       billFormTabFind.tabCode === dto.tabCode &&
       billFormTabFind.idBillFormTab !== dto.idBillFormTab,
@@ -80,12 +80,21 @@ export const updateBillFormTab: CaseReducer<
     message.error('编号已存在！');
     return;
   }
-  state!.data.configForm![name] = state?.data.configForm![name]?.map((bt) => {
+  const newTabs = state.data.configForm![name]?.map((bt) => {
     if (bt.idBillFormTab === dto.idBillFormTab) {
       bt = { ...bt, ...dto };
     }
     return bt;
   });
+
+  state.data.configForm![name] = newTabs;
+
+  const newTab = newTabs?.find(
+    (item) => item.idBillFormTab === dto.idBillFormTab,
+  );
+  if (state.current && newTab) {
+    state.current.data = newTab;
+  }
 };
 
 /**删除Tab信息 */
@@ -184,6 +193,13 @@ export const updateBillFormField: CaseReducer<
   state.data.configForm![name]!.find(
     (billFormTab) => billFormTab.tabCode === tabCode,
   )!.billFormFields = newBillformFields;
+  const newFiled = newBillformFields?.find(
+    (item) => item.idBillFormField === dto.idBillFormField,
+  );
+
+  if (state.current && newFiled) {
+    state.current.data = newFiled;
+  }
 };
 
 /**删除控件信息 */

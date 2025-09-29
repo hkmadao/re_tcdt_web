@@ -10,7 +10,7 @@ const SearchAttributes: FC = () => {
 
   useEffect(() => {}, []);
 
-  const hanleleChange = (value: string[]) => {
+  const handleChange = (value: string[]) => {
     if (searchRef) {
       dispatch(
         actions.updateCondition({ ...searchRef, searchAttributes: value }),
@@ -24,7 +24,7 @@ const SearchAttributes: FC = () => {
         size={'small'}
         mode="tags"
         value={searchRef?.searchAttributes}
-        onChange={hanleleChange}
+        onChange={handleChange}
         style={{ minWidth: '100px' }}
       >
         <Option value={searchRef?.attributeName}>
