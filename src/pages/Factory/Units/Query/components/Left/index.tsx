@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import Metadata from '../../../common/metadata';
-import { useSelector, useDispatch } from 'react-redux';
-import { selectMetaData, selectModuleData } from '../../store';
+import { useDispatch } from 'react-redux';
 import Action from './Action';
-import { getComponentAttributeTreeById } from '@/pages/Factory/Units/Query/store/async-thunk';
+import { useMetaData, useModuleData } from '../../hooks';
+import { getComponentAttributeTreeById } from '../../store/async-thunk';
 const index = () => {
   const dispatch = useDispatch();
-  const metaData = useSelector(selectMetaData);
-  const moduleData = useSelector(selectModuleData);
+  const metaData = useMetaData();
+  const moduleData = useModuleData();
 
   useEffect(() => {}, []);
 

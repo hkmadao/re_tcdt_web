@@ -21,3 +21,25 @@ export const useModuleData = () => {
     return state[moduleReducerName].data;
   });
 };
+
+export const useCurrentSearchRef = () => {
+  return useSelector((state: { [x: string]: TModuleStore }) => {
+    if (state[moduleReducerName].current?.type === 'field') {
+      return state[moduleReducerName].data.searchRefs?.find(
+        (s) => s.idBillSearchRef === state[moduleReducerName].current?.id,
+      );
+    }
+  });
+};
+
+export const useSearchRefs = () => {
+  return useSelector((state: { [x: string]: TModuleStore }) => {
+    return state[moduleReducerName].data.searchRefs;
+  });
+};
+
+export const useMetaData = () => {
+  return useSelector((state: { [x: string]: TModuleStore }) => {
+    return state[moduleReducerName].data.metaData;
+  });
+};

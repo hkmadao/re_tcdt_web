@@ -1,7 +1,6 @@
 import { EAttrTypes, EPartName } from '.';
 import {
   EInputType,
-  EValueType,
   TBillRef,
   TEnumRef,
 } from '@/pages/Factory/Units/common/model';
@@ -22,7 +21,6 @@ export type TCommonField = {
   fgMainProperty?: boolean;
   /**输入框类型，用来给前端区分 */
   inputType?: EInputType;
-  valueType?: EValueType;
   /**引用配置 */
   refConfig?: TBillRef;
   /**枚举配置 */

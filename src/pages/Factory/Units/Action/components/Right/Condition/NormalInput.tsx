@@ -5,25 +5,27 @@ import { actions } from '../../../store';
 import { useCurrentButton } from '../../../hooks';
 
 const NormalInput: FC<{ attr: 'label' | 'clickEventName' }> = ({ attr }) => {
-  const searchRef = useCurrentButton();
+  const currentButton = useCurrentButton();
   const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState<string>();
 
   useEffect(() => {
-    if (searchRef) {
-      setInputValue(searchRef[attr]);
+    if (currentButton) {
+      setInputValue(currentButton[attr]);
       return;
     }
     setInputValue(undefined);
-  }, [searchRef]);
+  }, [currentButton]);
 
   const handleChange = (event: any) => {
     setInputValue(event.target.value);
   };
 
   const handleBlur = () => {
-    if (searchRef) {
-      dispatch(actions.updateCondition({ ...searchRef, [attr]: inputValue }));
+    if (currentButton) {
+      dispatch(
+        actions.updateCondition({ ...currentButton, [attr]: inputValue }),
+      );
     }
   };
 

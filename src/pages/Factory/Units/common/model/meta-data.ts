@@ -1,10 +1,12 @@
+import { ReactNode } from 'react';
 import { EInputType } from '.';
+import { DataNode } from 'antd/lib/tree';
 
 /**表描述信息 */
 export type TDescriptionInfo = {
-  key: string;
+  key: string | number;
   parentKey?: string;
-  title?: string;
+  title?: ReactNode | ((data: DataNode) => ReactNode);
   children?: TDescriptionInfo[];
   /**属性id */
   id?: string;

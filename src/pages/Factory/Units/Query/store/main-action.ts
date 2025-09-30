@@ -15,13 +15,6 @@ export const setCurrent: CaseReducer<
   state.current = action.payload;
 };
 
-export const setMetaData: CaseReducer<
-  TModuleStore,
-  PayloadAction<{ metaData: TDescriptionInfo[] }>
-> = (state, action) => {
-  state.data.metaData = action.payload.metaData;
-};
-
 /**修改查询模板基础数据 */
 export const updateBaseQueryTemplate: CaseReducer<
   TModuleStore,
@@ -96,15 +89,21 @@ export const switchConditionOrder: CaseReducer<
 > = (state, action) => {
   const { drag, hover } = action.payload;
   state.data.searchRefs = state.data.searchRefs
-    .map((s) => {
-      let newS = { ...s };
-      if (s.idBillSearchRef === drag.idBillSearchRef) {
-        newS.showOrder = hover.showOrder;
+    ?.map((item) => {
+      let newS = { ...item };
+      if (item.idBillSearchRef === drag.idBillSearchRef) {
+        newS.showOrder = hover.showOrder! + 1;
+        return newS;
       }
-      if (s.idBillSearchRef === hover.idBillSearchRef) {
-        newS.showOrder = drag.showOrder;
+      if (item.showOrder! > hover.showOrder!) {
+        newS.showOrder = newS.showOrder! + 1;
       }
       return newS;
     })
-    .sort((s1, s2) => s1.showOrder - s2.showOrder);
+    .sort((s1, s2) => s1.showOrder! - s2.showOrder!)
+    .map((item, index) => {
+      item.showOrder = index;
+      return item;
+    });
+  state.current = { type: 'field', id: drag.idBillSearchRef };
 };

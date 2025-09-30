@@ -8,14 +8,15 @@ import NormalInput from './NormalInput';
 import HtmlInputType from './HtmlInputType';
 import SearchAttributes from './SearchAttributes';
 import EnumConf from '../../../../common/entity/enumconf';
-import { actions, selectCurrentSearchRef } from '../../../store';
+import { actions } from '../../../store';
 import RefConf from '../../../../common/entity/refconf';
 import { TBillRef, TEnumRef } from '@/pages/Factory/Units/common/model';
 import ValueType from './ValueType';
+import { useCurrentSearchRef } from '../../../hooks';
 
 const Condition: FC = () => {
   const dispatch = useDispatch();
-  const searchRef = useSelector(selectCurrentSearchRef);
+  const searchRef = useCurrentSearchRef();
 
   const handleEnumConf = (enumConfig: TEnumRef) => {
     if (searchRef) {

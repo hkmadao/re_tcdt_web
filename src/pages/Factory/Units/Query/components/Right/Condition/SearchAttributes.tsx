@@ -1,11 +1,12 @@
 import React, { FC, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Select } from 'antd';
-import { actions, selectCurrentSearchRef } from '../../../store';
+import { actions } from '../../../store';
+import { useCurrentSearchRef } from '../../../hooks';
 
 const SearchAttributes: FC = () => {
   const { Option } = Select;
-  const searchRef = useSelector(selectCurrentSearchRef);
+  const searchRef = useCurrentSearchRef();
   const dispatch = useDispatch();
 
   useEffect(() => {}, []);

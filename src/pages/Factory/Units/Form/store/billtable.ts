@@ -8,6 +8,7 @@ import {
   TModuleStore,
   TBillFormSelectData,
   TTableBillFormUriConf,
+  TTableBillFormSelectData,
 } from '../model';
 
 /**列表设置当前选中数据 */
@@ -164,19 +165,38 @@ export const switchOrderTableBillFormFields: CaseReducer<
   state.data.configList![name]?.forEach((billFormTab) => {
     if (billFormTab.tabCode === tabCode) {
       billFormTab.billFormFields = billFormTab.billFormFields
-        ?.map((s) => {
-          let newS = { ...s };
-          if (s.idBillFormField === drag.idBillFormField) {
-            newS.showOrder = hover.showOrder;
+        ?.map((item) => {
+          let newS = { ...item };
+          if (item.idBillFormField === drag.idBillFormField) {
+            newS.showOrder = hover.showOrder! + 1;
+            return newS;
           }
-          if (s.idBillFormField === hover.idBillFormField) {
-            newS.showOrder = drag.showOrder;
+          if (item.showOrder! > hover.showOrder!) {
+            newS.showOrder = newS.showOrder! + 1;
           }
           return newS;
         })
-        .sort((s1, s2) => s1.showOrder! - s2.showOrder!);
+        .sort((s1, s2) => s1.showOrder! - s2.showOrder!)
+        .map((item, index) => {
+          item.showOrder = index;
+          return item;
+        });
     }
   });
+  const curData = state.data
+    .configList![name]?.find((item) => item.tabCode === tabCode)
+    ?.billFormFields?.find(
+      (item) => item.idBillFormField === drag.idBillFormField,
+    );
+  if (curData) {
+    const current: TTableBillFormSelectData = {
+      attrType: EAttrTypes.Field,
+      name: name,
+      tabCode: tabCode,
+      data: curData,
+    };
+    state.current = current;
+  }
 };
 
 /**列表更新控件信息 */

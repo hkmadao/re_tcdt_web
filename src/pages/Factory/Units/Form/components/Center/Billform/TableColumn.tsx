@@ -25,6 +25,7 @@ import { EInputType } from '@/pages/Factory/Units/common/model';
 import { ItemTypes } from '@/pages/Factory/Units/common/conf';
 import { DeleteOutlined } from '@ant-design/icons';
 import styles from './styles.less';
+import { useBillFormField } from '../../../hooks';
 
 export type TTableColumnProps = {
   form: FormInstance<any>;
@@ -39,6 +40,7 @@ const TableColumn: FC<TTableColumnProps> = ({
   billformT,
   billformB,
 }) => {
+  const billFormField = useBillFormField();
   const [editing, setEditing] = useState(false);
   const [inputValue, setInputValue] = useState(billformB.defaultValue);
   const inputRef = useRef<any>();
@@ -498,6 +500,12 @@ const TableColumn: FC<TTableColumnProps> = ({
 
   return (
     <div
+      style={{
+        border:
+          billFormField?.idBillFormField === billformB.idBillFormField
+            ? '1px solid #1890ff'
+            : undefined,
+      }}
       ref={ref}
       data-handler-id={handlerId}
       onClick={fieldClick}

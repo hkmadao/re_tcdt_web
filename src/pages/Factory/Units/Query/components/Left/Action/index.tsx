@@ -1,21 +1,17 @@
 import { useState, useEffect } from 'react';
-import { Button, Popconfirm, Spin, Tooltip } from 'antd';
+import { Button, Tooltip } from 'antd';
 import { message } from 'antd';
 import { SaveOutlined, ExportOutlined } from '@ant-design/icons';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { TQuery, TQueryContent } from '@/pages/Factory/Units/Query/model';
 import API from '@/pages/Factory/Units/Query/api';
-import {
-  actions,
-  selectModuleData,
-  selectStatus,
-} from '@/pages/Factory/Units/Query/store';
 import SelectComponent from './selectcomponent';
 import BillFormBase from './base';
+import { useModuleData, useStatus } from '../../../hooks';
 
 const Action: React.FC = () => {
-  const loadStatus = useSelector(selectStatus);
-  const moduleData = useSelector(selectModuleData);
+  const loadStatus = useStatus();
+  const moduleData = useModuleData();
   const dispatch = useDispatch();
 
   useEffect(() => {}, []);

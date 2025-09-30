@@ -69,6 +69,7 @@ const DropBody: FC = () => {
           justifyContent: moduleData?.justifyContent ?? 'start',
           border: '1px dashed black',
           flexWrap: 'wrap',
+          padding: '5px',
         }}
       >
         {moduleData.buttons?.map((data, i) => {

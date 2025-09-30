@@ -98,15 +98,21 @@ export const switchConditionOrder: CaseReducer<
 > = (state, action) => {
   const { drag, hover } = action.payload;
   state.data.buttons = state.data.buttons
-    .map((s) => {
-      let newS = { ...s };
-      if (s.idButton === drag.idButton) {
-        newS.showOrder = hover.showOrder;
+    ?.map((item) => {
+      let newS = { ...item };
+      if (item.idButton === drag.idButton) {
+        newS.showOrder = hover.showOrder! + 1;
+        return newS;
       }
-      if (s.idButton === hover.idButton) {
-        newS.showOrder = drag.showOrder;
+      if (item.showOrder! > hover.showOrder!) {
+        newS.showOrder = newS.showOrder! + 1;
       }
       return newS;
     })
-    .sort((s1, s2) => s1.showOrder - s2.showOrder);
+    .sort((s1, s2) => s1.showOrder! - s2.showOrder!)
+    .map((item, index) => {
+      item.showOrder = index;
+      return item;
+    });
+  state.current = { type: 'field', id: drag.idButton };
 };

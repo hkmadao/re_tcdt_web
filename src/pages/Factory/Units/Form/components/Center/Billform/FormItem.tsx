@@ -21,10 +21,10 @@ import {
   TBillFormTab,
 } from '@/pages/Factory/Units/Form/model';
 import { actions } from '@/pages/Factory/Units/Form/store';
-import { EInputType } from '@/pages/Factory/Units/common/model';
 import { ItemTypes } from '@/pages/Factory/Units/common/conf';
 import { DeleteOutlined } from '@ant-design/icons';
 import styles from './styles.less';
+import { useBillFormField } from '../../../hooks';
 
 export type TFormItemProps = {
   form: FormInstance<any>;
@@ -44,6 +44,7 @@ const FormItem: FC<TFormItemProps> = ({
   billformT,
   billformB,
 }) => {
+  const billFormField = useBillFormField();
   const inputRef = useRef<any>(null);
   const [childNode, setChildNode] = useState(<Input />);
   const dispatch = useDispatch();
@@ -354,6 +355,12 @@ const FormItem: FC<TFormItemProps> = ({
 
   return (
     <span
+      style={{
+        border:
+          billFormField?.idBillFormField === billformB.idBillFormField
+            ? '1px solid #1890ff'
+            : undefined,
+      }}
       ref={ref}
       data-handler-id={handlerId}
       onClick={fieldClick}

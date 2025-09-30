@@ -1,12 +1,13 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Input, InputRef } from 'antd';
-import { actions, selectCurrentSearchRef } from '../../../store';
+import { actions } from '../../../store';
+import { useCurrentSearchRef } from '../../../hooks';
 
 const NormalInput: FC<{
   attr: 'label' | 'attributeName' | 'refAttributeName' | 'defaultValue';
 }> = ({ attr }) => {
-  const searchRef = useSelector(selectCurrentSearchRef);
+  const searchRef = useCurrentSearchRef();
   const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState<string>();
   const inputRef = useRef<InputRef>(null);

@@ -5,7 +5,6 @@ import {
   configureStore,
 } from '@reduxjs/toolkit';
 
-export * from './selects';
 import { initialState } from './initial-state';
 import { moduleReducerName } from '../conf';
 import * as mainActionReducers from './main-action';

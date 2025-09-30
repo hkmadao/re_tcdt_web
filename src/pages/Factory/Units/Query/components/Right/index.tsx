@@ -1,11 +1,10 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import Condition from './Condition';
-import { selectCurrentSearchRef } from '../../store';
 import Panel from './Panel';
+import { useCurrentSearchRef } from '../../hooks';
 
 const Right = () => {
-  const searchRef = useSelector(selectCurrentSearchRef);
+  const searchRef = useCurrentSearchRef();
   return (
     <div
       style={{

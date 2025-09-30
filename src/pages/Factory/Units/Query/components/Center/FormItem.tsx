@@ -21,6 +21,7 @@ import { actions } from '../../store';
 import { TBillSearchRef } from '@/pages/Factory/Units/common/model';
 import { DeleteOutlined, SearchOutlined } from '@ant-design/icons';
 import styles from './styles.less';
+import { useCurrentSearchRef } from '../../hooks';
 
 export type TFormItemProps = {
   form: FormInstance<any>;
@@ -28,6 +29,7 @@ export type TFormItemProps = {
 };
 
 const FormItem: FC<TFormItemProps> = ({ form, billSearchRef }) => {
+  const searchRef = useCurrentSearchRef();
   const inputRef = useRef<any>(null);
   const [childNode, setChildNode] = useState(<Input />);
   const ref = useRef<HTMLDivElement>(null);
@@ -362,6 +364,12 @@ const FormItem: FC<TFormItemProps> = ({ form, billSearchRef }) => {
   return (
     <>
       <span
+        style={{
+          border:
+            searchRef?.idBillSearchRef === billSearchRef.idBillSearchRef
+              ? '1px solid #1890ff'
+              : undefined,
+        }}
         ref={ref}
         data-handler-id={handlerId}
         onClick={fieldClick}

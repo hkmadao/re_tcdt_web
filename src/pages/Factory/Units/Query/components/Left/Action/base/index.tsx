@@ -1,14 +1,15 @@
 import { Button, Form, Input, Modal, Select, Tooltip } from 'antd';
 import { FC, useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { TQueryContent } from '@/pages/Factory/Units/Query/model';
-import { actions, selectModuleData } from '@/pages/Factory/Units/Query/store';
+import { actions } from '@/pages/Factory/Units/Query/store';
 import { PicCenterOutlined } from '@ant-design/icons';
+import { useModuleData } from '../../../../hooks';
 
 const BillFormBase: FC = () => {
   const [form] = Form.useForm<TQueryContent>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const billForm = useSelector(selectModuleData);
+  const moduleData = useModuleData();
   const dispatch = useDispatch();
 
   useEffect(() => {}, []);
@@ -16,9 +17,9 @@ const BillFormBase: FC = () => {
   /**点击选择组件 */
   const handleToConfig = () => {
     form.resetFields();
-    if (billForm) {
+    if (moduleData) {
       form.setFieldsValue({
-        ...billForm,
+        ...moduleData,
       });
     }
     setModalVisible(true);
@@ -42,7 +43,7 @@ const BillFormBase: FC = () => {
           <Button
             type={'text'}
             onClick={handleToConfig}
-            disabled={!billForm.idQuery}
+            disabled={!moduleData.idQuery}
             size={'middle'}
             icon={<PicCenterOutlined />}
           ></Button>

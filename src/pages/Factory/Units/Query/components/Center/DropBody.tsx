@@ -1,24 +1,24 @@
 import React, { FC } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Button, Form } from 'antd';
 import { ItemTypes } from '../../../common/conf';
 import FormItem from './FormItem';
-import { selectSearchRefs, actions } from '../../store';
+import { actions } from '../../store';
 import {
   TBillRef,
   TBillRefColumn,
   TBillSearchRef,
   TEnumColumn,
-  EInputType,
   TDescriptionInfo,
   TEnumRef,
 } from '@/pages/Factory/Units/common/model';
 import { nanoid } from '@reduxjs/toolkit';
 import { firstToLower } from '@/util/name-convent';
+import { useSearchRefs } from '../../hooks';
 
 const DropBody: FC = () => {
-  const searchRefs = useSelector(selectSearchRefs);
+  const searchRefs = useSearchRefs();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
 

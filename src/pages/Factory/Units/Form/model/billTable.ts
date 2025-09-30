@@ -1,4 +1,4 @@
-import { EInputType, EValueType } from '@/pages/Factory/Units/common/model';
+import { EInputType } from '@/pages/Factory/Units/common/model';
 import {
   TCommonConfigForm,
   TCommonSelectData,
@@ -9,7 +9,6 @@ import {
 /**控件信息 */
 export type TTableBillFormField = {
   inputType?: EInputType | string;
-  valueType?: EValueType | string;
 } & TCommonField;
 
 /**标签信息 */

@@ -5,7 +5,6 @@ import { TTip } from '@/pages/Factory/Units/Form/model';
 import { TBillRef, TEnumRef } from '@/pages/Factory/Units/common/model';
 import EnumConf from '@/pages/Factory/Units/common/entity/enumconf';
 import RefConf from '@/pages/Factory/Units/common/entity/refconf';
-import ValueType from './ValueType';
 import InputType from './InputType';
 import NormalInput from './NormalInput';
 import NormalInputNumber from './NormalInputNumber';
@@ -104,9 +103,6 @@ const FieldAttr: FC<any> = () => {
           <Descriptions column={1} bordered size={'small'}>
             <Descriptions.Item label="输入框类型">
               <InputType />
-            </Descriptions.Item>
-            <Descriptions.Item label="数据类型">
-              <ValueType />
             </Descriptions.Item>
             <Descriptions.Item label="引用属性">
               <NormalInput attr={'refAttributeName'} />

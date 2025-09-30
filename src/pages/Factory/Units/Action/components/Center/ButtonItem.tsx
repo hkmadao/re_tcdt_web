@@ -8,9 +8,10 @@ import { actions } from '../../store';
 import { DeleteOutlined } from '@ant-design/icons';
 import styles from './styles.less';
 import { TButton } from '../../model';
-import { useButtonById } from '../../hooks';
+import { useButtonById, useCurrentButton } from '../../hooks';
 
 const ButtonItem: FC<TButton> = ({ ...bt }) => {
+  const currentButton = useCurrentButton();
   const buttonConf = useButtonById(bt.idButton);
   const ref = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
@@ -91,6 +92,12 @@ const ButtonItem: FC<TButton> = ({ ...bt }) => {
   return (
     <>
       <span
+        style={{
+          border:
+            currentButton?.idButton === bt.idButton
+              ? '1px solid red'
+              : undefined,
+        }}
         ref={ref}
         data-handler-id={handlerId}
         onClick={fieldClick}
@@ -99,7 +106,7 @@ const ButtonItem: FC<TButton> = ({ ...bt }) => {
         <div className={styles['component']}>
           <Button
             key={buttonConf?.idButton}
-            size={buttonConf?.size}
+            size={buttonConf?.buttonSize}
             type={(buttonConf?.type ?? 'primary') as any}
           >
             {buttonConf?.label}

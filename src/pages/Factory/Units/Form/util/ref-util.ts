@@ -1,10 +1,5 @@
 import { nanoid } from '@reduxjs/toolkit';
-import {
-  EInputType,
-  TBillRef,
-  TBillRefColumn,
-  TDescriptionInfo,
-} from '../../common/model';
+import { TBillRef, TBillRefColumn, TDescriptionInfo } from '../../common/model';
 import { TBillFormField } from '../model';
 import { firstToLower } from '@/util';
 
@@ -19,6 +14,9 @@ export function getRefBillFormB(treeData: TDescriptionInfo, index: number) {
     showOrder: index,
     refAttributeName: treeData.attributeName,
     readonly: false,
+    width: 150,
+    textLen: 140,
+    placeholder: '请选择',
   };
   //拾取器初始化配置
   let refConfig: TBillRef | undefined = undefined;

@@ -12,7 +12,6 @@ import {
 } from '../model';
 import { initialState } from './initial-state';
 import {
-  EInputType,
   TBillSearchRef,
   TBillTreeRef,
   TEnumColumn,
